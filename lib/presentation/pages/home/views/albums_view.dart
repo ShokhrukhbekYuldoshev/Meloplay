@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:meloplay/bloc/home/home_bloc.dart';
 import 'package:meloplay/presentation/utils/app_router.dart';
 import 'package:on_audio_query/on_audio_query.dart';
@@ -18,7 +19,7 @@ class _AlbumsViewState extends State<AlbumsView>
 
   final audioQuery = OnAudioQuery();
   final albums = <AlbumModel>[];
-
+  bool isLoading = true;
   @override
   void initState() {
     super.initState();
@@ -34,66 +35,82 @@ class _AlbumsViewState extends State<AlbumsView>
           setState(() {
             albums.clear();
             albums.addAll(state.albums);
+            isLoading = false;
           });
         }
       },
-      child: GridView.builder(
-        padding: const EdgeInsets.all(16),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          crossAxisSpacing: 16,
-          mainAxisSpacing: 16,
-        ),
-        itemCount: albums.length,
-        itemBuilder: (context, index) {
-          final album = albums[index];
+      child: AnimationLimiter(
+        child: GridView.builder(
+          padding: const EdgeInsets.all(16),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: 16,
+            mainAxisSpacing: 16,
+          ),
+          itemCount: albums.length,
+          itemBuilder: (context, index) {
+            final album = albums[index];
 
-          return GestureDetector(
-            onTap: () {
-              Navigator.of(context).pushNamed(
-                AppRouter.albumRoute,
-                arguments: album,
-              );
-            },
-            child: Column(
-              children: [
-                QueryArtworkWidget(
-                  id: album.id,
-                  type: ArtworkType.ALBUM,
-                  artworkHeight: 96,
-                  artworkWidth: 96,
-                  artworkBorder: BorderRadius.circular(10),
-                  nullArtworkWidget: Container(
-                    width: 96,
-                    height: 96,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.grey.withOpacity(0.1),
+            return isLoading
+                ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : AnimationLimiter(
+                    child: AnimationConfiguration.staggeredGrid(
+                      position: index,
+                      duration: const Duration(milliseconds: 500),
+                      columnCount: 2,
+                      child: FlipAnimation(
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).pushNamed(
+                              AppRouter.albumRoute,
+                              arguments: album,
+                            );
+                          },
+                          child: Column(
+                            children: [
+                              QueryArtworkWidget(
+                                id: album.id,
+                                type: ArtworkType.ALBUM,
+                                artworkHeight: 96,
+                                artworkWidth: 96,
+                                artworkBorder: BorderRadius.circular(10),
+                                nullArtworkWidget: Container(
+                                  width: 96,
+                                  height: 96,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: Colors.grey.withOpacity(0.1),
+                                  ),
+                                  child: const Icon(
+                                    Icons.music_note_outlined,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                album.album,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                album.artist ?? '',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                     ),
-                    child: const Icon(
-                      Icons.music_note_outlined,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  album.album,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  album.artist ?? '',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(),
-                ),
-              ],
-            ),
-          );
-        },
+                  );
+          },
+        ),
       ),
     );
   }

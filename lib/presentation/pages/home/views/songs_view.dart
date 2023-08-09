@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:meloplay/bloc/home/home_bloc.dart';
 import 'package:meloplay/data/repositories/song_repository.dart';
 import 'package:on_audio_query/on_audio_query.dart';
@@ -21,6 +22,7 @@ class _SongsViewState extends State<SongsView>
 
   final audioQuery = OnAudioQuery();
   final songs = <SongModel>[];
+  bool isLoading = true;
 
   @override
   void initState() {
@@ -37,23 +39,39 @@ class _SongsViewState extends State<SongsView>
           setState(() {
             songs.clear();
             songs.addAll(state.songs);
+            isLoading = false;
           });
 
           await context.read<SongRepository>().addSongsToQueue(songs);
         }
       },
-      child: ListView.builder(
-        padding: EdgeInsets.zero,
-        itemCount: songs.length,
-        itemBuilder: (context, index) {
-          final song = songs[index];
-          final args = PlayerPageArguments(
-            songs: songs,
-            initialIndex: index,
-          );
-          return SongListTile(song: song, args: args);
-        },
-      ),
+      child: isLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : AnimationLimiter(
+              child: ListView.builder(
+                padding: EdgeInsets.zero,
+                itemCount: songs.length,
+                itemBuilder: (context, index) {
+                  final song = songs[index];
+                  final args = PlayerPageArguments(
+                    songs: songs,
+                    initialIndex: index,
+                  );
+                  return AnimationConfiguration.staggeredList(
+                    position: index,
+                    duration: const Duration(milliseconds: 500),
+                    child: FlipAnimation(
+                      child: SongListTile(
+                        song: song,
+                        args: args,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
     );
   }
 }

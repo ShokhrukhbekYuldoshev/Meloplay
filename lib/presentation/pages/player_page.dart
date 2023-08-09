@@ -146,14 +146,24 @@ class _PlayerPageState extends State<PlayerPage> {
               builder: (context, snapshot) {
                 final position = snapshot.data ?? Duration.zero;
 
-                return Slider(
-                  value: position.inMilliseconds.toDouble(),
-                  min: 0,
-                  max: _duration?.inMilliseconds.toDouble() ?? 0,
-                  onChanged: (value) {
-                    songRepository.seek(Duration(milliseconds: value.toInt()));
-                  },
-                );
+                try {
+                  return Slider(
+                    value: position.inMilliseconds.toDouble(),
+                    min: 0,
+                    max: _duration?.inMilliseconds.toDouble() ?? 0,
+                    onChanged: (value) {
+                      songRepository
+                          .seek(Duration(milliseconds: value.toInt()));
+                    },
+                  );
+                } catch (e) {
+                  return Slider(
+                    value: 0,
+                    min: 0,
+                    max: 0,
+                    onChanged: (value) {},
+                  );
+                }
               },
             ),
             const SizedBox(height: 16),
@@ -208,7 +218,7 @@ class _PlayerPageState extends State<PlayerPage> {
                       icon: shuffleMode == AudioServiceShuffleMode.none
                           ? const Icon(Icons.shuffle_rounded)
                           : const Icon(Icons.shuffle_on_rounded),
-                      iconSize: 40,
+                      iconSize: 30,
                     );
                   },
                 ),
@@ -250,11 +260,11 @@ class _PlayerPageState extends State<PlayerPage> {
                   icon: const Icon(Icons.skip_next_rounded),
                   iconSize: 40,
                 ),
-                // queue button
+                // repeat button
                 IconButton(
                   onPressed: () {},
-                  icon: const Icon(Icons.queue_music_rounded),
-                  iconSize: 40,
+                  icon: const Icon(Icons.repeat_rounded),
+                  iconSize: 30,
                 ),
               ],
             ),

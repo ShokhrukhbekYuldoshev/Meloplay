@@ -91,10 +91,13 @@ class _AboutPageState extends State<AboutPage> {
             children: [
               // logo
               Center(
-                child: Image.asset(
-                  Assets.logo,
-                  width: 128,
-                  height: 128,
+                child: Hero(
+                  tag: 'logo',
+                  child: Image.asset(
+                    Assets.logo,
+                    width: 128,
+                    height: 128,
+                  ),
                 ),
               ),
               const SizedBox(height: 32),

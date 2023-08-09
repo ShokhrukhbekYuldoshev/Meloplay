@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:meloplay/bloc/home/home_bloc.dart';
 import 'package:meloplay/presentation/utils/app_router.dart';
 import 'package:on_audio_query/on_audio_query.dart';
@@ -18,7 +19,7 @@ class _ArtistsViewState extends State<ArtistsView>
 
   final audioQuery = OnAudioQuery();
   final artists = <ArtistModel>[];
-
+  bool isLoading = true;
   @override
   void initState() {
     super.initState();
@@ -34,61 +35,75 @@ class _ArtistsViewState extends State<ArtistsView>
           setState(() {
             artists.clear();
             artists.addAll(state.artists);
+            isLoading = false;
           });
         }
       },
-      child: GridView.builder(
-        padding: const EdgeInsets.all(16),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          crossAxisSpacing: 16,
-          mainAxisSpacing: 16,
-        ),
-        itemCount: artists.length,
-        itemBuilder: (context, index) {
-          final artist = artists[index];
+      child: isLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : AnimationLimiter(
+              child: GridView.builder(
+                padding: const EdgeInsets.all(16),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 16,
+                  mainAxisSpacing: 16,
+                ),
+                itemCount: artists.length,
+                itemBuilder: (context, index) {
+                  final artist = artists[index];
 
-          return GestureDetector(
-            onTap: () {
-              Navigator.of(context).pushNamed(
-                AppRouter.artistRoute,
-                arguments: artist,
-              );
-            },
-            child: Column(
-              children: [
-                QueryArtworkWidget(
-                  id: artist.id,
-                  type: ArtworkType.ARTIST,
-                  artworkHeight: 96,
-                  artworkWidth: 96,
-                  artworkBorder: BorderRadius.circular(100),
-                  nullArtworkWidget: Container(
-                    width: 96,
-                    height: 96,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(100),
-                      color: Colors.grey.withOpacity(0.1),
+                  return AnimationConfiguration.staggeredGrid(
+                    position: index,
+                    duration: const Duration(milliseconds: 500),
+                    columnCount: 2,
+                    child: FlipAnimation(
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).pushNamed(
+                            AppRouter.artistRoute,
+                            arguments: artist,
+                          );
+                        },
+                        child: Column(
+                          children: [
+                            QueryArtworkWidget(
+                              id: artist.id,
+                              type: ArtworkType.ARTIST,
+                              artworkHeight: 96,
+                              artworkWidth: 96,
+                              artworkBorder: BorderRadius.circular(100),
+                              nullArtworkWidget: Container(
+                                width: 96,
+                                height: 96,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(100),
+                                  color: Colors.grey.withOpacity(0.1),
+                                ),
+                                child: const Icon(
+                                  Icons.person,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              artist.artist,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
-                    child: const Icon(
-                      Icons.person,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  artist.artist,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
+                  );
+                },
+              ),
             ),
-          );
-        },
-      ),
     );
   }
 }

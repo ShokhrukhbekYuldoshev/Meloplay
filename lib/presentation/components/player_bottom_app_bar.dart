@@ -98,7 +98,10 @@ class _PlayerBottomAppBarState extends State<PlayerBottomAppBar> {
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
-                                      color: Colors.grey.withOpacity(0.5),
+                                      color: Themes.getTheme()
+                                          .colorScheme
+                                          .onSurface
+                                          .withOpacity(0.7),
                                     ),
                                   ),
                                 ],

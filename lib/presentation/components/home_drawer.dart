@@ -25,10 +25,13 @@ class HomeDrawer extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Image.asset(
-                      Assets.logo,
-                      height: 64,
-                      width: 64,
+                    Hero(
+                      tag: 'logo',
+                      child: Image.asset(
+                        Assets.logo,
+                        height: 64,
+                        width: 64,
+                      ),
                     ),
                     const SizedBox(
                       height: 8,

@@ -8,6 +8,8 @@ class Themes {
     BlueTheme(),
     GreenTheme(),
     OrangeTheme(),
+    YellowTheme(),
+    TealTheme(),
     RedTheme(),
     BlackTheme(),
     WhiteTheme(),
@@ -18,6 +20,8 @@ class Themes {
     'Blue',
     'Green',
     'Orange',
+    'Yellow',
+    'Teal',
     'Red',
     'Black',
     'White',
@@ -36,12 +40,16 @@ class Themes {
         return _themes[2];
       case 'Orange':
         return _themes[3];
-      case 'Red':
+      case 'Yellow':
         return _themes[4];
-      case 'Black':
+      case 'Teal':
         return _themes[5];
-      case 'White':
+      case 'Red':
         return _themes[6];
+      case 'Black':
+        return _themes[7];
+      case 'White':
+        return _themes[8];
       default:
         return _themes[0];
     }
@@ -165,6 +173,48 @@ class OrangeTheme extends CustomTheme {
         );
 }
 
+class YellowTheme extends CustomTheme {
+  YellowTheme()
+      : super(
+          themeName: 'Yellow',
+          primaryColor: const Color(0xff47410c),
+          secondaryColor: const Color(0xFF8A7A16),
+          colorScheme: ColorScheme.fromSwatch(
+            primarySwatch: Colors.yellow,
+            brightness: Brightness.dark,
+          ),
+          linearGradient: const LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Color(0xff47410c),
+              Color(0xFF8A7A16),
+            ],
+          ),
+        );
+}
+
+class TealTheme extends CustomTheme {
+  TealTheme()
+      : super(
+          themeName: 'Teal',
+          primaryColor: const Color(0xff0c4741),
+          secondaryColor: const Color(0xFF168A7A),
+          colorScheme: ColorScheme.fromSwatch(
+            primarySwatch: Colors.teal,
+            brightness: Brightness.dark,
+          ),
+          linearGradient: const LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Color(0xff0c4741),
+              Color(0xFF168A7A),
+            ],
+          ),
+        );
+}
+
 class RedTheme extends CustomTheme {
   RedTheme()
       : super(
@@ -191,7 +241,7 @@ class BlackTheme extends CustomTheme {
       : super(
           themeName: 'Black',
           primaryColor: const Color(0xff000000),
-          secondaryColor: const Color(0xFF000000),
+          secondaryColor: const Color(0xFF1B1B1B),
           colorScheme: ColorScheme.fromSwatch(
             primarySwatch: Colors.grey,
             brightness: Brightness.dark,
@@ -201,7 +251,7 @@ class BlackTheme extends CustomTheme {
             end: Alignment.bottomCenter,
             colors: [
               Color(0xff000000),
-              Color(0xFF000000),
+              Color(0xFF1B1B1B),
             ],
           ),
         );
@@ -211,8 +261,8 @@ class WhiteTheme extends CustomTheme {
   WhiteTheme()
       : super(
           themeName: 'White',
-          primaryColor: const Color(0xffFFFFFF),
-          secondaryColor: const Color(0xFFFFFFFF),
+          primaryColor: const Color(0XFFFFFFFF),
+          secondaryColor: const Color(0xFFC7C7C7),
           colorScheme: ColorScheme.fromSwatch(
             primarySwatch: Colors.grey,
             brightness: Brightness.light,
@@ -221,8 +271,8 @@ class WhiteTheme extends CustomTheme {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              Color(0xffFFFFFF),
-              Color(0xFFFFFFFF),
+              Color(0XFFFFFFFF),
+              Color(0xFFC7C7C7),
             ],
           ),
         );
