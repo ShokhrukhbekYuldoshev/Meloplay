@@ -36,8 +36,7 @@ class _SongListTileState extends State<SongListTile> {
     return ListTile(
       onTap: () async {
         SongRepository songRepository = context.read<SongRepository>();
-        MediaItem mediaItem =
-            await songRepository.getMediaItemFromSong(widget.song);
+        MediaItem mediaItem = songRepository.getMediaItemFromSong(widget.song);
 
         if (mounted) {
           Navigator.of(context).pushNamed(

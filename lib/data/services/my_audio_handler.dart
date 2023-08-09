@@ -194,7 +194,14 @@ class MyAudioHandler extends BaseAudioHandler {
 
   // Skipping to the next item in the queue
   @override
-  Future<void> skipToNext() => _player.seekToNext();
+  Future<void> skipToNext() {
+    // if last song, then start from beginning
+    if (_player.currentIndex! + 1 == queue.value.length) {
+      return skipToQueueItem(0);
+    } else {
+      return _player.seekToNext();
+    }
+  }
 
   // Skipping to the previous item in the queue
   @override
