@@ -69,7 +69,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       return [
                         const SliverAppBar(
                           backgroundColor: Colors.transparent,
-                          title: Text('MeloPlay'),
+                          title: Text('Meloplay'),
                         ),
                       ];
                     },
