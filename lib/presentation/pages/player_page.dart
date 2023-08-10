@@ -80,7 +80,7 @@ class _PlayerPageState extends State<PlayerPage> {
             songRepository.mediaItem.value == null
                 ? const Center(child: CircularProgressIndicator())
                 : Expanded(
-                    flex: 3,
+                    flex: 4,
                     child: QueryArtworkWidget(
                       id: int.parse(songRepository.mediaItem.value!.id),
                       type: ArtworkType.AUDIO,
@@ -145,7 +145,6 @@ class _PlayerPageState extends State<PlayerPage> {
               stream: songRepository.position,
               builder: (context, snapshot) {
                 final position = snapshot.data ?? Duration.zero;
-
                 try {
                   return Slider(
                     value: position.inMilliseconds.toDouble(),
@@ -195,37 +194,39 @@ class _PlayerPageState extends State<PlayerPage> {
               ],
             ),
 
+            const Spacer(),
+
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 //  shuffle button
                 StreamBuilder<AudioServiceShuffleMode>(
-                  stream: songRepository.shuffleMode,
+                  stream: songRepository.playbackState.map(
+                    (state) => state.shuffleMode,
+                  ),
                   builder: (context, snapshot) {
-                    final shuffleMode =
-                        snapshot.data ?? AudioServiceShuffleMode.none;
-
                     return IconButton(
-                      onPressed: () {
-                        if (shuffleMode == AudioServiceShuffleMode.none) {
-                          songRepository
+                      onPressed: () async {
+                        if (snapshot.data == AudioServiceShuffleMode.none) {
+                          await songRepository
                               .setShuffleMode(AudioServiceShuffleMode.all);
                         } else {
-                          songRepository
+                          await songRepository
                               .setShuffleMode(AudioServiceShuffleMode.none);
                         }
                       },
-                      icon: shuffleMode == AudioServiceShuffleMode.none
-                          ? const Icon(Icons.shuffle_rounded)
-                          : const Icon(Icons.shuffle_on_rounded),
+                      icon: snapshot.data == AudioServiceShuffleMode.none
+                          ? const Icon(Icons.shuffle_rounded,
+                              color: Colors.grey)
+                          : const Icon(Icons.shuffle_rounded),
                       iconSize: 30,
                     );
                   },
                 ),
                 // previous button
                 IconButton(
-                  onPressed: () {
-                    songRepository.skipToPrevious();
+                  onPressed: () async {
+                    await songRepository.skipToPrevious();
                   },
                   icon: const Icon(Icons.skip_previous_rounded),
                   iconSize: 40,
@@ -238,11 +239,11 @@ class _PlayerPageState extends State<PlayerPage> {
                   builder: (context, snapshot) {
                     final playing = snapshot.data ?? false;
                     return IconButton(
-                      onPressed: () {
+                      onPressed: () async {
                         if (playing) {
-                          songRepository.pause();
+                          await songRepository.pause();
                         } else {
-                          songRepository.play();
+                          await songRepository.play();
                         }
                       },
                       icon: playing
@@ -261,11 +262,36 @@ class _PlayerPageState extends State<PlayerPage> {
                   iconSize: 40,
                 ),
                 // repeat button
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(Icons.repeat_rounded),
-                  iconSize: 30,
-                ),
+                StreamBuilder<AudioServiceRepeatMode>(
+                    stream: songRepository.playbackState.map(
+                      (state) => state.repeatMode,
+                    ),
+                    builder: (context, snapshot) {
+                      return IconButton(
+                        onPressed: () async {
+                          if (snapshot.data == AudioServiceRepeatMode.none) {
+                            await songRepository
+                                .setRepeatMode(AudioServiceRepeatMode.all);
+                          } else if (snapshot.data ==
+                              AudioServiceRepeatMode.all) {
+                            await songRepository
+                                .setRepeatMode(AudioServiceRepeatMode.one);
+                          } else {
+                            await songRepository
+                                .setRepeatMode(AudioServiceRepeatMode.none);
+                          }
+                        },
+                        icon: snapshot.data == AudioServiceRepeatMode.none
+                            ? const Icon(
+                                Icons.repeat_rounded,
+                                color: Colors.grey,
+                              )
+                            : snapshot.data == AudioServiceRepeatMode.all
+                                ? const Icon(Icons.repeat_rounded)
+                                : const Icon(Icons.repeat_one_rounded),
+                        iconSize: 30,
+                      );
+                    }),
               ],
             ),
           ],

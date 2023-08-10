@@ -139,6 +139,14 @@ class MyAudioHandler extends BaseAudioHandler {
       bufferedPosition: _player.bufferedPosition,
       speed: _player.speed,
       queueIndex: event.currentIndex,
+      shuffleMode: _player.shuffleModeEnabled
+          ? AudioServiceShuffleMode.all
+          : AudioServiceShuffleMode.none,
+      repeatMode: _player.loopMode == LoopMode.one
+          ? AudioServiceRepeatMode.one
+          : _player.loopMode == LoopMode.all
+              ? AudioServiceRepeatMode.all
+              : AudioServiceRepeatMode.none,
     );
   }
 
@@ -221,5 +229,51 @@ class MyAudioHandler extends BaseAudioHandler {
       index = _player.shuffleIndices![index];
     }
     _player.seek(Duration.zero, index: index);
+  }
+
+  @override
+  Future<void> setShuffleMode(AudioServiceShuffleMode shuffleMode) async {
+    final newMode = {
+      AudioServiceShuffleMode.none: false,
+      AudioServiceShuffleMode.all: true,
+    }[shuffleMode]!;
+    await _player.setShuffleModeEnabled(newMode);
+
+    // ! TODO: Fix this hack
+    // This is a hack to get the player to emit a sequenceState event with the
+    // new shuffle mode. Without this, the UI will not update to reflect the
+    // new shuffle mode.
+    bool playing = _player.playerState.playing;
+    if (playing) {
+      await _player.pause();
+      await _player.play();
+    } else {
+      await _player.play();
+      await _player.pause();
+    }
+  }
+
+  @override
+  Future<void> setRepeatMode(AudioServiceRepeatMode repeatMode) async {
+    final LoopMode newMode = {
+      AudioServiceRepeatMode.none: LoopMode.off,
+      AudioServiceRepeatMode.one: LoopMode.one,
+      AudioServiceRepeatMode.all: LoopMode.all,
+    }[repeatMode]!;
+    await _player.setLoopMode(newMode);
+
+    // ! TODO: Fix this hack
+    // This is a hack to get the player to emit a sequenceState event with the
+    // new shuffle mode. Without this, the UI will not update to reflect the
+    // new shuffle mode.
+    bool playing = _player.playerState.playing;
+
+    if (playing) {
+      await _player.pause();
+      await _player.play();
+    } else {
+      await _player.play();
+      await _player.pause();
+    }
   }
 }

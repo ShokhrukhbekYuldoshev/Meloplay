@@ -12,6 +12,15 @@ class SongRepository {
   // current media item
   ValueStream<MediaItem?> get mediaItem => _audioHandler.mediaItem;
 
+  // current position
+  Stream<Duration> get position => AudioService.position.map((event) => event);
+
+  // current playback state
+  ValueStream<PlaybackState> get playbackState => _audioHandler.playbackState;
+
+  // get queue
+  ValueStream<List<MediaItem>> get queue => _audioHandler.queue;
+
   // get media item index from queue
   int getMediaItemIndexFromQueue(MediaItem mediaItem) {
     int index = 0;
@@ -64,9 +73,6 @@ class SongRepository {
     );
   }
 
-  // get queue
-  ValueStream<List<MediaItem>> get queue => _audioHandler.queue;
-
   Future<void> addSongsToQueue(List<SongModel> songs) async {
     // clear queue
     await clearQueue();
@@ -90,49 +96,38 @@ class SongRepository {
     }
   }
 
-  void play() => _audioHandler.play();
+  Future<void> play() => _audioHandler.play();
 
-  void playFromMediaId(String mediaId) =>
-      _audioHandler.playFromMediaId(mediaId);
+  Future<void> pause() => _audioHandler.pause();
 
-  void pause() => _audioHandler.pause();
+  Future<void> seek(Duration position) => _audioHandler.seek(position);
 
-  void seek(Duration position) => _audioHandler.seek(position);
+  Future<void> stop() => _audioHandler.stop();
 
-  void stop() => _audioHandler.stop();
-
-  void addQueueItem(MediaItem mediaItem) =>
+  Future<void> addQueueItem(MediaItem mediaItem) =>
       _audioHandler.addQueueItem(mediaItem);
 
-  void removeQueueItemAt(int index) => _audioHandler.removeQueueItemAt(index);
+  Future<void> removeQueueItemAt(int index) =>
+      _audioHandler.removeQueueItemAt(index);
 
-  void skipToNext() => _audioHandler.skipToNext();
+  Future<void> skipToNext() => _audioHandler.skipToNext();
 
-  void skipToPrevious() => _audioHandler.skipToPrevious();
+  Future<void> skipToPrevious() => _audioHandler.skipToPrevious();
 
-  void skipToQueueItem(int index) => _audioHandler.skipToQueueItem(index);
+  Future<void> skipToQueueItem(int index) =>
+      _audioHandler.skipToQueueItem(index);
 
-  void fastForward() => _audioHandler.fastForward();
+  Future<void> fastForward() => _audioHandler.fastForward();
 
-  void rewind() => _audioHandler.rewind();
+  Future<void> rewind() => _audioHandler.rewind();
 
-  void setSpeed(double speed) => _audioHandler.setSpeed(speed);
+  Future<void> setSpeed(double speed) => _audioHandler.setSpeed(speed);
 
-  void setRepeatMode(AudioServiceRepeatMode repeatMode) =>
+  Future<void> setRepeatMode(AudioServiceRepeatMode repeatMode) =>
       _audioHandler.setRepeatMode(repeatMode);
 
-  void setShuffleMode(AudioServiceShuffleMode shuffleMode) =>
+  Future<void> setShuffleMode(AudioServiceShuffleMode shuffleMode) =>
       _audioHandler.setShuffleMode(shuffleMode);
-
-  // current position
-  Stream<Duration> get position => AudioService.position.map((event) => event);
-
-  // current playback state
-  Stream<PlaybackState> get playbackState => _audioHandler.playbackState;
-
-  // current shuffle mode
-  Stream<AudioServiceShuffleMode> get shuffleMode =>
-      _audioHandler.playbackState.map((state) => state.shuffleMode);
 
   // play media item from queue
   void playFromQueue(MediaItem mediaItem) {

@@ -55,6 +55,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     return BlocBuilder<ThemeBloc, ThemeState>(
       builder: (context, state) {
         return Scaffold(
+          extendBody: true,
+          appBar: AppBar(
+            backgroundColor: Themes.getTheme().primaryColor,
+            title: const Text('Meloplay'),
+          ),
           drawer: const HomeDrawer(),
           // current song, play/pause button, song progress bar, song queue button
           bottomNavigationBar: const PlayerBottomAppBar(),
@@ -63,76 +68,64 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               gradient: Themes.getTheme().linearGradient,
             ),
             child: _hasPermission
-                ? NestedScrollView(
-                    floatHeaderSlivers: true,
-                    headerSliverBuilder: (context, innerBoxIsScrolled) {
-                      return [
-                        const SliverAppBar(
-                          backgroundColor: Colors.transparent,
-                          title: Text('Meloplay'),
+                ? Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Row(
+                          children: [
+                            HomeCard(
+                              title: 'Favorites',
+                              icon: Icons.favorite_rounded,
+                              color: const Color(0xFF5D2285),
+                              onTap: () {
+                                Navigator.of(context).pushNamed(
+                                  AppRouter.favoritesRoute,
+                                );
+                              },
+                            ),
+                            const SizedBox(width: 16),
+                            HomeCard(
+                              title: 'Playlists',
+                              icon: Icons.playlist_play,
+                              color: const Color(0xFF136327),
+                              onTap: () {
+                                Navigator.of(context).pushNamed(
+                                  AppRouter.playlistsRoute,
+                                );
+                              },
+                            ),
+                            const SizedBox(width: 16),
+                            HomeCard(
+                              title: 'Recents',
+                              icon: Icons.history,
+                              color: const Color(0xFFD4850D),
+                              onTap: () {
+                                Navigator.of(context).pushNamed(
+                                  AppRouter.recentsRoute,
+                                );
+                              },
+                            ),
+                          ],
                         ),
-                      ];
-                    },
-                    body: Column(
-                      children: [
-                        SizedBox(height: MediaQuery.of(context).padding.top),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: Row(
-                            children: [
-                              HomeCard(
-                                title: 'Favorites',
-                                icon: Icons.favorite_rounded,
-                                color: const Color(0xFF5D2285),
-                                onTap: () {
-                                  Navigator.of(context).pushNamed(
-                                    AppRouter.favoritesRoute,
-                                  );
-                                },
-                              ),
-                              const SizedBox(width: 16),
-                              HomeCard(
-                                title: 'Playlists',
-                                icon: Icons.playlist_play,
-                                color: const Color(0xFF136327),
-                                onTap: () {
-                                  Navigator.of(context).pushNamed(
-                                    AppRouter.playlistsRoute,
-                                  );
-                                },
-                              ),
-                              const SizedBox(width: 16),
-                              HomeCard(
-                                title: 'Recents',
-                                icon: Icons.history,
-                                color: const Color(0xFFD4850D),
-                                onTap: () {
-                                  Navigator.of(context).pushNamed(
-                                    AppRouter.recentsRoute,
-                                  );
-                                },
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        TabBar(
+                      ),
+                      const SizedBox(height: 16),
+                      TabBar(
+                        controller: _tabController,
+                        tabs: tabs.map((e) => Tab(text: e)).toList(),
+                      ),
+                      Expanded(
+                        child: TabBarView(
                           controller: _tabController,
-                          tabs: tabs.map((e) => Tab(text: e)).toList(),
+                          children: const [
+                            SongsView(),
+                            ArtistsView(),
+                            AlbumsView(),
+                            GenresView(),
+                          ],
                         ),
-                        Expanded(
-                          child: TabBarView(
-                            controller: _tabController,
-                            children: const [
-                              SongsView(),
-                              ArtistsView(),
-                              AlbumsView(),
-                              GenresView(),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   )
                 : const Center(
                     child: Text('No permission to access library'),

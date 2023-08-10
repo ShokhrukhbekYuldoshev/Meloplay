@@ -31,13 +31,13 @@ Future<void> main() async {
   await Hive.openBox(HiveBox.boxName);
 
   // initialize audio service
+
   AudioHandler audioHandler = await AudioService.init(
     builder: () => MyAudioHandler(),
     config: const AudioServiceConfig(
       androidNotificationChannelId: 'com.shokhrukhbek.meloplay.audio',
       androidNotificationChannelName: 'Meloplay Audio',
-      androidNotificationOngoing: true,
-      androidStopForegroundOnPause: true,
+      androidNotificationChannelDescription: 'Meloplay Audio Service',
     ),
   );
 
