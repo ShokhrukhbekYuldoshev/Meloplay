@@ -1,8 +1,7 @@
-import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:meloplay/data/services/my_audio_handler.dart';
+import 'package:just_audio_background/just_audio_background.dart';
 import 'package:meloplay/bloc/home/home_bloc.dart';
 import 'package:meloplay/bloc/theme/theme_bloc.dart';
 import 'package:meloplay/data/repositories/song_repository.dart';
@@ -32,21 +31,17 @@ Future<void> main() async {
 
   // initialize audio service
 
-  AudioHandler audioHandler = await AudioService.init(
-    builder: () => MyAudioHandler(),
-    config: const AudioServiceConfig(
-      androidNotificationChannelId: 'com.shokhrukhbek.meloplay.audio',
-      androidNotificationChannelName: 'Meloplay Audio',
-      androidNotificationChannelDescription: 'Meloplay Audio Service',
-    ),
+  await JustAudioBackground.init(
+    androidNotificationChannelId: 'com.shokhrukhbek.meloplay.channel.audio',
+    androidNotificationChannelName: 'Meloplay Audio',
+    androidNotificationOngoing: true,
+    androidStopForegroundOnPause: true,
   );
 
   // run app
   runApp(
     RepositoryProvider(
-      create: (context) => SongRepository(
-        audioHandler: audioHandler,
-      ),
+      create: (context) => SongRepository(),
       child: MultiBlocProvider(
         providers: [
           BlocProvider(

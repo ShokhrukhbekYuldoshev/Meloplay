@@ -42,7 +42,7 @@ class _SongsViewState extends State<SongsView>
             isLoading = false;
           });
 
-          await context.read<SongRepository>().addSongsToQueue(songs);
+          await context.read<SongRepository>().addSongsToPlaylist(songs);
         }
       },
       child: isLoading

@@ -1,6 +1,7 @@
-import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:just_audio/just_audio.dart';
+import 'package:just_audio_background/just_audio_background.dart';
 import 'package:meloplay/data/repositories/song_repository.dart';
 import 'package:meloplay/presentation/components/animated_favorite_button.dart';
 import 'package:meloplay/presentation/utils/extensions.dart';
@@ -31,15 +32,16 @@ class _PlayerPageState extends State<PlayerPage> {
   Future<void> initPlayer() async {
     songRepository = context.read<SongRepository>();
 
-    // if media item is same skip
-    if (songRepository.mediaItem.value?.id != widget.mediaItem.id) {
-      songRepository.playFromQueue(widget.mediaItem);
-    } else {
-      songRepository.play();
-    }
-
-    songRepository.mediaItem.listen((mediaItem) {
+    songRepository.mediaItem.listen((mediaItem) async {
       if (mediaItem != null) {
+        // if media item is same skip
+        if (mediaItem.id != widget.mediaItem.id) {
+          try {
+            int index = songRepository.getMediaItemIndex(widget.mediaItem);
+            await songRepository.playFromQueue(index);
+          } catch (_) {}
+        }
+
         if (mounted) {
           setState(() {
             _duration = mediaItem.duration ?? Duration.zero;
@@ -77,12 +79,14 @@ class _PlayerPageState extends State<PlayerPage> {
             ),
             const SizedBox(height: 16),
             // artwork
-            songRepository.mediaItem.value == null
-                ? const Center(child: CircularProgressIndicator())
-                : Expanded(
+            StreamBuilder<MediaItem?>(
+                stream: songRepository.mediaItem,
+                builder: (context, snapshot) {
+                  final mediaItem = snapshot.data;
+                  return Expanded(
                     flex: 4,
                     child: QueryArtworkWidget(
-                      id: int.parse(songRepository.mediaItem.value!.id),
+                      id: int.parse(mediaItem?.id ?? '0'),
                       type: ArtworkType.AUDIO,
                       artworkQuality: FilterQuality.high,
                       quality: 100,
@@ -102,43 +106,49 @@ class _PlayerPageState extends State<PlayerPage> {
                       artworkHeight: MediaQuery.of(context).size.width - 64,
                       artworkFit: BoxFit.fill,
                     ),
-                  ),
+                  );
+                }),
             const Spacer(),
             // title and artist
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+            StreamBuilder<MediaItem?>(
+                stream: songRepository.mediaItem,
+                builder: (context, snapshot) {
+                  final mediaItem = snapshot.data;
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        songRepository.mediaItem.value?.title ?? 'Unknown',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              mediaItem?.title ?? 'Unknown',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              mediaItem?.artist ?? 'Unknown',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      Text(
-                        songRepository.mediaItem.value?.artist ?? 'Unknown',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      AnimatedFavoriteButton(
+                        isFavorite: false,
+                        onChanged: (value) {},
                       ),
                     ],
-                  ),
-                ),
-                AnimatedFavoriteButton(
-                  isFavorite: false,
-                  onChanged: (value) {},
-                ),
-              ],
-            ),
+                  );
+                }),
             const Spacer(),
             // seek bar
             StreamBuilder<Duration>(
@@ -200,24 +210,20 @@ class _PlayerPageState extends State<PlayerPage> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 //  shuffle button
-                StreamBuilder<AudioServiceShuffleMode>(
-                  stream: songRepository.playbackState.map(
-                    (state) => state.shuffleMode,
-                  ),
+                StreamBuilder<bool>(
+                  stream: songRepository.shuffleModeEnabled,
                   builder: (context, snapshot) {
                     return IconButton(
                       onPressed: () async {
-                        if (snapshot.data == AudioServiceShuffleMode.none) {
-                          await songRepository
-                              .setShuffleMode(AudioServiceShuffleMode.all);
-                        } else {
-                          await songRepository
-                              .setShuffleMode(AudioServiceShuffleMode.none);
-                        }
+                        await songRepository.setShuffleModeEnabled(
+                          !(snapshot.data ?? false),
+                        );
                       },
-                      icon: snapshot.data == AudioServiceShuffleMode.none
-                          ? const Icon(Icons.shuffle_rounded,
-                              color: Colors.grey)
+                      icon: snapshot.data == false
+                          ? const Icon(
+                              Icons.shuffle_rounded,
+                              color: Colors.grey,
+                            )
                           : const Icon(Icons.shuffle_rounded),
                       iconSize: 30,
                     );
@@ -226,16 +232,14 @@ class _PlayerPageState extends State<PlayerPage> {
                 // previous button
                 IconButton(
                   onPressed: () async {
-                    await songRepository.skipToPrevious();
+                    await songRepository.seekPrevious();
                   },
                   icon: const Icon(Icons.skip_previous_rounded),
                   iconSize: 40,
                 ),
                 // play/pause button
                 StreamBuilder<bool>(
-                  stream: songRepository.playbackState.map(
-                    (state) => state.playing,
-                  ),
+                  stream: songRepository.playing,
                   builder: (context, snapshot) {
                     final playing = snapshot.data ?? false;
                     return IconButton(
@@ -256,37 +260,31 @@ class _PlayerPageState extends State<PlayerPage> {
                 // next button
                 IconButton(
                   onPressed: () {
-                    songRepository.skipToNext();
+                    songRepository.seekNext();
                   },
                   icon: const Icon(Icons.skip_next_rounded),
                   iconSize: 40,
                 ),
                 // repeat button
-                StreamBuilder<AudioServiceRepeatMode>(
-                    stream: songRepository.playbackState.map(
-                      (state) => state.repeatMode,
-                    ),
+                StreamBuilder<LoopMode>(
+                    stream: songRepository.loopMode,
                     builder: (context, snapshot) {
                       return IconButton(
                         onPressed: () async {
-                          if (snapshot.data == AudioServiceRepeatMode.none) {
-                            await songRepository
-                                .setRepeatMode(AudioServiceRepeatMode.all);
-                          } else if (snapshot.data ==
-                              AudioServiceRepeatMode.all) {
-                            await songRepository
-                                .setRepeatMode(AudioServiceRepeatMode.one);
+                          if (snapshot.data == LoopMode.off) {
+                            await songRepository.setLoopMode(LoopMode.all);
+                          } else if (snapshot.data == LoopMode.all) {
+                            await songRepository.setLoopMode(LoopMode.one);
                           } else {
-                            await songRepository
-                                .setRepeatMode(AudioServiceRepeatMode.none);
+                            await songRepository.setLoopMode(LoopMode.off);
                           }
                         },
-                        icon: snapshot.data == AudioServiceRepeatMode.none
+                        icon: snapshot.data == LoopMode.off
                             ? const Icon(
                                 Icons.repeat_rounded,
                                 color: Colors.grey,
                               )
-                            : snapshot.data == AudioServiceRepeatMode.all
+                            : snapshot.data == LoopMode.all
                                 ? const Icon(Icons.repeat_rounded)
                                 : const Icon(Icons.repeat_one_rounded),
                         iconSize: 30,

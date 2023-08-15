@@ -1,50 +1,46 @@
-import 'package:audio_service/audio_service.dart';
+import 'package:flutter/material.dart';
+import 'package:just_audio/just_audio.dart';
+import 'package:just_audio_background/just_audio_background.dart';
 import 'package:on_audio_query/on_audio_query.dart';
-import 'package:rxdart/rxdart.dart';
 
 class SongRepository {
-  SongRepository({required AudioHandler audioHandler})
-      : _audioHandler = audioHandler;
-
-  final AudioHandler _audioHandler;
-  // final audioQuery = OnAudioQuery();
-
-  // current media item
-  ValueStream<MediaItem?> get mediaItem => _audioHandler.mediaItem;
-
-  // current position
-  Stream<Duration> get position => AudioService.position.map((event) => event);
-
-  // current playback state
-  ValueStream<PlaybackState> get playbackState => _audioHandler.playbackState;
-
-  // get queue
-  ValueStream<List<MediaItem>> get queue => _audioHandler.queue;
-
-  // get media item index from queue
-  int getMediaItemIndexFromQueue(MediaItem mediaItem) {
-    int index = 0;
-    for (MediaItem item in _audioHandler.queue.value) {
-      if (item.id == mediaItem.id) {
-        return index;
-      }
-      index++;
-    }
-    return -1;
+  SongRepository() {
+    _loadEmptyPlaylist();
   }
 
-  // uint8list to uri
-  // Future<Uri?> getArtwork(int id) async {
-  //   Uint8List? artwork = await audioQuery.queryArtwork(
-  //     id,
-  //     ArtworkType.AUDIO,
-  //   );
-  //   Uri? uri;
-  //   if (artwork != null) {
-  //     uri = Uri.dataFromBytes(artwork);
-  //   }
-  //   return uri;
-  // }
+  Future<void> _loadEmptyPlaylist() async {
+    try {
+      await audioPlayer.setAudioSource(playlist);
+    } catch (err) {
+      debugPrint("Error: $err");
+    }
+  }
+
+  UriAudioSource _createAudioSource(MediaItem mediaItem) {
+    return AudioSource.uri(
+      Uri.parse(mediaItem.extras!['url'] as String),
+      tag: mediaItem,
+    );
+  }
+
+  final audioPlayer = AudioPlayer();
+
+  // playlist
+  final playlist = ConcatenatingAudioSource(children: []);
+
+  // media items
+  var mediaItems = <MediaItem>[];
+
+  // add songs to playlist
+  Future<void> addSongsToPlaylist(List<SongModel> songs) async {
+    final mediaItems = songs.map((song) => getMediaItemFromSong(song)).toList();
+    this.mediaItems = [...mediaItems];
+
+    await playlist.addAll(mediaItems.map((mediaItem) {
+      final source = _createAudioSource(mediaItem);
+      return source;
+    }).toList());
+  }
 
   // media item to song model
   SongModel getSongFromMediaItem(MediaItem mediaItem) {
@@ -73,69 +69,97 @@ class SongRepository {
     );
   }
 
-  Future<void> addSongsToQueue(List<SongModel> songs) async {
-    // clear queue
-    await clearQueue();
+  // current index
+  Stream<int?> get currentIndex => audioPlayer.currentIndexStream;
 
-    // create media items
-    List<MediaItem> mediaItems = [];
+  // current media item
+  Stream<MediaItem?> get mediaItem => mediaItems.isEmpty
+      ? Stream.value(null)
+      : audioPlayer.currentIndexStream.map((index) => mediaItems[index!]);
 
-    for (SongModel song in songs) {
-      mediaItems.add(getMediaItemFromSong(song));
-    }
+  // current position
+  Stream<Duration> get position => audioPlayer.positionStream;
 
-    // add songs to queue
-    for (MediaItem mediaItem in mediaItems) {
-      await _audioHandler.addQueueItem(mediaItem);
+  // shuffle mode enabled
+  Stream<bool> get shuffleModeEnabled => audioPlayer.shuffleModeEnabledStream;
+
+  // loop mode
+  Stream<LoopMode> get loopMode => audioPlayer.loopModeStream;
+
+  // playing
+  Stream<bool> get playing => audioPlayer.playingStream;
+
+  // play
+  Future<void> play() async {
+    await audioPlayer.play();
+  }
+
+  // play from queue
+  Future<void> playFromQueue(int index) async {
+    await audioPlayer.seek(Duration.zero, index: index);
+    await audioPlayer.play();
+  }
+
+  int getMediaItemIndex(MediaItem mediaItem) {
+    return mediaItems.indexWhere((item) => item.id == mediaItem.id);
+  }
+
+  int getMediaItemId(MediaItem mediaItem) {
+    return mediaItems.indexWhere((item) => item.id == mediaItem.id);
+  }
+
+  // pause
+  Future<void> pause() async {
+    await audioPlayer.pause();
+  }
+
+  // stop
+  Future<void> stop() async {
+    await audioPlayer.stop();
+  }
+
+  // seek next
+  Future<void> seekNext() async {
+    // if last song, seek to first song
+    if (audioPlayer.currentIndex == playlist.length - 1) {
+      await audioPlayer.seek(Duration.zero, index: 0);
+    } else {
+      await audioPlayer.seekToNext();
     }
   }
 
-  Future<void> clearQueue() async {
-    for (int i = 0; i < _audioHandler.queue.value.length; i++) {
-      await _audioHandler.removeQueueItemAt(i);
+  // seek previous
+  Future<void> seekPrevious() async {
+    // if first song, seek to last song
+    if (audioPlayer.currentIndex == 0) {
+      await audioPlayer.seek(Duration.zero, index: playlist.length - 1);
+    } else {
+      await audioPlayer.seekToPrevious();
     }
   }
 
-  Future<void> play() => _audioHandler.play();
+  // seek
+  Future<void> seek(Duration position) async {
+    await audioPlayer.seek(position);
+  }
 
-  Future<void> pause() => _audioHandler.pause();
+  // set volume
+  Future<void> setVolume(double volume) async {
+    await audioPlayer.setVolume(volume);
+  }
 
-  Future<void> seek(Duration position) => _audioHandler.seek(position);
+  // set speed
+  Future<void> setSpeed(double speed) async {
+    await audioPlayer.setSpeed(speed);
+  }
 
-  Future<void> stop() => _audioHandler.stop();
+  // set loop mode
+  Future<void> setLoopMode(LoopMode loopMode) async {
+    await audioPlayer.setLoopMode(loopMode);
+  }
 
-  Future<void> addQueueItem(MediaItem mediaItem) =>
-      _audioHandler.addQueueItem(mediaItem);
-
-  Future<void> removeQueueItemAt(int index) =>
-      _audioHandler.removeQueueItemAt(index);
-
-  Future<void> skipToNext() => _audioHandler.skipToNext();
-
-  Future<void> skipToPrevious() => _audioHandler.skipToPrevious();
-
-  Future<void> skipToQueueItem(int index) =>
-      _audioHandler.skipToQueueItem(index);
-
-  Future<void> fastForward() => _audioHandler.fastForward();
-
-  Future<void> rewind() => _audioHandler.rewind();
-
-  Future<void> setSpeed(double speed) => _audioHandler.setSpeed(speed);
-
-  Future<void> setRepeatMode(AudioServiceRepeatMode repeatMode) =>
-      _audioHandler.setRepeatMode(repeatMode);
-
-  Future<void> setShuffleMode(AudioServiceShuffleMode shuffleMode) =>
-      _audioHandler.setShuffleMode(shuffleMode);
-
-  // play media item from queue
-  void playFromQueue(MediaItem mediaItem) {
-    int index = getMediaItemIndexFromQueue(mediaItem);
-    if (index != -1) {
-      skipToQueueItem(index);
-    }
-
-    play();
+  // set shuffle mode
+  Future<void> setShuffleModeEnabled(bool enabled) async {
+    await audioPlayer.setShuffleModeEnabled(enabled);
   }
 }
