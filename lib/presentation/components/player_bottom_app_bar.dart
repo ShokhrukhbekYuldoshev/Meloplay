@@ -24,22 +24,15 @@ class _PlayerBottomAppBarState extends State<PlayerBottomAppBar> {
   void initState() {
     super.initState();
     songRepository = context.read<SongRepository>();
-    songRepository.mediaItem.listen((mediaItem) {
-      if (mediaItem != null) {
-        setState(() {
-          isPlaying = true;
-        });
-      } else {
-        setState(() {
-          isPlaying = false;
-        });
-      }
+    songRepository.playing.listen((playing) {
+      setState(() {
+        isPlaying = playing;
+      });
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    print(isPlaying);
     return isPlaying
         ? BlocBuilder<ThemeBloc, ThemeState>(
             builder: (context, state) {
