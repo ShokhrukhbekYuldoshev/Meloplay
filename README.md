@@ -185,7 +185,7 @@ Distributed under the MIT License. See [LICENSE](LICENSE) for more information.
 ## 📧 Contact
 
 -   [GitHub](https://github.com/ShokhrukhbekYuldoshev)
--   [Twitter](https://twitter.com/ShokhrukhbekY)
+-   [X](https://x.com/ShokhrukhbekY)
 -   [Telegram](https://t.me/fighttothedeath)
 
 ## 🌟 Show your support
