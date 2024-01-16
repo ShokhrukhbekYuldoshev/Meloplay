@@ -2,13 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:just_audio_background/just_audio_background.dart';
-import 'package:meloplay/bloc/home/home_bloc.dart';
-import 'package:meloplay/bloc/theme/theme_bloc.dart';
-import 'package:meloplay/data/repositories/song_repository.dart';
-import 'package:meloplay/data/services/hive_box.dart';
-import 'package:meloplay/presentation/pages/splash_page.dart';
-import 'package:meloplay/presentation/utils/app_router.dart';
-import 'package:meloplay/presentation/utils/theme/app_theme_data.dart';
+import 'package:meloplay/src/app.dart';
+import 'package:meloplay/src/bloc/home/home_bloc.dart';
+import 'package:meloplay/src/bloc/theme/theme_bloc.dart';
+import 'package:meloplay/src/data/repositories/song_repository.dart';
+import 'package:meloplay/src/data/services/hive_box.dart';
+
 import 'package:permission_handler/permission_handler.dart';
 
 Future<void> main() async {
@@ -45,34 +44,14 @@ Future<void> main() async {
       child: MultiBlocProvider(
         providers: [
           BlocProvider(
-            create: (context) => ThemeBloc(),
+            create: (context) => HomeBloc(),
           ),
           BlocProvider(
-            create: (context) => HomeBloc(),
+            create: (context) => ThemeBloc(),
           ),
         ],
         child: const MyApp(),
       ),
     ),
   );
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<ThemeBloc, ThemeState>(
-      builder: (context, state) {
-        return MaterialApp(
-          debugShowCheckedModeBanner: false,
-          title: 'Meloplay',
-          theme: AppThemeData.getTheme(),
-          home: const SplashPage(),
-          onGenerateRoute: (settings) => AppRouter.generateRoute(settings),
-        );
-      },
-    );
-  }
 }

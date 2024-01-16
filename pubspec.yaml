@@ -1,10 +1,10 @@
 name: meloplay
 description: Meloplay is a local music player app that plays music from your device built with Flutter.
-publish_to: "none" # Remove this line if you wish to publish to pub.dev
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-    sdk: ">=3.0.6 <4.0.0"
+    sdk: '>=3.0.6 <4.0.0'
 
 dependencies:
     bloc: ^8.1.2 # state management
@@ -14,19 +14,19 @@ dependencies:
     flutter_staggered_animations: ^1.1.1 # animation
     hive: ^2.2.3 # local database
     hive_flutter: ^1.1.0 # local database
-    just_audio: ^0.9.34 # audio player
+    just_audio: ^0.9.36 # audio player
     just_audio_background: ^0.0.1-beta.10 # audio player background
     on_audio_query: ^2.9.0 # get songs from device
-    package_info_plus: ^4.1.0 # get app info
-    permission_handler: ^10.4.3 # get permission
+    package_info_plus: ^5.0.1 # get app info
+    permission_handler: ^11.1.0 # get permission
     rxdart: ^0.27.7 # stream
-    share_plus: ^7.1.0 # share song
-    url_launcher: ^6.1.12 # open url
+    share_plus: ^7.2.1 # share song
+    url_launcher: ^6.2.3 # open url
 
 dev_dependencies:
     flutter_test:
         sdk: flutter
-    flutter_lints: ^2.0.2 # linter
+    flutter_lints: ^3.0.1 # linter
     flutter_launcher_icons: ^0.13.1 # app icon generator
 
 flutter:
@@ -35,7 +35,7 @@ flutter:
         - assets/icon/
 
 flutter_launcher_icons:
-    image_path: "assets/icon/icon.png"
+    image_path: 'assets/icon/icon.png'
     android: true
     ios: true
 # dart pub get
