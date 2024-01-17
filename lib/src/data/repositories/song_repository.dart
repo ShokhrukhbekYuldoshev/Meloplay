@@ -23,6 +23,24 @@ class SongRepository {
     );
   }
 
+  bool arePlaylistsEqual(
+      ConcatenatingAudioSource a, ConcatenatingAudioSource b) {
+    if (a.children.length != b.children.length) {
+      return false;
+    }
+
+    for (int i = 0; i < a.children.length; i++) {
+      UriAudioSource sourceA = a.children[i] as UriAudioSource;
+      UriAudioSource sourceB = b.children[i] as UriAudioSource;
+
+      if (sourceA.uri != sourceB.uri) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
   final audioPlayer = AudioPlayer();
 
   // playlist
@@ -36,14 +54,18 @@ class SongRepository {
     final mediaItems = getMediaItemsFromSongs(songs);
     this.mediaItems = mediaItems;
 
-    playlist.clear();
+    var temp = ConcatenatingAudioSource(children: []);
 
-    await playlist.addAll(mediaItems.map((mediaItem) {
+    await temp.addAll(mediaItems.map((mediaItem) {
       final source = _createAudioSource(mediaItem);
       return source;
     }).toList());
 
-    await audioPlayer.setAudioSource(playlist);
+    if (!arePlaylistsEqual(playlist, temp)) {
+      playlist.clear();
+      playlist.addAll(temp.children);
+      await audioPlayer.setAudioSource(temp);
+    }
   }
 
   // media item to song model
@@ -89,6 +111,9 @@ class SongRepository {
   // current position
   Stream<Duration> get position => audioPlayer.positionStream;
 
+  // duration
+  Stream<Duration?> get duration => audioPlayer.durationStream;
+
   // shuffle mode enabled
   Stream<bool> get shuffleModeEnabled => audioPlayer.shuffleModeEnabledStream;
 
@@ -110,7 +135,7 @@ class SongRepository {
   }
 
   int getMediaItemIndex(MediaItem mediaItem) {
-    return mediaItems.indexWhere((item) => item.id == mediaItem.id);
+    return mediaItems.indexWhere((item) => item == mediaItem);
   }
 
   int getMediaItemId(MediaItem mediaItem) {
@@ -127,14 +152,14 @@ class SongRepository {
     await audioPlayer.stop();
   }
 
+  // dispose
+  Future<void> dispose() async {
+    await audioPlayer.dispose();
+  }
+
   // seek next
   Future<void> seekNext() async {
-    // if last song, seek to first song
-    if (audioPlayer.currentIndex == playlist.length - 1) {
-      await audioPlayer.seek(Duration.zero, index: 0);
-    } else {
-      await audioPlayer.seekToNext();
-    }
+    await audioPlayer.seekToNext();
   }
 
   // seek previous

@@ -21,7 +21,7 @@ class PlayerPage extends StatefulWidget {
 
 class _PlayerPageState extends State<PlayerPage> {
   late final SongRepository songRepository;
-  Duration? _duration;
+  // Duration? _duration;
 
   @override
   void initState() {
@@ -32,23 +32,20 @@ class _PlayerPageState extends State<PlayerPage> {
   Future<void> initPlayer() async {
     songRepository = context.read<SongRepository>();
 
-    songRepository.mediaItem.listen((mediaItem) async {
-      if (mediaItem != null) {
-        // if media item is same skip
-        if (mediaItem.id != widget.mediaItem.id) {
-          try {
-            int index = songRepository.getMediaItemIndex(widget.mediaItem);
-            await songRepository.playFromQueue(index);
-          } catch (_) {}
+    songRepository.mediaItem.listen(
+      (mediaItem) async {
+        if (mediaItem != null) {
+          // if media item is same skip or no items playing
+          if (mediaItem.id != widget.mediaItem.id ||
+              await songRepository.playing.first == false) {
+            try {
+              int index = songRepository.getMediaItemIndex(widget.mediaItem);
+              await songRepository.playFromQueue(index);
+            } catch (_) {}
+          }
         }
-
-        if (mounted) {
-          setState(() {
-            _duration = mediaItem.duration ?? Duration.zero;
-          });
-        }
-      }
-    });
+      },
+    );
   }
 
   @override
@@ -95,7 +92,7 @@ class _PlayerPageState extends State<PlayerPage> {
                         width: double.infinity,
                         decoration: BoxDecoration(
                           color: Colors.grey.withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(50),
                         ),
                         child: Icon(
                           Icons.music_note_outlined,
@@ -153,13 +150,19 @@ class _PlayerPageState extends State<PlayerPage> {
               builder: (context, snapshot) {
                 final position = snapshot.data ?? Duration.zero;
                 try {
-                  return Slider(
-                    value: position.inMilliseconds.toDouble(),
-                    min: 0,
-                    max: _duration?.inMilliseconds.toDouble() ?? 0,
-                    onChanged: (value) {
-                      songRepository
-                          .seek(Duration(milliseconds: value.toInt()));
+                  return StreamBuilder<Duration?>(
+                    stream: songRepository.duration,
+                    builder: (context, snapshot) {
+                      final duration = snapshot.data ?? Duration.zero;
+                      return Slider(
+                        value: position.inMilliseconds.toDouble(),
+                        min: 0,
+                        max: duration.inMilliseconds.toDouble(),
+                        onChanged: (value) {
+                          songRepository
+                              .seek(Duration(milliseconds: value.toInt()));
+                        },
+                      );
                     },
                   );
                 } catch (e) {
@@ -191,13 +194,18 @@ class _PlayerPageState extends State<PlayerPage> {
                     );
                   },
                 ),
-                Text(
-                  _duration?.toHms() ?? '0:00',
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+                StreamBuilder<Duration?>(
+                    stream: songRepository.duration,
+                    builder: (context, snapshot) {
+                      final duration = snapshot.data;
+                      return Text(
+                        duration?.toHms() ?? '0:00',
+                        style: const TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      );
+                    }),
               ],
             ),
 
@@ -264,29 +272,30 @@ class _PlayerPageState extends State<PlayerPage> {
                 ),
                 // repeat button
                 StreamBuilder<LoopMode>(
-                    stream: songRepository.loopMode,
-                    builder: (context, snapshot) {
-                      return IconButton(
-                        onPressed: () async {
-                          if (snapshot.data == LoopMode.off) {
-                            await songRepository.setLoopMode(LoopMode.all);
-                          } else if (snapshot.data == LoopMode.all) {
-                            await songRepository.setLoopMode(LoopMode.one);
-                          } else {
-                            await songRepository.setLoopMode(LoopMode.off);
-                          }
-                        },
-                        icon: snapshot.data == LoopMode.off
-                            ? const Icon(
-                                Icons.repeat_rounded,
-                                color: Colors.grey,
-                              )
-                            : snapshot.data == LoopMode.all
-                                ? const Icon(Icons.repeat_rounded)
-                                : const Icon(Icons.repeat_one_rounded),
-                        iconSize: 30,
-                      );
-                    }),
+                  stream: songRepository.loopMode,
+                  builder: (context, snapshot) {
+                    return IconButton(
+                      onPressed: () async {
+                        if (snapshot.data == LoopMode.off) {
+                          await songRepository.setLoopMode(LoopMode.all);
+                        } else if (snapshot.data == LoopMode.all) {
+                          await songRepository.setLoopMode(LoopMode.one);
+                        } else {
+                          await songRepository.setLoopMode(LoopMode.off);
+                        }
+                      },
+                      icon: snapshot.data == LoopMode.off
+                          ? const Icon(
+                              Icons.repeat_rounded,
+                              color: Colors.grey,
+                            )
+                          : snapshot.data == LoopMode.all
+                              ? const Icon(Icons.repeat_rounded)
+                              : const Icon(Icons.repeat_one_rounded),
+                      iconSize: 30,
+                    );
+                  },
+                ),
               ],
             ),
           ],
