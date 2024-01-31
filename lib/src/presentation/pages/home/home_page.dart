@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:meloplay/src/service_locator.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'package:meloplay/src/bloc/theme/theme_bloc.dart';
-import 'package:meloplay/src/data/repositories/song_repository.dart';
 import 'package:meloplay/src/presentation/pages/home/views/albums_view.dart';
 import 'package:meloplay/src/presentation/pages/home/views/artists_view.dart';
 import 'package:meloplay/src/presentation/pages/home/views/genres_view.dart';
@@ -23,8 +23,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
-  final OnAudioQuery _audioQuery = OnAudioQuery();
-  late final SongRepository songRepository;
+  final OnAudioQuery _audioQuery = sl<OnAudioQuery>();
   late TabController _tabController;
   bool _hasPermission = false;
 

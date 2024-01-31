@@ -2,13 +2,9 @@ import 'package:flutter/material.dart';
 
 class AnimatedFavoriteButton extends StatefulWidget {
   final bool isFavorite;
-  final Function(bool) onChanged;
-
-  const AnimatedFavoriteButton({
-    super.key,
-    required this.isFavorite,
-    required this.onChanged,
-  });
+  final VoidCallback? onTap;
+  const AnimatedFavoriteButton(
+      {super.key, required this.isFavorite, this.onTap});
 
   @override
   State<AnimatedFavoriteButton> createState() => _AnimatedFavoriteButtonState();
@@ -17,52 +13,46 @@ class AnimatedFavoriteButton extends StatefulWidget {
 class _AnimatedFavoriteButtonState extends State<AnimatedFavoriteButton>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
-  late Animation<double> _scaleAnimation;
-  late Animation<Color?> _colorAnimation;
+  late Animation<double> _animation;
 
   @override
   void initState() {
     super.initState();
     _controller = AnimationController(
+      duration: const Duration(milliseconds: 200),
       vsync: this,
-      duration: const Duration(milliseconds: 150),
-    );
-    _scaleAnimation = Tween<double>(begin: 1.0, end: 1.5).animate(_controller);
-    _scaleAnimation.addStatusListener((status) {
-      if (status == AnimationStatus.completed) {
-        _controller.reverse();
-      }
-    });
-    _colorAnimation = ColorTween(
-      begin: Colors.grey[400],
-      end: Colors.red,
-    ).animate(_controller);
-  }
+    )..addListener(() {
+        setState(() {});
+      });
 
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
+    _animation = Tween<double>(begin: 1.0, end: 1.2).animate(_controller)
+      ..addStatusListener((status) {
+        if (status == AnimationStatus.completed) {
+          _controller.reverse();
+        }
+      });
   }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        if (widget.isFavorite) {
-          _controller.reverse();
-        } else {
-          _controller.forward();
-        }
-        widget.onChanged(!widget.isFavorite);
+        _controller.forward();
+        widget.onTap?.call();
       },
-      child: ScaleTransition(
-        scale: _scaleAnimation,
+      child: Transform.scale(
+        scale: _animation.value,
         child: Icon(
-          Icons.favorite_rounded,
-          color: _colorAnimation.value,
+          widget.isFavorite ? Icons.favorite : Icons.favorite_border,
+          color: widget.isFavorite ? Colors.red : Colors.grey,
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 }

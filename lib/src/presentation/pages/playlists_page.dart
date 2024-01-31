@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:meloplay/src/presentation/utils/theme/themes.dart';
+import 'package:meloplay/src/service_locator.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 class PlaylistsPage extends StatefulWidget {
@@ -10,7 +11,7 @@ class PlaylistsPage extends StatefulWidget {
 }
 
 class _PlaylistsPageState extends State<PlaylistsPage> {
-  final audioQuery = OnAudioQuery();
+  final audioQuery = sl<OnAudioQuery>();
   final playlists = <PlaylistModel>[];
   final controller = TextEditingController();
   final formKey = GlobalKey<FormState>();

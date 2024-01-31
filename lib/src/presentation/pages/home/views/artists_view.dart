@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:meloplay/src/bloc/home/home_bloc.dart';
 import 'package:meloplay/src/presentation/utils/app_router.dart';
+import 'package:meloplay/src/service_locator.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 class ArtistsView extends StatefulWidget {
@@ -17,7 +18,7 @@ class _ArtistsViewState extends State<ArtistsView>
   @override
   bool get wantKeepAlive => true;
 
-  final audioQuery = OnAudioQuery();
+  final audioQuery = sl<OnAudioQuery>();
   final artists = <ArtistModel>[];
   bool isLoading = true;
   @override

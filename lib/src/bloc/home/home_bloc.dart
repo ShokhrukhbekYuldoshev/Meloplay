@@ -7,8 +7,7 @@ part 'home_event.dart';
 part 'home_state.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
-  HomeBloc() : super(HomeInitial()) {
-    final repository = HomeRepository();
+  HomeBloc({required HomeRepository repository}) : super(HomeInitial()) {
     on<GetSongsEvent>((event, emit) async {
       emit(HomeLoading());
       try {

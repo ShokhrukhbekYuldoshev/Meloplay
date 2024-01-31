@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:just_audio/just_audio.dart';
+import 'package:just_audio/just_audio.dart' hide PlayerState;
 import 'package:just_audio_background/just_audio_background.dart';
+import 'package:meloplay/src/bloc/player/player_bloc.dart';
+import 'package:meloplay/src/data/repositories/player_repository.dart';
 import 'package:meloplay/src/data/repositories/song_repository.dart';
 import 'package:meloplay/src/presentation/widgets/animated_favorite_button.dart';
 import 'package:meloplay/src/presentation/utils/extensions.dart';
 import 'package:meloplay/src/presentation/utils/theme/themes.dart';
+import 'package:meloplay/src/service_locator.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 class PlayerPage extends StatefulWidget {
@@ -30,7 +33,7 @@ class _PlayerPageState extends State<PlayerPage> {
   }
 
   Future<void> initPlayer() async {
-    songRepository = context.read<SongRepository>();
+    songRepository = sl<SongRepository>();
 
     songRepository.mediaItem.listen(
       (mediaItem) async {
@@ -80,25 +83,56 @@ class _PlayerPageState extends State<PlayerPage> {
                 stream: songRepository.mediaItem,
                 builder: (context, snapshot) {
                   final mediaItem = snapshot.data;
+
                   return Expanded(
                     flex: 4,
-                    child: QueryArtworkWidget(
-                      id: int.parse(mediaItem?.id ?? '0'),
-                      type: ArtworkType.AUDIO,
-                      artworkQuality: FilterQuality.high,
-                      quality: 100,
-                      artworkWidth: double.infinity,
-                      nullArtworkWidget: Container(
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: Colors.grey.withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(50),
+                    child: Stack(
+                      fit: StackFit.expand,
+                      children: [
+                        QueryArtworkWidget(
+                          id: int.parse(mediaItem?.id ?? '0'),
+                          type: ArtworkType.AUDIO,
+                          artworkQuality: FilterQuality.high,
+                          quality: 100,
+                          artworkWidth: double.infinity,
+                          nullArtworkWidget: Container(
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: Colors.grey.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(50),
+                            ),
+                            child: Icon(
+                              Icons.music_note_outlined,
+                              size: MediaQuery.of(context).size.height / 10,
+                            ),
+                          ),
                         ),
-                        child: Icon(
-                          Icons.music_note_outlined,
-                          size: MediaQuery.of(context).size.height / 10,
+                        Align(
+                          alignment: Alignment.bottomRight,
+                          child: Container(
+                            margin:
+                                const EdgeInsets.only(right: 16, bottom: 16),
+                            padding: const EdgeInsets.all(16),
+                            decoration: BoxDecoration(
+                              color: Colors.black.withOpacity(0.5),
+                              borderRadius: BorderRadius.circular(50),
+                            ),
+                            child: BlocBuilder<PlayerBloc, PlayerState>(
+                              builder: (context, state) {
+                                return AnimatedFavoriteButton(
+                                  isFavorite: sl<PlayerRepository>()
+                                      .isFavorite(mediaItem?.id ?? ''),
+                                  onTap: () {
+                                    context.read<PlayerBloc>().add(
+                                          ToggleFavorite(mediaItem?.id ?? ''),
+                                        );
+                                  },
+                                );
+                              },
+                            ),
+                          ),
                         ),
-                      ),
+                      ],
                     ),
                   );
                 }),
@@ -108,6 +142,7 @@ class _PlayerPageState extends State<PlayerPage> {
                 stream: songRepository.mediaItem,
                 builder: (context, snapshot) {
                   final mediaItem = snapshot.data;
+
                   return Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -135,10 +170,6 @@ class _PlayerPageState extends State<PlayerPage> {
                             ),
                           ],
                         ),
-                      ),
-                      AnimatedFavoriteButton(
-                        isFavorite: false,
-                        onChanged: (value) {},
                       ),
                     ],
                   );
@@ -264,8 +295,8 @@ class _PlayerPageState extends State<PlayerPage> {
                 ),
                 // next button
                 IconButton(
-                  onPressed: () {
-                    songRepository.seekNext();
+                  onPressed: () async {
+                    await songRepository.seekNext();
                   },
                   icon: const Icon(Icons.skip_next_rounded),
                   iconSize: 40,

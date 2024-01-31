@@ -1,10 +1,10 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:meloplay/src/data/repositories/song_repository.dart';
 import 'package:meloplay/src/presentation/utils/app_router.dart';
+import 'package:meloplay/src/service_locator.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:share_plus/share_plus.dart';
@@ -34,9 +34,9 @@ class _SongListTileState extends State<SongListTile> {
   Widget build(BuildContext context) {
     return ListTile(
       onTap: () async {
-        SongRepository songRepository = context.read<SongRepository>();
+        SongRepository songRepository = sl<SongRepository>();
         MediaItem mediaItem = songRepository.getMediaItemFromSong(widget.song);
-        await context.read<SongRepository>().addSongsToPlaylist(widget.songs);
+        await sl<SongRepository>().addSongsToPlaylist(widget.songs);
 
         if (mounted) {
           Navigator.of(context).pushNamed(
@@ -47,7 +47,7 @@ class _SongListTileState extends State<SongListTile> {
       },
       leading: widget.showAlbumArt
           ? QueryArtworkWidget(
-              id: widget.song.albumId!,
+              id: widget.song.albumId ?? 0,
               type: ArtworkType.ALBUM,
               artworkBorder: BorderRadius.circular(10),
               nullArtworkWidget: Container(

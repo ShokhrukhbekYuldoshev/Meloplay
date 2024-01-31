@@ -26,7 +26,7 @@ class HomeCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
           onTap: onTap,
           child: Padding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -34,7 +34,7 @@ class HomeCard extends StatelessWidget {
                   icon,
                   color: Colors.white,
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 5),
                 Text(
                   title,
                   style: const TextStyle(

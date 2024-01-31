@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:meloplay/src/presentation/widgets/player_bottom_app_bar.dart';
 import 'package:meloplay/src/presentation/widgets/song_list_tile.dart';
 import 'package:meloplay/src/presentation/utils/theme/themes.dart';
+import 'package:meloplay/src/service_locator.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 class ArtistPage extends StatefulWidget {
@@ -24,7 +25,7 @@ class _ArtistPageState extends State<ArtistPage> {
   }
 
   Future<void> _getSongs() async {
-    final OnAudioQuery audioQuery = OnAudioQuery();
+    final OnAudioQuery audioQuery = sl<OnAudioQuery>();
 
     final List<SongModel> songs = await audioQuery.queryAudiosFrom(
       AudiosFromType.ARTIST_ID,

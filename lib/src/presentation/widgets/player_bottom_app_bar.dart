@@ -5,6 +5,7 @@ import 'package:meloplay/src/bloc/theme/theme_bloc.dart';
 import 'package:meloplay/src/data/repositories/song_repository.dart';
 import 'package:meloplay/src/presentation/utils/app_router.dart';
 import 'package:meloplay/src/presentation/utils/theme/themes.dart';
+import 'package:meloplay/src/service_locator.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 class PlayerBottomAppBar extends StatefulWidget {
@@ -23,7 +24,7 @@ class _PlayerBottomAppBarState extends State<PlayerBottomAppBar> {
   @override
   void initState() {
     super.initState();
-    songRepository = context.read<SongRepository>();
+    songRepository = sl<SongRepository>();
     songRepository.playing.listen((playing) {
       setState(() {
         isPlaying = playing;

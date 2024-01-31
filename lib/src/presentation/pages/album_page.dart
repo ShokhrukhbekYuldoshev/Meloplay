@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meloplay/src/data/repositories/song_repository.dart';
 import 'package:meloplay/src/presentation/widgets/player_bottom_app_bar.dart';
 import 'package:meloplay/src/presentation/widgets/song_list_tile.dart';
 import 'package:meloplay/src/presentation/utils/theme/themes.dart';
+import 'package:meloplay/src/service_locator.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 class AlbumPage extends StatefulWidget {
@@ -22,13 +22,13 @@ class _AlbumPageState extends State<AlbumPage> {
   @override
   void initState() {
     super.initState();
-    songRepository = context.read<SongRepository>();
+    songRepository = sl<SongRepository>();
     _songs = [];
     _getSongs();
   }
 
   Future<void> _getSongs() async {
-    final OnAudioQuery audioQuery = OnAudioQuery();
+    final OnAudioQuery audioQuery = sl<OnAudioQuery>();
 
     final List<SongModel> songs = await audioQuery.queryAudiosFrom(
       AudiosFromType.ALBUM_ID,

@@ -6,8 +6,7 @@ part 'theme_event.dart';
 part 'theme_state.dart';
 
 class ThemeBloc extends Bloc<ThemeEvent, ThemeState> {
-  ThemeBloc() : super(ThemeInitial()) {
-    final repository = ThemeRepository();
+  ThemeBloc({required ThemeRepository repository}) : super(ThemeInitial()) {
     on<ChangeTheme>((event, emit) async {
       emit(ThemeInitial());
       await repository.updateTheme(event.theme);

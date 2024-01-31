@@ -17,7 +17,7 @@ Meloplay is a local music player app that plays music from your device built wit
 -   [x] Shuffle and repeat
 -   [ ] Search for music
 -   [ ] Playlists (Read, create, rename, delete, add songs, remove songs)
--   [ ] Favorites (Add songs, remove songs)
+-   [x] Favorites (Add songs, remove songs)
 -   [ ] Recently played
 -   [ ] Most played
 -   [x] Artists
@@ -79,22 +79,23 @@ Meloplay is a local music player app that plays music from your device built wit
 
 ## 📚 Dependencies
 
-| Name                                                                                  | Version       | Description                                                                                                                                |
-| ------------------------------------------------------------------------------------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| [bloc](https://pub.dev/packages/bloc)                                                 | 8.1.2         | A predictable state management library                                                                                                     |
-| [flutter_bloc](https://pub.dev/packages/flutter_bloc)                                 | 8.1.3         | Flutter Widgets that make it easy to implement BLoC design patterns                                                                        |
-| [flutter_staggered_animations](https://pub.dev/packages/flutter_staggered_animations) | 1.1.1         | A plugin for adding staggered animations to your Flutter apps                                                                              |
-| [hive](https://pub.dev/packages/hive)                                                 | 2.2.3         | A lightweight and blazing fast key-value database                                                                                          |
-| [hive_flutter](https://pub.dev/packages/hive_flutter)                                 | 1.1.0         | Hive database implementation for Flutter                                                                                                   |
-| [flutter_launcher_icons](https://pub.dev/packages/flutter_launcher_icons)             | 0.13.1        | A package that provides icons for Flutter apps                                                                                             |
-| [just_audio](https://pub.dev/packages/just_audio)                                     | 0.9.346       | A feature-rich audio player for Flutter                                                                                                    |
-| [just_audio_background](https://pub.dev/packages/just_audio_background)               | 0.0.1-beta.11 | A plugin for playing audio in the background on Android and iOS.                                                                           |
-| [on_audio_query](https://pub.dev/packages/on_audio_query)                             | 2.9.0         | A Flutter plugin to query songs on Android and iOS                                                                                         |
-| [package_info_plus](https://pub.dev/packages/package_info_plus)                       | 5.0.1         | Flutter plugin for querying information about the application package, such as CFBundleVersion on iOS or versionCode on Android.           |
-| [permission_handler](https://pub.dev/packages/permission_handler)                     | 11.1.0        | A Flutter plugin for permission handling. This plugin provides a cross-platform (iOS, Android) API to request and check permissions.       |
-| [rxdart](https://pub.dev/packages/rxdart)                                             | 0.27.7        | RxDart is an implementation of the popular reactiveX api for asynchronous programming, leveraging the native Dart Streams API.             |
-| [share_plus](https://pub.dev/packages/share_plus)                                     | 7.2.1         | Flutter plugin for sharing content via the platform share UI, using the ACTION_SEND intent on Android and UIActivityViewController on iOS. |
-| [url_launcher](https://pub.dev/packages/url_launcher)                                 | 6.2.3         | A Flutter plugin for launching a URL in the mobile platform.                                                                               |
+| Name                                                                                  | Version       | Description                                                                                                                                                              |
+| ------------------------------------------------------------------------------------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| [bloc](https://pub.dev/packages/bloc)                                                 | 8.1.2         | A predictable state management library                                                                                                                                   |
+| [flutter_bloc](https://pub.dev/packages/flutter_bloc)                                 | 8.1.3         | Flutter Widgets that make it easy to implement BLoC design patterns                                                                                                      |
+| [flutter_staggered_animations](https://pub.dev/packages/flutter_staggered_animations) | 1.1.1         | A plugin for adding staggered animations to your Flutter apps                                                                                                            |
+| [get_it](https://pub.dev/packages/get_it)                                             | 7.6.7         | Simple direct Service Locator that allows to decouple the interface from a concrete implementation and to access the concrete implementation from everywhere in your App |
+| [hive](https://pub.dev/packages/hive)                                                 | 2.2.3         | A lightweight and blazing fast key-value database                                                                                                                        |
+| [hive_flutter](https://pub.dev/packages/hive_flutter)                                 | 1.1.0         | Hive database implementation for Flutter                                                                                                                                 |
+| [flutter_launcher_icons](https://pub.dev/packages/flutter_launcher_icons)             | 0.13.1        | A package that provides icons for Flutter apps                                                                                                                           |
+| [just_audio](https://pub.dev/packages/just_audio)                                     | 0.9.346       | A feature-rich audio player for Flutter                                                                                                                                  |
+| [just_audio_background](https://pub.dev/packages/just_audio_background)               | 0.0.1-beta.11 | A plugin for playing audio in the background on Android and iOS.                                                                                                         |
+| [on_audio_query](https://pub.dev/packages/on_audio_query)                             | 2.9.0         | A Flutter plugin to query songs on Android and iOS                                                                                                                       |
+| [package_info_plus](https://pub.dev/packages/package_info_plus)                       | 5.0.1         | Flutter plugin for querying information about the application package, such as CFBundleVersion on iOS or versionCode on Android.                                         |
+| [permission_handler](https://pub.dev/packages/permission_handler)                     | 11.2.0        | A Flutter plugin for permission handling. This plugin provides a cross-platform (iOS, Android) API to request and check permissions.                                     |
+| [rxdart](https://pub.dev/packages/rxdart)                                             | 0.27.7        | RxDart is an implementation of the popular reactiveX api for asynchronous programming, leveraging the native Dart Streams API.                                           |
+| [share_plus](https://pub.dev/packages/share_plus)                                     | 7.2.2         | Flutter plugin for sharing content via the platform share UI, using the ACTION_SEND intent on Android and UIActivityViewController on iOS.                               |
+| [url_launcher](https://pub.dev/packages/url_launcher)                                 | 6.2.4         | A Flutter plugin for launching a URL in the mobile platform.                                                                                                             |
 
 ## 📦 Installation
 

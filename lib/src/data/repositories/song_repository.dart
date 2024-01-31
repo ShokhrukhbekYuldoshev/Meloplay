@@ -80,6 +80,13 @@ class SongRepository {
     });
   }
 
+  // media items to song models
+  List<SongModel> getSongsFromMediaItems(List<MediaItem> mediaItems) {
+    return mediaItems
+        .map((mediaItem) => getSongFromMediaItem(mediaItem))
+        .toList();
+  }
+
   // song model to media item
   MediaItem getMediaItemFromSong(SongModel song) {
     return MediaItem(

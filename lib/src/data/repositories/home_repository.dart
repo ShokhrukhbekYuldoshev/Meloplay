@@ -1,7 +1,8 @@
+import 'package:meloplay/src/service_locator.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 class HomeRepository {
-  final OnAudioQuery _audioQuery = OnAudioQuery();
+  final OnAudioQuery _audioQuery = sl<OnAudioQuery>();
 
   Future<List<SongModel>> getSongs() async {
     // get all songs
