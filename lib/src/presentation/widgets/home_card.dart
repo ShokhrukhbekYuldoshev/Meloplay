@@ -19,11 +19,11 @@ class HomeCard extends StatelessWidget {
     return Expanded(
       child: Ink(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(15),
           color: color,
         ),
         child: InkWell(
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(15),
           onTap: onTap,
           child: Padding(
             padding: const EdgeInsets.all(10),

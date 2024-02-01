@@ -77,11 +77,12 @@ class _ArtistPageState extends State<ArtistPage> {
                 type: ArtworkType.ARTIST,
                 artworkQuality: FilterQuality.high,
                 artworkWidth: double.infinity,
+                artworkBorder: BorderRadius.circular(50),
                 nullArtworkWidget: Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
                     color: Colors.grey.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(50),
                   ),
                   child: const Icon(
                     Icons.person,

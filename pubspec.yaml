@@ -1,7 +1,7 @@
 name: meloplay
 description: Meloplay is a local music player app that plays music from your device built with Flutter.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
-version: 1.1.0+1
+version: 1.1.1+1
 
 environment:
     sdk: '>=3.0.6 <4.0.0'

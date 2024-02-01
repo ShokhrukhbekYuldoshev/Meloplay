@@ -3,16 +3,56 @@ part of 'player_bloc.dart';
 @immutable
 sealed class PlayerEvent {}
 
-// toggle favorite
-class ToggleFavorite extends PlayerEvent {
-  final String songId;
+class PlayerPlay extends PlayerEvent {}
 
-  ToggleFavorite(this.songId);
+class PlayerPlayFromQueue extends PlayerEvent {
+  final int index;
+
+  PlayerPlayFromQueue(this.index);
 }
 
-// add to recently played
-class AddToRecentlyPlayed extends PlayerEvent {
-  final String songId;
+class PlayerAddSongsToPlaylist extends PlayerEvent {
+  final List<SongModel> songs;
 
-  AddToRecentlyPlayed(this.songId);
+  PlayerAddSongsToPlaylist(this.songs);
+}
+
+class PlayerPause extends PlayerEvent {}
+
+class PlayerStop extends PlayerEvent {}
+
+class PlayerSeek extends PlayerEvent {
+  final Duration position;
+
+  PlayerSeek(this.position);
+}
+
+class PlayerNext extends PlayerEvent {}
+
+class PlayerPrevious extends PlayerEvent {}
+
+class PlayerShuffle extends PlayerEvent {}
+
+class PlayerSetVolume extends PlayerEvent {
+  final double volume;
+
+  PlayerSetVolume(this.volume);
+}
+
+class PlayerSetSpeed extends PlayerEvent {
+  final double speed;
+
+  PlayerSetSpeed(this.speed);
+}
+
+class PlayerSetLoopMode extends PlayerEvent {
+  final LoopMode loopMode;
+
+  PlayerSetLoopMode(this.loopMode);
+}
+
+class PlayerSetShuffleModeEnabled extends PlayerEvent {
+  final bool shuffleModeEnabled;
+
+  PlayerSetShuffleModeEnabled(this.shuffleModeEnabled);
 }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:meloplay/src/data/repositories/song_repository.dart';
+import 'package:meloplay/src/data/repositories/player_repository.dart';
 import 'package:meloplay/src/presentation/widgets/player_bottom_app_bar.dart';
 import 'package:meloplay/src/presentation/widgets/song_list_tile.dart';
 import 'package:meloplay/src/presentation/utils/theme/themes.dart';
@@ -17,12 +17,11 @@ class AlbumPage extends StatefulWidget {
 
 class _AlbumPageState extends State<AlbumPage> {
   late List<SongModel> _songs;
-  late final SongRepository songRepository;
+  final PlayerRepository playerRepository = sl<PlayerRepository>();
 
   @override
   void initState() {
     super.initState();
-    songRepository = sl<SongRepository>();
     _songs = [];
     _getSongs();
   }
@@ -81,11 +80,12 @@ class _AlbumPageState extends State<AlbumPage> {
                 type: ArtworkType.ALBUM,
                 artworkQuality: FilterQuality.high,
                 artworkWidth: double.infinity,
+                artworkBorder: BorderRadius.circular(50),
                 nullArtworkWidget: Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
                     color: Colors.grey.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(50),
                   ),
                   child: const Icon(
                     Icons.music_note_outlined,

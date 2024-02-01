@@ -1,5 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:meloplay/src/data/repositories/favorites_repository.dart';
 
 import 'package:on_audio_query/on_audio_query.dart';

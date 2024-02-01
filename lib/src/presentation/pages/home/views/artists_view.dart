@@ -75,12 +75,12 @@ class _ArtistsViewState extends State<ArtistsView>
                               type: ArtworkType.ARTIST,
                               artworkHeight: 96,
                               artworkWidth: 96,
-                              artworkBorder: BorderRadius.circular(10),
+                              artworkBorder: BorderRadius.circular(25),
                               nullArtworkWidget: Container(
                                 width: 96,
                                 height: 96,
                                 decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
+                                  borderRadius: BorderRadius.circular(25),
                                   color: Colors.grey.withOpacity(0.1),
                                 ),
                                 child: const Icon(

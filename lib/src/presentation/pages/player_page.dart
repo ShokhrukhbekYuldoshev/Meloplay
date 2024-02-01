@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:just_audio/just_audio.dart' hide PlayerState;
+import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:meloplay/src/bloc/player/player_bloc.dart';
+import 'package:meloplay/src/bloc/song/song_bloc.dart';
 import 'package:meloplay/src/data/repositories/player_repository.dart';
 import 'package:meloplay/src/data/repositories/song_repository.dart';
 import 'package:meloplay/src/presentation/widgets/animated_favorite_button.dart';
@@ -23,8 +24,7 @@ class PlayerPage extends StatefulWidget {
 }
 
 class _PlayerPageState extends State<PlayerPage> {
-  late final SongRepository songRepository;
-  // Duration? _duration;
+  final playerRepository = sl<PlayerRepository>();
 
   @override
   void initState() {
@@ -33,17 +33,15 @@ class _PlayerPageState extends State<PlayerPage> {
   }
 
   Future<void> initPlayer() async {
-    songRepository = sl<SongRepository>();
-
-    songRepository.mediaItem.listen(
+    playerRepository.mediaItem.listen(
       (mediaItem) async {
         if (mediaItem != null) {
           // if media item is same skip or no items playing
           if (mediaItem.id != widget.mediaItem.id ||
-              await songRepository.playing.first == false) {
+              await playerRepository.playing.first == false) {
             try {
-              int index = songRepository.getMediaItemIndex(widget.mediaItem);
-              await songRepository.playFromQueue(index);
+              int index = playerRepository.getMediaItemIndex(widget.mediaItem);
+              await playerRepository.playFromQueue(index);
             } catch (_) {}
           }
         }
@@ -80,7 +78,7 @@ class _PlayerPageState extends State<PlayerPage> {
             const SizedBox(height: 16),
             // artwork
             StreamBuilder<MediaItem?>(
-                stream: songRepository.mediaItem,
+                stream: playerRepository.mediaItem,
                 builder: (context, snapshot) {
                   final mediaItem = snapshot.data;
 
@@ -109,27 +107,18 @@ class _PlayerPageState extends State<PlayerPage> {
                         ),
                         Align(
                           alignment: Alignment.bottomRight,
-                          child: Container(
-                            margin:
-                                const EdgeInsets.only(right: 16, bottom: 16),
-                            padding: const EdgeInsets.all(16),
-                            decoration: BoxDecoration(
-                              color: Colors.black.withOpacity(0.5),
-                              borderRadius: BorderRadius.circular(50),
-                            ),
-                            child: BlocBuilder<PlayerBloc, PlayerState>(
-                              builder: (context, state) {
-                                return AnimatedFavoriteButton(
-                                  isFavorite: sl<PlayerRepository>()
-                                      .isFavorite(mediaItem?.id ?? ''),
-                                  onTap: () {
-                                    context.read<PlayerBloc>().add(
-                                          ToggleFavorite(mediaItem?.id ?? ''),
-                                        );
-                                  },
-                                );
-                              },
-                            ),
+                          child: BlocBuilder<SongBloc, SongState>(
+                            builder: (context, state) {
+                              return AnimatedFavoriteButton(
+                                isFavorite: sl<SongRepository>()
+                                    .isFavorite(mediaItem?.id ?? ''),
+                                onTap: () {
+                                  context.read<SongBloc>().add(
+                                        ToggleFavorite(mediaItem?.id ?? ''),
+                                      );
+                                },
+                              );
+                            },
                           ),
                         ),
                       ],
@@ -139,7 +128,7 @@ class _PlayerPageState extends State<PlayerPage> {
             const Spacer(),
             // title and artist
             StreamBuilder<MediaItem?>(
-                stream: songRepository.mediaItem,
+                stream: playerRepository.mediaItem,
                 builder: (context, snapshot) {
                   final mediaItem = snapshot.data;
 
@@ -177,12 +166,12 @@ class _PlayerPageState extends State<PlayerPage> {
             const Spacer(),
             // seek bar
             StreamBuilder<Duration>(
-              stream: songRepository.position,
+              stream: playerRepository.position,
               builder: (context, snapshot) {
                 final position = snapshot.data ?? Duration.zero;
                 try {
                   return StreamBuilder<Duration?>(
-                    stream: songRepository.duration,
+                    stream: playerRepository.duration,
                     builder: (context, snapshot) {
                       final duration = snapshot.data ?? Duration.zero;
                       return Slider(
@@ -190,8 +179,11 @@ class _PlayerPageState extends State<PlayerPage> {
                         min: 0,
                         max: duration.inMilliseconds.toDouble(),
                         onChanged: (value) {
-                          songRepository
-                              .seek(Duration(milliseconds: value.toInt()));
+                          context.read<PlayerBloc>().add(
+                                PlayerSeek(
+                                  Duration(milliseconds: value.toInt()),
+                                ),
+                              );
                         },
                       );
                     },
@@ -212,7 +204,7 @@ class _PlayerPageState extends State<PlayerPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 StreamBuilder<Duration>(
-                  stream: songRepository.position,
+                  stream: playerRepository.position,
                   builder: (context, snapshot) {
                     final position = snapshot.data ?? Duration.zero;
 
@@ -226,7 +218,7 @@ class _PlayerPageState extends State<PlayerPage> {
                   },
                 ),
                 StreamBuilder<Duration?>(
-                    stream: songRepository.duration,
+                    stream: playerRepository.duration,
                     builder: (context, snapshot) {
                       final duration = snapshot.data;
                       return Text(
@@ -247,13 +239,15 @@ class _PlayerPageState extends State<PlayerPage> {
               children: [
                 //  shuffle button
                 StreamBuilder<bool>(
-                  stream: songRepository.shuffleModeEnabled,
+                  stream: playerRepository.shuffleModeEnabled,
                   builder: (context, snapshot) {
                     return IconButton(
                       onPressed: () async {
-                        await songRepository.setShuffleModeEnabled(
-                          !(snapshot.data ?? false),
-                        );
+                        context.read<PlayerBloc>().add(
+                              PlayerSetShuffleModeEnabled(
+                                !(snapshot.data ?? false),
+                              ),
+                            );
                       },
                       icon: snapshot.data == false
                           ? const Icon(
@@ -267,23 +261,23 @@ class _PlayerPageState extends State<PlayerPage> {
                 ),
                 // previous button
                 IconButton(
-                  onPressed: () async {
-                    await songRepository.seekPrevious();
+                  onPressed: () {
+                    context.read<PlayerBloc>().add(PlayerPrevious());
                   },
                   icon: const Icon(Icons.skip_previous_rounded),
                   iconSize: 40,
                 ),
                 // play/pause button
                 StreamBuilder<bool>(
-                  stream: songRepository.playing,
+                  stream: playerRepository.playing,
                   builder: (context, snapshot) {
                     final playing = snapshot.data ?? false;
                     return IconButton(
-                      onPressed: () async {
+                      onPressed: () {
                         if (playing) {
-                          await songRepository.pause();
+                          context.read<PlayerBloc>().add(PlayerPause());
                         } else {
-                          await songRepository.play();
+                          context.read<PlayerBloc>().add(PlayerPlay());
                         }
                       },
                       icon: playing
@@ -295,24 +289,30 @@ class _PlayerPageState extends State<PlayerPage> {
                 ),
                 // next button
                 IconButton(
-                  onPressed: () async {
-                    await songRepository.seekNext();
+                  onPressed: () {
+                    context.read<PlayerBloc>().add(PlayerNext());
                   },
                   icon: const Icon(Icons.skip_next_rounded),
                   iconSize: 40,
                 ),
                 // repeat button
                 StreamBuilder<LoopMode>(
-                  stream: songRepository.loopMode,
+                  stream: playerRepository.loopMode,
                   builder: (context, snapshot) {
                     return IconButton(
-                      onPressed: () async {
+                      onPressed: () {
                         if (snapshot.data == LoopMode.off) {
-                          await songRepository.setLoopMode(LoopMode.all);
+                          context.read<PlayerBloc>().add(
+                                PlayerSetLoopMode(LoopMode.all),
+                              );
                         } else if (snapshot.data == LoopMode.all) {
-                          await songRepository.setLoopMode(LoopMode.one);
+                          context.read<PlayerBloc>().add(
+                                PlayerSetLoopMode(LoopMode.one),
+                              );
                         } else {
-                          await songRepository.setLoopMode(LoopMode.off);
+                          context.read<PlayerBloc>().add(
+                                PlayerSetLoopMode(LoopMode.off),
+                              );
                         }
                       },
                       icon: snapshot.data == LoopMode.off

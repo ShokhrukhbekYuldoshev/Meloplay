@@ -1,17 +1,18 @@
-// favorites_repository.dart
+// recents_repository.dart
 import 'package:hive_flutter/adapters.dart';
 import 'package:meloplay/src/data/repositories/player_repository.dart';
 import 'package:meloplay/src/data/services/hive_box.dart';
 import 'package:meloplay/src/service_locator.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
-class FavoritesRepository {
+class RecentsRepository {
   final playerRepository = sl<PlayerRepository>();
 
   final box = Hive.box('myBox');
-  Future<List<SongModel>> fetchFavorites() async {
-    List<String> favoriteSongsIds = box.get(
-      HiveBox.favoriteSongsKey,
+
+  Future<List<SongModel>> fetchRecents() async {
+    List<String> recentSongsIds = box.get(
+      HiveBox.recentlyPlayedSongsKey,
       defaultValue: List<String>.empty(),
     );
 
@@ -20,8 +21,13 @@ class FavoritesRepository {
       uriType: UriType.EXTERNAL,
     );
 
+    // sort songs by recent songs ids
+    songs.sort((a, b) => recentSongsIds
+        .indexOf(a.id.toString())
+        .compareTo(recentSongsIds.indexOf(b.id.toString())));
+
     return songs
-        .where((song) => favoriteSongsIds.contains(song.id.toString()))
+        .where((song) => recentSongsIds.contains(song.id.toString()))
         .toList();
   }
 }

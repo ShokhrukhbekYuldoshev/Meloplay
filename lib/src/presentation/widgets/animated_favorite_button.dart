@@ -2,9 +2,13 @@ import 'package:flutter/material.dart';
 
 class AnimatedFavoriteButton extends StatefulWidget {
   final bool isFavorite;
-  final VoidCallback? onTap;
-  const AnimatedFavoriteButton(
-      {super.key, required this.isFavorite, this.onTap});
+  final Function onTap;
+
+  const AnimatedFavoriteButton({
+    super.key,
+    required this.isFavorite,
+    required this.onTap,
+  });
 
   @override
   State<AnimatedFavoriteButton> createState() => _AnimatedFavoriteButtonState();
@@ -38,13 +42,21 @@ class _AnimatedFavoriteButtonState extends State<AnimatedFavoriteButton>
     return GestureDetector(
       onTap: () {
         _controller.forward();
-        widget.onTap?.call();
+        widget.onTap();
       },
-      child: Transform.scale(
-        scale: _animation.value,
-        child: Icon(
-          widget.isFavorite ? Icons.favorite : Icons.favorite_border,
-          color: widget.isFavorite ? Colors.red : Colors.grey,
+      child: Container(
+        margin: const EdgeInsets.only(right: 16, bottom: 16),
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.black.withOpacity(0.5),
+          borderRadius: BorderRadius.circular(50),
+        ),
+        child: Transform.scale(
+          scale: _animation.value,
+          child: Icon(
+            widget.isFavorite ? Icons.favorite : Icons.favorite_border,
+            color: widget.isFavorite ? Colors.red : Colors.grey,
+          ),
         ),
       ),
     );

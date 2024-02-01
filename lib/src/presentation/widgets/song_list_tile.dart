@@ -1,8 +1,10 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:just_audio_background/just_audio_background.dart';
-import 'package:meloplay/src/data/repositories/song_repository.dart';
+import 'package:meloplay/src/bloc/song/song_bloc.dart';
+import 'package:meloplay/src/data/repositories/player_repository.dart';
 import 'package:meloplay/src/presentation/utils/app_router.dart';
 import 'package:meloplay/src/service_locator.dart';
 import 'package:on_audio_query/on_audio_query.dart';
@@ -34,9 +36,15 @@ class _SongListTileState extends State<SongListTile> {
   Widget build(BuildContext context) {
     return ListTile(
       onTap: () async {
-        SongRepository songRepository = sl<SongRepository>();
-        MediaItem mediaItem = songRepository.getMediaItemFromSong(widget.song);
-        await sl<SongRepository>().addSongsToPlaylist(widget.songs);
+        PlayerRepository playerRepository = sl<PlayerRepository>();
+        MediaItem mediaItem =
+            playerRepository.getMediaItemFromSong(widget.song);
+        await sl<PlayerRepository>().addSongsToPlaylist(widget.songs);
+        if (mounted) {
+          context.read<SongBloc>().add(
+                AddToRecentlyPlayed(mediaItem.id),
+              );
+        }
 
         if (mounted) {
           Navigator.of(context).pushNamed(
