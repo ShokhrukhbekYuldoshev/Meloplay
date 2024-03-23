@@ -108,21 +108,21 @@ Meloplay is a local music player app that plays music from your device built wit
 
 1. Clone the repo
 
-```sh
-git clone
-```
+    ```sh
+    git clone
+    ```
 
 2. Install dependencies
 
-```sh
-dart pub get
-```
+    ```sh
+    dart pub get
+    ```
 
 3. Run the app
 
-```sh
-flutter run
-```
+    ```sh
+    flutter run
+    ```
 
 ## ❗ Permissions
 
@@ -188,7 +188,6 @@ Distributed under the MIT License. See [LICENSE](LICENSE) for more information.
 
 -   [GitHub](https://github.com/ShokhrukhbekYuldoshev)
 -   [X](https://x.com/ShokhrukhbekY)
--   [Telegram](https://t.me/fighttothedeath)
 
 ## 🌟 Show your support
 
