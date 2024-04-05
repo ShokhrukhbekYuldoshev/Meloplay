@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:meloplay/src/presentation/utils/theme/themes.dart';
+import 'package:meloplay/src/core/theme/themes.dart';
 
 class AppThemeData {
   static ThemeData getTheme() {

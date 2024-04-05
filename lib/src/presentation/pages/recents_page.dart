@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meloplay/src/bloc/recents/recents_bloc.dart';
 import 'package:meloplay/src/bloc/song/song_bloc.dart';
-import 'package:meloplay/src/presentation/utils/theme/themes.dart';
+import 'package:meloplay/src/core/theme/themes.dart';
 import 'package:meloplay/src/presentation/widgets/player_bottom_app_bar.dart';
 import 'package:meloplay/src/presentation/widgets/song_list_tile.dart';
 
@@ -30,14 +30,6 @@ class _RecentsPageState extends State<RecentsPage> {
       appBar: AppBar(
         backgroundColor: Themes.getTheme().primaryColor,
         elevation: 0,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          icon: const Icon(
-            Icons.arrow_back_ios_rounded,
-          ),
-        ),
         title: const Text('Recents'),
       ),
       body: Ink(

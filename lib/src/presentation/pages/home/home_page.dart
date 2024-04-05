@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:meloplay/src/service_locator.dart';
+import 'package:meloplay/src/core/di/service_locator.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -9,8 +9,8 @@ import 'package:meloplay/src/presentation/pages/home/views/albums_view.dart';
 import 'package:meloplay/src/presentation/pages/home/views/artists_view.dart';
 import 'package:meloplay/src/presentation/pages/home/views/genres_view.dart';
 import 'package:meloplay/src/presentation/pages/home/views/songs_view.dart';
-import 'package:meloplay/src/presentation/utils/app_router.dart';
-import 'package:meloplay/src/presentation/utils/theme/themes.dart';
+import 'package:meloplay/src/core/router/app_router.dart';
+import 'package:meloplay/src/core/theme/themes.dart';
 import 'package:meloplay/src/presentation/widgets/home_card.dart';
 import 'package:meloplay/src/presentation/widgets/home_drawer.dart';
 import 'package:meloplay/src/presentation/widgets/player_bottom_app_bar.dart';
@@ -69,7 +69,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 onPressed: () {
                   // TODO: implement search
                 },
-                icon: const Icon(Icons.search_rounded),
+                icon: const Icon(Icons.search_outlined),
               )
             ],
           ),
@@ -87,7 +87,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           children: [
                             HomeCard(
                               title: 'Favorites',
-                              icon: Icons.favorite_rounded,
+                              icon: Icons.favorite_outlined,
                               color: const Color(0xFF5D2285),
                               onTap: () {
                                 Navigator.of(context).pushNamed(
@@ -98,7 +98,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                             const SizedBox(width: 16),
                             HomeCard(
                               title: 'Playlists',
-                              icon: Icons.playlist_play,
+                              icon: Icons.playlist_play_outlined,
                               color: const Color(0xFF136327),
                               onTap: () {
                                 Navigator.of(context).pushNamed(
@@ -109,7 +109,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                             const SizedBox(width: 16),
                             HomeCard(
                               title: 'Recents',
-                              icon: Icons.history,
+                              icon: Icons.history_outlined,
                               color: const Color(0xFFD4850D),
                               onTap: () {
                                 Navigator.of(context).pushNamed(

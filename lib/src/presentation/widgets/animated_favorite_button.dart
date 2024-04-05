@@ -54,7 +54,9 @@ class _AnimatedFavoriteButtonState extends State<AnimatedFavoriteButton>
         child: Transform.scale(
           scale: _animation.value,
           child: Icon(
-            widget.isFavorite ? Icons.favorite : Icons.favorite_border,
+            widget.isFavorite
+                ? Icons.favorite_outlined
+                : Icons.favorite_border_outlined,
             color: widget.isFavorite ? Colors.red : Colors.grey,
           ),
         ),

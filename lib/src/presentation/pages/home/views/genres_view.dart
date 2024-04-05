@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:meloplay/src/bloc/home/home_bloc.dart';
-import 'package:meloplay/src/presentation/utils/app_router.dart';
-import 'package:meloplay/src/service_locator.dart';
+import 'package:meloplay/src/core/router/app_router.dart';
+import 'package:meloplay/src/core/di/service_locator.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 class GenresView extends StatefulWidget {
@@ -67,6 +67,7 @@ class _GenresViewState extends State<GenresView>
                           id: genre.id,
                           type: ArtworkType.GENRE,
                           artworkBorder: BorderRadius.circular(10),
+                          size: 10000,
                           nullArtworkWidget: Container(
                             width: 48,
                             height: 48,

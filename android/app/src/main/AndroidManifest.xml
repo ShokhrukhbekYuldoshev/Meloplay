@@ -11,9 +11,6 @@
     <!-- !DANGER! Delete, update songs/playlists -->
     <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
 
-    <!-- Android 13+ notification -->
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-
     <!-- Android 12 or below  -->
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"

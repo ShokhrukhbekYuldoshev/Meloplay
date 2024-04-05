@@ -1,6 +1,8 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:meloplay/src/core/di/service_locator.dart';
+import 'package:meloplay/src/data/repositories/player_repository.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 class SpinningDisc extends StatefulWidget {
@@ -33,30 +35,44 @@ class _SpinningDiscState extends State<SpinningDisc>
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _controller,
-      builder: (_, child) {
-        return Transform.rotate(
-          angle: _controller.value * 2 * pi,
-          child: child,
+    return StreamBuilder<bool>(
+      stream: sl<JustAudioPlayer>().playing,
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return Container();
+        }
+        // if not playing, don't stop the animation
+        if (!snapshot.data!) {
+          _controller.stop();
+        } else {
+          _controller.repeat();
+        }
+        return AnimatedBuilder(
+          animation: _controller,
+          builder: (_, child) {
+            return Transform.rotate(
+              angle: _controller.value * 2 * pi,
+              child: child,
+            );
+          },
+          child: QueryArtworkWidget(
+            id: widget.id,
+            type: ArtworkType.AUDIO,
+            size: 10000,
+            quality: 100,
+            artworkBorder: BorderRadius.circular(100),
+            nullArtworkWidget: Container(
+              width: 48,
+              height: 48,
+              decoration: BoxDecoration(
+                color: Colors.grey.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(100),
+              ),
+              child: const Icon(Icons.music_note_outlined),
+            ),
+          ),
         );
       },
-      child: QueryArtworkWidget(
-        id: widget.id,
-        type: ArtworkType.AUDIO,
-        artworkQuality: FilterQuality.high,
-        quality: 100,
-        artworkBorder: BorderRadius.circular(100),
-        nullArtworkWidget: Container(
-          width: 48,
-          height: 48,
-          decoration: BoxDecoration(
-            color: Colors.grey.withOpacity(0.1),
-            borderRadius: BorderRadius.circular(100),
-          ),
-          child: const Icon(Icons.music_note_outlined),
-        ),
-      ),
     );
   }
 }

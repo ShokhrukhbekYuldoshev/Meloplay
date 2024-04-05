@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:just_audio_background/just_audio_background.dart';
+import 'package:meloplay/src/presentation/pages/playlist_details_page.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 import 'package:meloplay/src/presentation/pages/about_page.dart';
@@ -11,7 +11,7 @@ import 'package:meloplay/src/presentation/pages/home/home_page.dart';
 import 'package:meloplay/src/presentation/pages/player_page.dart';
 import 'package:meloplay/src/presentation/pages/playlists_page.dart';
 import 'package:meloplay/src/presentation/pages/recents_page.dart';
-import 'package:meloplay/src/presentation/pages/settings_page.dart';
+import 'package:meloplay/src/presentation/pages/themes_page.dart';
 import 'package:meloplay/src/presentation/pages/splash_page.dart';
 
 class AppRouter {
@@ -26,10 +26,11 @@ class AppRouter {
   static const String genreRoute = '/genre';
   static const String aboutRoute = '/about';
   static const String settingsRoute = '/settings';
+  static const String playlistDetailsRoute = '/playlist';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
-      case splashRoute:
+      case '/':
         return MaterialPageRoute<dynamic>(
           builder: (_) => const SplashPage(),
         );
@@ -51,9 +52,7 @@ class AppRouter {
         );
       case playerRoute:
         return MaterialPageRoute<dynamic>(
-          builder: (_) => PlayerPage(
-            mediaItem: settings.arguments as MediaItem,
-          ),
+          builder: (_) => const PlayerPage(),
         );
       case artistRoute:
         return MaterialPageRoute<dynamic>(
@@ -79,11 +78,24 @@ class AppRouter {
         );
       case settingsRoute:
         return MaterialPageRoute<dynamic>(
-          builder: (_) => const SettingsPage(),
+          builder: (_) => const ThemesPage(),
+        );
+      case playlistDetailsRoute:
+        return MaterialPageRoute<dynamic>(
+          builder: (_) => PlaylistDetailsPage(
+            playlist: settings.arguments as PlaylistModel,
+          ),
         );
       default:
         return MaterialPageRoute<dynamic>(
-          builder: (_) => const SplashPage(),
+          builder: (_) => Scaffold(
+            appBar: AppBar(
+              title: const Text('Error'),
+            ),
+            body: Center(
+              child: Text('No route defined for ${settings.name}'),
+            ),
+          ),
         );
     }
   }

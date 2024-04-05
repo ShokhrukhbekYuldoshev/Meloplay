@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
-import 'package:just_audio/just_audio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 import 'package:meloplay/src/data/repositories/player_repository.dart';
@@ -9,7 +9,7 @@ part 'player_event.dart';
 part 'player_state.dart';
 
 class PlayerBloc extends Bloc<PlayerEvent, PlayerState> {
-  PlayerBloc({required PlayerRepository repository}) : super(PlayerInitial()) {
+  PlayerBloc({required JustAudioPlayer repository}) : super(PlayerInitial()) {
     on<PlayerPlay>((event, emit) async {
       try {
         await repository.play();
@@ -24,15 +24,6 @@ class PlayerBloc extends Bloc<PlayerEvent, PlayerState> {
         await repository.seek(Duration.zero);
         await repository.play();
         emit(PlayerPlaying());
-      } catch (e) {
-        emit(PlayerError(e.toString()));
-      }
-    });
-
-    on<PlayerAddSongsToPlaylist>((event, emit) async {
-      try {
-        await repository.addSongsToPlaylist(event.songs);
-        emit(PlayerPlaylistLoaded(repository.playlist));
       } catch (e) {
         emit(PlayerError(e.toString()));
       }
@@ -67,7 +58,7 @@ class PlayerBloc extends Bloc<PlayerEvent, PlayerState> {
 
     on<PlayerNext>((event, emit) async {
       try {
-        await repository.seekNext();
+        await repository.seekToNext();
         emit(PlayerNexted());
       } catch (e) {
         emit(PlayerError(e.toString()));
@@ -76,7 +67,7 @@ class PlayerBloc extends Bloc<PlayerEvent, PlayerState> {
 
     on<PlayerPrevious>((event, emit) async {
       try {
-        await repository.seekPrevious();
+        await repository.seekToPrevious();
         emit(PlayerPrevioussed());
       } catch (e) {
         emit(PlayerError(e.toString()));

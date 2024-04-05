@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meloplay/src/bloc/theme/theme_bloc.dart';
-import 'package:meloplay/src/presentation/utils/app_router.dart';
-import 'package:meloplay/src/presentation/utils/assets.dart';
-import 'package:meloplay/src/presentation/utils/theme/themes.dart';
+import 'package:meloplay/src/core/router/app_router.dart';
+import 'package:meloplay/src/core/constants/assets.dart';
+import 'package:meloplay/src/core/theme/themes.dart';
 
 class HomeDrawer extends StatelessWidget {
   const HomeDrawer({
@@ -49,15 +49,15 @@ class HomeDrawer extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: const Icon(Icons.info),
+            leading: const Icon(Icons.info_outlined),
             title: const Text('About'),
             onTap: () {
               Navigator.of(context).pushNamed(AppRouter.aboutRoute);
             },
           ),
           ListTile(
-            leading: const Icon(Icons.settings),
-            title: const Text('Settings'),
+            leading: const Icon(Icons.color_lens_outlined),
+            title: const Text('Themes'),
             onTap: () {
               Navigator.of(context).pushNamed(AppRouter.settingsRoute);
             },

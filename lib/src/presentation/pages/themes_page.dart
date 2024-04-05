@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meloplay/src/bloc/theme/theme_bloc.dart';
-import 'package:meloplay/src/presentation/utils/theme/themes.dart';
+import 'package:meloplay/src/core/theme/themes.dart';
 
-class SettingsPage extends StatefulWidget {
-  const SettingsPage({super.key});
+class ThemesPage extends StatefulWidget {
+  const ThemesPage({super.key});
 
   @override
-  State<SettingsPage> createState() => _SettingsPageState();
+  State<ThemesPage> createState() => _ThemesPageState();
 }
 
-class _SettingsPageState extends State<SettingsPage> {
+class _ThemesPageState extends State<ThemesPage> {
   final themeNames = Themes.themeNames;
 
   @override
@@ -27,16 +27,8 @@ class _SettingsPageState extends State<SettingsPage> {
           appBar: AppBar(
             backgroundColor: Themes.getTheme().primaryColor,
             elevation: 0,
-            leading: IconButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              icon: const Icon(
-                Icons.arrow_back_ios_rounded,
-              ),
-            ),
             title: const Text(
-              'Settings',
+              'Themes',
             ),
           ),
           body: Ink(
@@ -53,13 +45,6 @@ class _SettingsPageState extends State<SettingsPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Themes',
-                    style: TextStyle(
-                      fontSize: 20,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
                   // theme options
                   Wrap(
                     spacing: 16,
@@ -117,7 +102,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                       const Align(
                                         alignment: Alignment.centerRight,
                                         child: Icon(
-                                          Icons.check,
+                                          Icons.check_outlined,
                                         ),
                                       ),
                                   ],

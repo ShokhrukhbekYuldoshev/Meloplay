@@ -1,4 +1,4 @@
-import 'package:meloplay/src/service_locator.dart';
+import 'package:meloplay/src/core/di/service_locator.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 class HomeRepository {

@@ -15,7 +15,7 @@ Meloplay is a local music player app that plays music from your device built wit
 -   [x] Lock screen controls
 -   [x] Play, pause, skip, previous, seek
 -   [x] Shuffle and repeat
--   [ ] Search for music
+-   [ ] Search for music, playlists, artists, albums, genres
 -   [ ] Playlists (Read, create, rename, delete, add songs, remove songs)
 -   [x] Favorites (Add songs, remove songs)
 -   [x] Recently played
@@ -81,21 +81,21 @@ Meloplay is a local music player app that plays music from your device built wit
 
 | Name                                                                                  | Version       | Description                                                                                                                                                              |
 | ------------------------------------------------------------------------------------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| [bloc](https://pub.dev/packages/bloc)                                                 | 8.1.2         | A predictable state management library                                                                                                                                   |
-| [flutter_bloc](https://pub.dev/packages/flutter_bloc)                                 | 8.1.3         | Flutter Widgets that make it easy to implement BLoC design patterns                                                                                                      |
+| [bloc](https://pub.dev/packages/bloc)                                                 | 8.1.4         | A predictable state management library                                                                                                                                   |
+| [flutter_bloc](https://pub.dev/packages/flutter_bloc)                                 | 8.1.5         | Flutter Widgets that make it easy to implement BLoC design patterns                                                                                                      |
 | [flutter_staggered_animations](https://pub.dev/packages/flutter_staggered_animations) | 1.1.1         | A plugin for adding staggered animations to your Flutter apps                                                                                                            |
-| [get_it](https://pub.dev/packages/get_it)                                             | 7.6.7         | Simple direct Service Locator that allows to decouple the interface from a concrete implementation and to access the concrete implementation from everywhere in your App |
+| [get_it](https://pub.dev/packages/get_it)                                             | 7.6.8         | Simple direct Service Locator that allows to decouple the interface from a concrete implementation and to access the concrete implementation from everywhere in your App |
 | [hive](https://pub.dev/packages/hive)                                                 | 2.2.3         | A lightweight and blazing fast key-value database                                                                                                                        |
 | [hive_flutter](https://pub.dev/packages/hive_flutter)                                 | 1.1.0         | Hive database implementation for Flutter                                                                                                                                 |
-| [flutter_launcher_icons](https://pub.dev/packages/flutter_launcher_icons)             | 0.13.1        | A package that provides icons for Flutter apps                                                                                                                           |
-| [just_audio](https://pub.dev/packages/just_audio)                                     | 0.9.346       | A feature-rich audio player for Flutter                                                                                                                                  |
+| [just_audio](https://pub.dev/packages/just_audio)                                     | 0.9.37        | A feature-rich audio player for Flutter                                                                                                                                  |
 | [just_audio_background](https://pub.dev/packages/just_audio_background)               | 0.0.1-beta.11 | A plugin for playing audio in the background on Android and iOS.                                                                                                         |
 | [on_audio_query](https://pub.dev/packages/on_audio_query)                             | 2.9.0         | A Flutter plugin to query songs on Android and iOS                                                                                                                       |
-| [package_info_plus](https://pub.dev/packages/package_info_plus)                       | 5.0.1         | Flutter plugin for querying information about the application package, such as CFBundleVersion on iOS or versionCode on Android.                                         |
-| [permission_handler](https://pub.dev/packages/permission_handler)                     | 11.2.0        | A Flutter plugin for permission handling. This plugin provides a cross-platform (iOS, Android) API to request and check permissions.                                     |
+| [package_info_plus](https://pub.dev/packages/package_info_plus)                       | 6.0.0         | Flutter plugin for querying information about the application package, such as CFBundleVersion on iOS or versionCode on Android.                                         |
+| [permission_handler](https://pub.dev/packages/permission_handler)                     | 11.3.1        | A Flutter plugin for permission handling. This plugin provides a cross-platform (iOS, Android) API to request and check permissions.                                     |
 | [rxdart](https://pub.dev/packages/rxdart)                                             | 0.27.7        | RxDart is an implementation of the popular reactiveX api for asynchronous programming, leveraging the native Dart Streams API.                                           |
-| [share_plus](https://pub.dev/packages/share_plus)                                     | 7.2.2         | Flutter plugin for sharing content via the platform share UI, using the ACTION_SEND intent on Android and UIActivityViewController on iOS.                               |
-| [url_launcher](https://pub.dev/packages/url_launcher)                                 | 6.2.4         | A Flutter plugin for launching a URL in the mobile platform.                                                                                                             |
+| [share_plus](https://pub.dev/packages/share_plus)                                     | 8.0.2         | Flutter plugin for sharing content via the platform share UI, using the ACTION_SEND intent on Android and UIActivityViewController on iOS.                               |
+| [url_launcher](https://pub.dev/packages/url_launcher)                                 | 6.2.5         | A Flutter plugin for launching a URL in the mobile platform.                                                                                                             |
+| [lottie](https://pub.dev/packages/lottie)                                             | 3.1.0         | Lottie is a mobile library for Android and iOS that parses Lottie and JSON-based animations and renders them natively on mobile.                                         |
 
 ## 📦 Installation
 
@@ -137,9 +137,6 @@ Meloplay is a local music player app that plays music from your device built wit
         <data android:scheme="https" />
     </intent>
 </queries>
-
-<!-- Android 13+ notification -->
-<uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
 <!-- !DANGER! Delete, update songs/playlists -->
 <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />

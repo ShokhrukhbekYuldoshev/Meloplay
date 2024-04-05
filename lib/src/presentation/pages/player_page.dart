@@ -2,21 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
+import 'package:on_audio_query/on_audio_query.dart';
+
 import 'package:meloplay/src/bloc/player/player_bloc.dart';
 import 'package:meloplay/src/bloc/song/song_bloc.dart';
+import 'package:meloplay/src/core/di/service_locator.dart';
+import 'package:meloplay/src/core/theme/themes.dart';
 import 'package:meloplay/src/data/repositories/player_repository.dart';
 import 'package:meloplay/src/data/repositories/song_repository.dart';
 import 'package:meloplay/src/presentation/widgets/animated_favorite_button.dart';
-import 'package:meloplay/src/presentation/utils/extensions.dart';
-import 'package:meloplay/src/presentation/utils/theme/themes.dart';
-import 'package:meloplay/src/service_locator.dart';
-import 'package:on_audio_query/on_audio_query.dart';
 
 class PlayerPage extends StatefulWidget {
-  final MediaItem mediaItem;
   const PlayerPage({
     super.key,
-    required this.mediaItem,
   });
 
   @override
@@ -24,29 +22,25 @@ class PlayerPage extends StatefulWidget {
 }
 
 class _PlayerPageState extends State<PlayerPage> {
-  final playerRepository = sl<PlayerRepository>();
+  final player = sl<JustAudioPlayer>();
+  SequenceState? sequence;
 
   @override
   void initState() {
     super.initState();
-    initPlayer();
+
+    player.sequenceState.listen((state) {
+      setState(() {
+        sequence = state;
+      });
+    });
   }
 
-  Future<void> initPlayer() async {
-    playerRepository.mediaItem.listen(
-      (mediaItem) async {
-        if (mediaItem != null) {
-          // if media item is same skip or no items playing
-          if (mediaItem.id != widget.mediaItem.id ||
-              await playerRepository.playing.first == false) {
-            try {
-              int index = playerRepository.getMediaItemIndex(widget.mediaItem);
-              await playerRepository.playFromQueue(index);
-            } catch (_) {}
-          }
-        }
-      },
-    );
+  @override
+  void setState(VoidCallback fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
   }
 
   @override
@@ -77,10 +71,16 @@ class _PlayerPageState extends State<PlayerPage> {
             ),
             const SizedBox(height: 16),
             // artwork
-            StreamBuilder<MediaItem?>(
-                stream: playerRepository.mediaItem,
+            StreamBuilder<SequenceState?>(
+                stream: player.sequenceState,
                 builder: (context, snapshot) {
-                  final mediaItem = snapshot.data;
+                  if (!snapshot.hasData) {
+                    return const SizedBox.shrink();
+                  }
+                  final sequence = snapshot.data;
+
+                  MediaItem? mediaItem =
+                      sequence!.sequence[sequence.currentIndex].tag;
 
                   return Expanded(
                     flex: 4,
@@ -88,10 +88,9 @@ class _PlayerPageState extends State<PlayerPage> {
                       fit: StackFit.expand,
                       children: [
                         QueryArtworkWidget(
-                          id: int.parse(mediaItem?.id ?? '0'),
+                          id: int.parse(mediaItem!.id),
                           type: ArtworkType.AUDIO,
-                          artworkQuality: FilterQuality.high,
-                          quality: 100,
+                          size: 10000,
                           artworkWidth: double.infinity,
                           nullArtworkWidget: Container(
                             width: double.infinity,
@@ -111,10 +110,10 @@ class _PlayerPageState extends State<PlayerPage> {
                             builder: (context, state) {
                               return AnimatedFavoriteButton(
                                 isFavorite: sl<SongRepository>()
-                                    .isFavorite(mediaItem?.id ?? ''),
+                                    .isFavorite(mediaItem.id),
                                 onTap: () {
                                   context.read<SongBloc>().add(
-                                        ToggleFavorite(mediaItem?.id ?? ''),
+                                        ToggleFavorite(mediaItem.id),
                                       );
                                 },
                               );
@@ -127,10 +126,16 @@ class _PlayerPageState extends State<PlayerPage> {
                 }),
             const Spacer(),
             // title and artist
-            StreamBuilder<MediaItem?>(
-                stream: playerRepository.mediaItem,
+            StreamBuilder<SequenceState?>(
+                stream: player.sequenceState,
                 builder: (context, snapshot) {
-                  final mediaItem = snapshot.data;
+                  if (!snapshot.hasData) {
+                    return const SizedBox.shrink();
+                  }
+                  final sequence = snapshot.data;
+
+                  MediaItem? mediaItem =
+                      sequence!.sequence[sequence.currentIndex].tag;
 
                   return Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -140,7 +145,7 @@ class _PlayerPageState extends State<PlayerPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              mediaItem?.title ?? 'Unknown',
+                              mediaItem!.title,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: const TextStyle(
@@ -149,7 +154,7 @@ class _PlayerPageState extends State<PlayerPage> {
                               ),
                             ),
                             Text(
-                              mediaItem?.artist ?? 'Unknown',
+                              mediaItem.artist ?? 'Unknown',
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: const TextStyle(
@@ -164,74 +169,59 @@ class _PlayerPageState extends State<PlayerPage> {
                   );
                 }),
             const Spacer(),
+
             // seek bar
             StreamBuilder<Duration>(
-              stream: playerRepository.position,
+              stream: player.position,
               builder: (context, snapshot) {
                 final position = snapshot.data ?? Duration.zero;
-                try {
-                  return StreamBuilder<Duration?>(
-                    stream: playerRepository.duration,
-                    builder: (context, snapshot) {
-                      final duration = snapshot.data ?? Duration.zero;
-                      return Slider(
-                        value: position.inMilliseconds.toDouble(),
-                        min: 0,
-                        max: duration.inMilliseconds.toDouble(),
-                        onChanged: (value) {
-                          context.read<PlayerBloc>().add(
-                                PlayerSeek(
-                                  Duration(milliseconds: value.toInt()),
-                                ),
-                              );
-                        },
-                      );
-                    },
-                  );
-                } catch (e) {
-                  return Slider(
-                    value: 0,
-                    min: 0,
-                    max: 0,
-                    onChanged: (value) {},
-                  );
-                }
-              },
-            ),
-            const SizedBox(height: 16),
-            // time
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                StreamBuilder<Duration>(
-                  stream: playerRepository.position,
+                return StreamBuilder<Duration?>(
+                  stream: player.duration,
                   builder: (context, snapshot) {
-                    final position = snapshot.data ?? Duration.zero;
+                    final duration = snapshot.data ?? Duration.zero;
+                    return Column(
+                      children: [
+                        Slider(
+                          value: position > duration
+                              ? duration.inMilliseconds.toDouble()
+                              : position.inMilliseconds.toDouble(),
+                          min: 0,
+                          max: duration.inMilliseconds.toDouble(),
+                          onChanged: (value) {
+                            context.read<PlayerBloc>().add(
+                                  PlayerSeek(
+                                    Duration(milliseconds: value.toInt()),
+                                  ),
+                                );
+                          },
+                        ),
 
-                    return Text(
-                      position.toHms(),
-                      style: const TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                      ),
+                        // position and duration text
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              '${position.inMinutes.toString().padLeft(2, '0')}:${(position.inSeconds % 60).toString().padLeft(2, '0')}',
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              '${duration.inMinutes.toString().padLeft(2, '0')}:${(duration.inSeconds % 60).toString().padLeft(2, '0')}',
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
                     );
                   },
-                ),
-                StreamBuilder<Duration?>(
-                    stream: playerRepository.duration,
-                    builder: (context, snapshot) {
-                      final duration = snapshot.data;
-                      return Text(
-                        duration?.toHms() ?? '0:00',
-                        style: const TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      );
-                    }),
-              ],
+                );
+              },
             ),
-
             const Spacer(),
 
             Row(
@@ -239,7 +229,7 @@ class _PlayerPageState extends State<PlayerPage> {
               children: [
                 //  shuffle button
                 StreamBuilder<bool>(
-                  stream: playerRepository.shuffleModeEnabled,
+                  stream: player.shuffleModeEnabled,
                   builder: (context, snapshot) {
                     return IconButton(
                       onPressed: () async {
@@ -251,10 +241,10 @@ class _PlayerPageState extends State<PlayerPage> {
                       },
                       icon: snapshot.data == false
                           ? const Icon(
-                              Icons.shuffle_rounded,
+                              Icons.shuffle_outlined,
                               color: Colors.grey,
                             )
-                          : const Icon(Icons.shuffle_rounded),
+                          : const Icon(Icons.shuffle_outlined),
                       iconSize: 30,
                     );
                   },
@@ -264,12 +254,12 @@ class _PlayerPageState extends State<PlayerPage> {
                   onPressed: () {
                     context.read<PlayerBloc>().add(PlayerPrevious());
                   },
-                  icon: const Icon(Icons.skip_previous_rounded),
+                  icon: const Icon(Icons.skip_previous_outlined),
                   iconSize: 40,
                 ),
                 // play/pause button
                 StreamBuilder<bool>(
-                  stream: playerRepository.playing,
+                  stream: player.playing,
                   builder: (context, snapshot) {
                     final playing = snapshot.data ?? false;
                     return IconButton(
@@ -281,8 +271,8 @@ class _PlayerPageState extends State<PlayerPage> {
                         }
                       },
                       icon: playing
-                          ? const Icon(Icons.pause_rounded)
-                          : const Icon(Icons.play_arrow_rounded),
+                          ? const Icon(Icons.pause_outlined)
+                          : const Icon(Icons.play_arrow_outlined),
                       iconSize: 40,
                     );
                   },
@@ -292,12 +282,12 @@ class _PlayerPageState extends State<PlayerPage> {
                   onPressed: () {
                     context.read<PlayerBloc>().add(PlayerNext());
                   },
-                  icon: const Icon(Icons.skip_next_rounded),
+                  icon: const Icon(Icons.skip_next_outlined),
                   iconSize: 40,
                 ),
                 // repeat button
                 StreamBuilder<LoopMode>(
-                  stream: playerRepository.loopMode,
+                  stream: player.loopMode,
                   builder: (context, snapshot) {
                     return IconButton(
                       onPressed: () {
@@ -317,12 +307,12 @@ class _PlayerPageState extends State<PlayerPage> {
                       },
                       icon: snapshot.data == LoopMode.off
                           ? const Icon(
-                              Icons.repeat_rounded,
+                              Icons.repeat_outlined,
                               color: Colors.grey,
                             )
                           : snapshot.data == LoopMode.all
-                              ? const Icon(Icons.repeat_rounded)
-                              : const Icon(Icons.repeat_one_rounded),
+                              ? const Icon(Icons.repeat_outlined)
+                              : const Icon(Icons.repeat_one_outlined),
                       iconSize: 30,
                     );
                   },

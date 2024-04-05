@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:meloplay/src/bloc/home/home_bloc.dart';
-import 'package:meloplay/src/presentation/utils/app_router.dart';
-import 'package:meloplay/src/service_locator.dart';
+import 'package:meloplay/src/core/router/app_router.dart';
+import 'package:meloplay/src/core/di/service_locator.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 class ArtistsView extends StatefulWidget {
@@ -75,6 +75,7 @@ class _ArtistsViewState extends State<ArtistsView>
                               type: ArtworkType.ARTIST,
                               artworkHeight: 96,
                               artworkWidth: 96,
+                              size: 10000,
                               artworkBorder: BorderRadius.circular(25),
                               nullArtworkWidget: Container(
                                 width: 96,
@@ -84,7 +85,7 @@ class _ArtistsViewState extends State<ArtistsView>
                                   color: Colors.grey.withOpacity(0.1),
                                 ),
                                 child: const Icon(
-                                  Icons.person,
+                                  Icons.person_outlined,
                                 ),
                               ),
                             ),

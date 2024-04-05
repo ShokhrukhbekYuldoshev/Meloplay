@@ -5,4 +5,5 @@ class Links {
 
 class Assets {
   static const String logo = 'assets/icon/icon.png';
+  static const String playingAnimation = 'assets/lottie/playing.json';
 }

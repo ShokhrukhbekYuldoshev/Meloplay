@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:meloplay/src/presentation/utils/theme/themes.dart';
-import 'package:meloplay/src/presentation/utils/assets.dart';
+import 'package:meloplay/src/core/theme/themes.dart';
+import 'package:meloplay/src/core/constants/assets.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -39,14 +39,6 @@ class _AboutPageState extends State<AboutPage> {
       appBar: AppBar(
         backgroundColor: Themes.getTheme().primaryColor,
         elevation: 0,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          icon: const Icon(
-            Icons.arrow_back_ios_rounded,
-          ),
-        ),
         title: const Text(
           'About',
         ),

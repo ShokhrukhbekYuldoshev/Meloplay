@@ -27,7 +27,9 @@ void init() {
   // Repository
   sl.registerLazySingleton(() => ThemeRepository());
   sl.registerLazySingleton(() => HomeRepository());
-  sl.registerLazySingleton(() => PlayerRepository());
+  sl.registerLazySingleton<JustAudioPlayer>(
+    () => JustAudioPlayerImpl(),
+  );
   sl.registerLazySingleton(() => SongRepository());
   sl.registerLazySingleton(() => FavoritesRepository());
   sl.registerLazySingleton(() => RecentsRepository());
