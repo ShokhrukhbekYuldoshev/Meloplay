@@ -9,7 +9,7 @@ import 'package:on_audio_query/on_audio_query.dart';
 class AlbumPage extends StatefulWidget {
   final AlbumModel album;
 
-  const AlbumPage({super.key, required this.album});
+  const AlbumPage({Key? key, required this.album}) : super(key: key);
 
   @override
   State<AlbumPage> createState() => _AlbumPageState();
@@ -29,15 +29,24 @@ class _AlbumPageState extends State<AlbumPage> {
   Future<void> _getSongs() async {
     final OnAudioQuery audioQuery = sl<OnAudioQuery>();
 
-    final List<SongModel> songs = await audioQuery.queryAudiosFrom(
+    List<SongModel> songs = await audioQuery.queryAudiosFrom(
       AudiosFromType.ALBUM_ID,
       widget.album.id,
     );
 
-    // remove songs less than 10 seconds long (10,000 milliseconds)
-    //songs.removeWhere((song) => (song.duration ?? 0) < 10000);
+    // Sort songs by name
+    songs.sort((a, b) {
+      // Extract the numeric part from the song title
+      int numA = int.parse(a.title.split(RegExp(r'\D+'))[0]);
+      int numB = int.parse(b.title.split(RegExp(r'\D+'))[0]);
+      // Compare the numeric parts first
+      if (numA != numB) {
+        return numA.compareTo(numB);
+      }
+      // If numeric parts are equal, compare the alphabetic parts
+      return a.title.replaceAll(RegExp(r'\d+'), '').compareTo(b.title.replaceAll(RegExp(r'\d+'), ''));
+    });
 
-    // await songRepository.addSongsToQueue(songs);
     setState(() {
       _songs = songs;
     });
@@ -46,7 +55,6 @@ class _AlbumPageState extends State<AlbumPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // current song, play/pause button, song progress bar, song queue button
       bottomNavigationBar: const PlayerBottomAppBar(),
       extendBody: true,
       appBar: AppBar(
@@ -89,6 +97,8 @@ class _AlbumPageState extends State<AlbumPage> {
     );
   }
 }
+
+
 
 
 //   @override
