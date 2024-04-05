@@ -49,76 +49,26 @@ class _AlbumPageState extends State<AlbumPage> {
       // current song, play/pause button, song progress bar, song queue button
       bottomNavigationBar: const PlayerBottomAppBar(),
       extendBody: true,
-      body: Ink(
-        padding: EdgeInsets.fromLTRB(
-          24,
-          MediaQuery.of(context).padding.top + 16,
-          24,
-          16,
+      appBar: AppBar(
+        backgroundColor: Themes.getTheme().primaryColor,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          icon: const Icon(
+            Icons.arrow_back_ios_rounded,
+          ),
         ),
+        title: Text(
+          widget.album.album,
+        ),
+      ),
+      body: Ink(
         decoration: BoxDecoration(
           gradient: Themes.getTheme().linearGradient,
         ),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // back button
-            Row(
-              children: [
-                IconButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  icon: const Icon(Icons.arrow_back_ios),
-                ),
-              ],
-            ),
-            // album artwork
-            Expanded(
-              child: QueryArtworkWidget(
-                id: widget.album.id,
-                type: ArtworkType.ALBUM,
-                artworkQuality: FilterQuality.high,
-                artworkWidth: double.infinity,
-                artworkBorder: BorderRadius.circular(50),
-                nullArtworkWidget: Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: Colors.grey.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(50),
-                  ),
-                  child: const Icon(
-                    Icons.music_note_outlined,
-                    size: 100,
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 16),
-            // album name
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Text(
-                widget.album.album,
-                style: const TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            // artist name
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Text(
-                widget.album.artist ?? 'Unknown',
-                style: const TextStyle(
-                  fontSize: 18,
-                  color: Colors.grey,
-                ),
-              ),
-            ),
-            const SizedBox(height: 16),
-            // songs
             Expanded(
               child: ListView.builder(
                 padding: EdgeInsets.zero,
@@ -129,7 +79,6 @@ class _AlbumPageState extends State<AlbumPage> {
                   return SongListTile(
                     song: song,
                     songs: _songs,
-                    showAlbumArt: false,
                   );
                 },
               ),
@@ -140,3 +89,102 @@ class _AlbumPageState extends State<AlbumPage> {
     );
   }
 }
+
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       // current song, play/pause button, song progress bar, song queue button
+//       bottomNavigationBar: const PlayerBottomAppBar(),
+//       extendBody: true,
+//       body: Ink(
+//         padding: EdgeInsets.fromLTRB(
+//           24,
+//           MediaQuery.of(context).padding.top + 16,
+//           24,
+//           16,
+//         ),
+//         decoration: BoxDecoration(
+//           gradient: Themes.getTheme().linearGradient,
+//         ),
+//         child: Column(
+//           crossAxisAlignment: CrossAxisAlignment.start,
+//           children: [
+//             // back button
+//             Row(
+//               children: [
+//                 IconButton(
+//                   onPressed: () {
+//                     Navigator.of(context).pop();
+//                   },
+//                   icon: const Icon(Icons.arrow_back_ios),
+//                 ),
+//               ],
+//             ),
+//             // // album artwork
+//             // Expanded(
+//             //   child: QueryArtworkWidget(
+//             //     id: widget.album.id,
+//             //     type: ArtworkType.ALBUM,
+//             //     artworkQuality: FilterQuality.high,
+//             //     artworkWidth: double.infinity,
+//             //     artworkBorder: BorderRadius.circular(50),
+//             //     nullArtworkWidget: Container(
+//             //       width: double.infinity,
+//             //       decoration: BoxDecoration(
+//             //         color: Colors.grey.withOpacity(0.1),
+//             //         borderRadius: BorderRadius.circular(50),
+//             //       ),
+//             //       child: const Icon(
+//             //         Icons.music_note_outlined,
+//             //         size: 100,
+//             //       ),
+//             //     ),
+//             //   ),
+//             // ),
+//             // const SizedBox(height: 16),
+//             // // album name
+//             // Padding(
+//             //   padding: const EdgeInsets.symmetric(horizontal: 16),
+//             //   child: Text(
+//             //     widget.album.album,
+//             //     style: const TextStyle(
+//             //       fontSize: 24,
+//             //       fontWeight: FontWeight.bold,
+//             //     ),
+//             //   ),
+//             // ),
+//             // // artist name
+//             // Padding(
+//             //   padding: const EdgeInsets.symmetric(horizontal: 16),
+//             //   child: Text(
+//             //     widget.album.artist ?? 'Unknown',
+//             //     style: const TextStyle(
+//             //       fontSize: 18,
+//             //       color: Colors.grey,
+//             //     ),
+//             //   ),
+//             // ),
+//             // const SizedBox(height: 16),
+//             // songs
+//             Expanded(
+//               child: ListView.builder(
+//                 padding: EdgeInsets.zero,
+//                 itemCount: _songs.length,
+//                 itemBuilder: (context, index) {
+//                   final SongModel song = _songs[index];
+
+//                   return SongListTile(
+//                     song: song,
+//                     songs: _songs,
+//                     showAlbumArt: false,
+//                   );
+//                 },
+//               ),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
