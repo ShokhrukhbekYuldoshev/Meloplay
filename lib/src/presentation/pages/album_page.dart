@@ -35,7 +35,7 @@ class _AlbumPageState extends State<AlbumPage> {
     );
 
     // remove songs less than 10 seconds long (10,000 milliseconds)
-    songs.removeWhere((song) => (song.duration ?? 0) < 10000);
+    //songs.removeWhere((song) => (song.duration ?? 0) < 10000);
 
     // await songRepository.addSongsToQueue(songs);
     setState(() {
