@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:lottie/lottie.dart';
+import 'package:meloplay/src/bloc/player/player_bloc.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:share_plus/share_plus.dart';
@@ -33,6 +34,7 @@ class SongListTile extends StatefulWidget {
 
 class _SongListTileState extends State<SongListTile> {
   final player = sl<JustAudioPlayer>();
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<SequenceState?>(
@@ -47,6 +49,7 @@ class _SongListTileState extends State<SongListTile> {
         return ListTile(
           onTap: () async {
             MediaItem mediaItem = player.getMediaItemFromSong(widget.song);
+
             if (context.mounted) {
               context.read<SongBloc>().add(
                     AddToRecentlyPlayed(mediaItem.id),
@@ -62,7 +65,9 @@ class _SongListTileState extends State<SongListTile> {
                 );
               }
             } else {
-              await sl<JustAudioPlayer>().load(mediaItem, widget.songs);
+              context.read<PlayerBloc>().add(
+                    PlayerLoadSongs(widget.songs, mediaItem),
+                  );
             }
           },
           leading: _buildLeading(currentMediaItem),
@@ -255,9 +260,15 @@ class _SongListTileState extends State<SongListTile> {
         child: StreamBuilder<bool>(
           stream: player.playing,
           builder: (context, snapshot) {
-            return Lottie.asset(
-              Assets.playingAnimation,
-              animate: snapshot.data ?? false,
+            return ColorFiltered(
+              colorFilter: ColorFilter.mode(
+                Theme.of(context).colorScheme.primary,
+                BlendMode.srcIn,
+              ),
+              child: Lottie.asset(
+                Assets.playingAnimation,
+                animate: snapshot.data ?? false,
+              ),
             );
           },
         ),
@@ -266,6 +277,7 @@ class _SongListTileState extends State<SongListTile> {
 
     // otherwise, show the album art
     return QueryArtworkWidget(
+      keepOldArtwork: true,
       id: widget.song.albumId ?? 0,
       type: ArtworkType.ALBUM,
       artworkBorder: BorderRadius.circular(10),

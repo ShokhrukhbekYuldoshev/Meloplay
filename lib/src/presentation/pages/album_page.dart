@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:marquee/marquee.dart';
 import 'package:meloplay/src/core/extensions/string_extensions.dart';
 import 'package:meloplay/src/core/helpers/helpers.dart';
 import 'package:meloplay/src/presentation/widgets/player_bottom_app_bar.dart';
@@ -63,16 +64,27 @@ class _AlbumPageState extends State<AlbumPage> {
                   title: LayoutBuilder(
                     builder: (context, constraints) {
                       bool isDark = constraints.maxHeight > 100;
-                      return Text(
-                        widget.album.album,
-                        style: TextStyle(
-                          color: isDark
-                              ? Colors.white
-                              : calculateTextColor(
-                                  Theme.of(context).scaffoldBackgroundColor,
-                                ),
-                        ),
-                      );
+
+                      if (isDark) {
+                        return Text(
+                          widget.album.album,
+                          style: const TextStyle(
+                            color: Colors.white,
+                          ),
+                        );
+                      } else {
+                        return Marquee(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          text: widget.album.album,
+                          style: TextStyle(
+                            color: calculateTextColor(
+                              Theme.of(context).scaffoldBackgroundColor,
+                            ),
+                          ),
+                          blankSpace: 100,
+                          pauseAfterRound: const Duration(seconds: 1),
+                        );
+                      }
                     },
                   ),
                   background: QueryArtworkWidget(

@@ -11,16 +11,12 @@ final class PlayerPaused extends PlayerState {}
 
 final class PlayerStopped extends PlayerState {}
 
+final class PlayerSongsLoaded extends PlayerState {}
+
 final class PlayerSeeked extends PlayerState {
   final Duration position;
 
   PlayerSeeked(this.position);
-}
-
-final class PlayerPlaylistLoaded extends PlayerState {
-  final ConcatenatingAudioSource playlist;
-
-  PlayerPlaylistLoaded(this.playlist);
 }
 
 final class PlayerError extends PlayerState {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:marquee/marquee.dart';
 import 'package:meloplay/src/core/helpers/helpers.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
@@ -64,16 +65,26 @@ class _ArtistPageState extends State<ArtistPage> {
                 title: LayoutBuilder(
                   builder: (context, constraints) {
                     bool isDark = constraints.maxHeight > 100;
-                    return Text(
-                      widget.artist.artist,
-                      style: TextStyle(
-                        color: isDark
-                            ? Colors.white
-                            : calculateTextColor(
-                                Theme.of(context).scaffoldBackgroundColor,
-                              ),
-                      ),
-                    );
+                    if (isDark) {
+                      return Text(
+                        widget.artist.artist,
+                        style: const TextStyle(
+                          color: Colors.white,
+                        ),
+                      );
+                    } else {
+                      return Marquee(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        text: widget.artist.artist,
+                        style: TextStyle(
+                          color: calculateTextColor(
+                            Theme.of(context).scaffoldBackgroundColor,
+                          ),
+                        ),
+                        blankSpace: 100,
+                        pauseAfterRound: const Duration(seconds: 1),
+                      );
+                    }
                   },
                 ),
                 background: QueryArtworkWidget(

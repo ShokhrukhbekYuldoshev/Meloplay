@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/foundation.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:just_audio_background/just_audio_background.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 import 'package:meloplay/src/data/repositories/player_repository.dart';
@@ -10,18 +11,17 @@ part 'player_state.dart';
 
 class PlayerBloc extends Bloc<PlayerEvent, PlayerState> {
   PlayerBloc({required JustAudioPlayer repository}) : super(PlayerInitial()) {
-    on<PlayerPlay>((event, emit) async {
+    on<PlayerLoadSongs>((event, emit) async {
       try {
-        await repository.play();
-        emit(PlayerPlaying());
+        emit(PlayerLoading());
+        await repository.load(event.mediaItem, event.playlist);
+        emit(PlayerSongsLoaded());
       } catch (e) {
         emit(PlayerError(e.toString()));
       }
     });
-
-    on<PlayerPlayFromQueue>((event, emit) async {
+    on<PlayerPlay>((event, emit) async {
       try {
-        await repository.seek(Duration.zero);
         await repository.play();
         emit(PlayerPlaying());
       } catch (e) {

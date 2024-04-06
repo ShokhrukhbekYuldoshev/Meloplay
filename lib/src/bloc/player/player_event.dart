@@ -5,16 +5,14 @@ sealed class PlayerEvent {}
 
 class PlayerPlay extends PlayerEvent {}
 
-class PlayerPlayFromQueue extends PlayerEvent {
-  final int index;
+class PlayerLoadSongs extends PlayerEvent {
+  final List<SongModel> playlist;
+  final MediaItem mediaItem;
 
-  PlayerPlayFromQueue(this.index);
-}
-
-class PlayerAddSongsToPlaylist extends PlayerEvent {
-  final List<SongModel> songs;
-
-  PlayerAddSongsToPlaylist(this.songs);
+  PlayerLoadSongs(
+    this.playlist,
+    this.mediaItem,
+  );
 }
 
 class PlayerPause extends PlayerEvent {}

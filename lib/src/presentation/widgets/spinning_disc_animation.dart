@@ -56,9 +56,10 @@ class _SpinningDiscState extends State<SpinningDisc>
             );
           },
           child: QueryArtworkWidget(
+            keepOldArtwork: true,
             id: widget.id,
             type: ArtworkType.AUDIO,
-            size: 10000,
+            size: 500,
             quality: 100,
             artworkBorder: BorderRadius.circular(100),
             nullArtworkWidget: Container(
