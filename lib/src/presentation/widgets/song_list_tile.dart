@@ -79,167 +79,6 @@ class _SongListTileState extends State<SongListTile> {
     );
   }
 
-  IconButton _buildTrailing(BuildContext context) {
-    return IconButton(
-      onPressed: () {
-        // add to queue, add to playlist, delete, share
-        showModalBottomSheet(
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(
-              top: Radius.circular(25),
-            ),
-          ),
-          context: context,
-          builder: (context) {
-            return Wrap(
-              children: [
-                ListTile(
-                  // border radius same as bottom sheet
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(25),
-                    ),
-                  ),
-                  leading: const Icon(Icons.playlist_add_outlined),
-                  title: const Text('Add to queue'),
-                  onTap: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-                ListTile(
-                  leading: const Icon(Icons.playlist_add_outlined),
-                  title: const Text('Add to playlist'),
-                  onTap: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-                ListTile(
-                  leading: const Icon(Icons.delete_outlined),
-                  title: const Text('Delete'),
-                  onTap: () {
-                    // Show a confirmation dialog before deleting the song
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: const Text('Delete Song'),
-                          content: const Text(
-                              'Are you sure you want to delete this song?'),
-                          actions: <Widget>[
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: const Text('Cancel'),
-                            ),
-                            TextButton(
-                              onPressed: () async {
-                                // Delete the song from the database
-                                final file = File(widget.song.data);
-
-                                if (await file.exists()) {
-                                  debugPrint('Deleting ${widget.song.title}');
-                                  try {
-                                    // ask for permission to manage external storage if not granted
-                                    if (!await Permission
-                                        .manageExternalStorage.isGranted) {
-                                      final status = await Permission
-                                          .manageExternalStorage
-                                          .request();
-
-                                      if (status.isGranted) {
-                                        debugPrint('Permission granted');
-                                      } else {
-                                        if (context.mounted) {
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(
-                                            const SnackBar(
-                                              content: Text(
-                                                'Permission denied',
-                                              ),
-                                              backgroundColor: Colors.red,
-                                            ),
-                                          );
-                                        }
-                                      }
-                                    }
-                                    await file.delete();
-                                    debugPrint('Deleted ${widget.song.title}');
-                                  } catch (e) {
-                                    debugPrint(
-                                        'Failed to delete ${widget.song.title}');
-                                  }
-                                } else {
-                                  debugPrint(
-                                      'File does not exist ${widget.song.title}');
-                                }
-
-                                // TODO: Remove the song from the list
-                                if (context.mounted) {
-                                  Navigator.of(context).pop();
-                                  Navigator.of(context).pop();
-                                }
-                              },
-                              child: const Text('Delete'),
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                  },
-                ),
-                ListTile(
-                  leading: const Icon(Icons.share_outlined),
-                  title: const Text('Share'),
-                  onTap: () async {
-                    List<XFile> files = [];
-                    // convert song to xfile
-                    final songFile = XFile(widget.song.data);
-                    files.add(songFile);
-                    await Share.shareXFiles(
-                      files,
-                      text: widget.song.title,
-                    );
-                    if (context.mounted) {
-                      Navigator.of(context).pop();
-                    }
-                  },
-                ),
-              ],
-            );
-          },
-        );
-      },
-      icon: const Icon(Icons.more_vert_outlined),
-    );
-  }
-
-  Text _buildSubtitle() {
-    String subtitle =
-        '${widget.song.artist ?? 'Unknown'} - ${widget.song.album ?? 'Unknown'}';
-    return Text(
-      subtitle,
-      maxLines: 1,
-      overflow: TextOverflow.ellipsis,
-      style: const TextStyle(),
-    );
-  }
-
-  Text _buildTitle(MediaItem? currentMediaItem, BuildContext context) {
-    return Text(
-      widget.song.title,
-      maxLines: 1,
-      overflow: TextOverflow.ellipsis,
-      style: TextStyle(
-        fontWeight: FontWeight.bold,
-        color: currentMediaItem != null &&
-                currentMediaItem.id == widget.song.id.toString()
-            ? Theme.of(context).colorScheme.primary
-            : null,
-      ),
-    );
-  }
-
   Widget? _buildLeading(MediaItem? currentMediaItem) {
     // if showAlbumArt is false, don't show leading
     if (!widget.showAlbumArt) {
@@ -250,8 +89,8 @@ class _SongListTileState extends State<SongListTile> {
     if (currentMediaItem != null &&
         currentMediaItem.id == widget.song.id.toString()) {
       return Container(
-        width: 48,
-        height: 48,
+        width: 50,
+        height: 50,
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
@@ -283,8 +122,8 @@ class _SongListTileState extends State<SongListTile> {
       artworkBorder: BorderRadius.circular(10),
       size: 500,
       nullArtworkWidget: Container(
-        width: 48,
-        height: 48,
+        width: 50,
+        height: 50,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           color: Colors.grey.withOpacity(0.1),
@@ -293,6 +132,173 @@ class _SongListTileState extends State<SongListTile> {
           Icons.music_note_outlined,
         ),
       ),
+    );
+  }
+
+  Text _buildTitle(MediaItem? currentMediaItem, BuildContext context) {
+    return Text(
+      widget.song.title,
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+      style: TextStyle(
+        fontWeight: FontWeight.bold,
+        color: currentMediaItem != null &&
+                currentMediaItem.id == widget.song.id.toString()
+            ? Theme.of(context).colorScheme.primary
+            : null,
+      ),
+    );
+  }
+
+  Text _buildSubtitle() {
+    String subtitle =
+        '${widget.song.artist ?? 'Unknown'} | ${widget.song.album ?? 'Unknown'}';
+    return Text(
+      subtitle,
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+      style: TextStyle(
+        color: Theme.of(context).textTheme.bodyMedium!.color!.withOpacity(0.8),
+      ),
+    );
+  }
+
+  IconButton _buildTrailing(BuildContext context) {
+    return IconButton(
+      onPressed: () {
+        // add to queue, add to playlist, delete, share
+        _buildModalBottomSheet(context);
+      },
+      icon: const Icon(Icons.more_vert_outlined),
+    );
+  }
+
+  Future<dynamic> _buildModalBottomSheet(BuildContext context) {
+    return showModalBottomSheet(
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(25),
+        ),
+      ),
+      context: context,
+      builder: (context) {
+        return Wrap(
+          children: [
+            ListTile(
+              // border radius same as bottom sheet
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(
+                  top: Radius.circular(25),
+                ),
+              ),
+              leading: const Icon(Icons.playlist_add_outlined),
+              title: const Text('Add to queue'),
+              onTap: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.playlist_add_outlined),
+              title: const Text('Add to playlist'),
+              onTap: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.delete_outlined),
+              title: const Text('Delete'),
+              onTap: () {
+                // Show a confirmation dialog before deleting the song
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: const Text('Delete Song'),
+                      content: const Text(
+                          'Are you sure you want to delete this song?'),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text('Cancel'),
+                        ),
+                        TextButton(
+                          onPressed: () async {
+                            // Delete the song from the database
+                            final file = File(widget.song.data);
+
+                            if (await file.exists()) {
+                              debugPrint('Deleting ${widget.song.title}');
+                              try {
+                                // ask for permission to manage external storage if not granted
+                                if (!await Permission
+                                    .manageExternalStorage.isGranted) {
+                                  final status = await Permission
+                                      .manageExternalStorage
+                                      .request();
+
+                                  if (status.isGranted) {
+                                    debugPrint('Permission granted');
+                                  } else {
+                                    if (context.mounted) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        const SnackBar(
+                                          content: Text(
+                                            'Permission denied',
+                                          ),
+                                          backgroundColor: Colors.red,
+                                        ),
+                                      );
+                                    }
+                                  }
+                                }
+                                await file.delete();
+                                debugPrint('Deleted ${widget.song.title}');
+                              } catch (e) {
+                                debugPrint(
+                                    'Failed to delete ${widget.song.title}');
+                              }
+                            } else {
+                              debugPrint(
+                                  'File does not exist ${widget.song.title}');
+                            }
+
+                            // TODO: Remove the song from the list
+                            if (context.mounted) {
+                              Navigator.of(context).pop();
+                              Navigator.of(context).pop();
+                            }
+                          },
+                          child: const Text('Delete'),
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.share_outlined),
+              title: const Text('Share'),
+              onTap: () async {
+                List<XFile> files = [];
+                // convert song to xfile
+                final songFile = XFile(widget.song.data);
+                files.add(songFile);
+                await Share.shareXFiles(
+                  files,
+                  text: widget.song.title,
+                );
+                if (context.mounted) {
+                  Navigator.of(context).pop();
+                }
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

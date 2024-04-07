@@ -63,14 +63,27 @@ class _AlbumPageState extends State<AlbumPage> {
                 flexibleSpace: FlexibleSpaceBar(
                   title: LayoutBuilder(
                     builder: (context, constraints) {
-                      bool isDark = constraints.maxHeight > 100;
+                      bool isLarge = constraints.maxHeight > 100;
+                      bool isLong = widget.album.album.length > 20;
 
-                      if (isDark) {
+                      if (isLarge) {
                         return Text(
                           widget.album.album,
                           style: const TextStyle(
                             color: Colors.white,
                           ),
+                        );
+                      } else if (!isLong) {
+                        return Text(
+                          widget.album.album,
+                          style: TextStyle(
+                            color: calculateTextColor(
+                              Theme.of(context).scaffoldBackgroundColor,
+                            ),
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          softWrap: false,
                         );
                       } else {
                         return Marquee(

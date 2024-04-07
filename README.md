@@ -17,6 +17,7 @@ Meloplay is a local music player app that plays music from your device built wit
 -   [x] Shuffle and repeat
 -   [ ] Search for music, playlists, artists, albums, genres
 -   [ ] Playlists (Read, create, rename, delete, add songs, remove songs)
+-   [ ] Queue
 -   [x] Favorites (Add songs, remove songs)
 -   [x] Recently played
 -   [ ] Most played
@@ -96,6 +97,7 @@ Meloplay is a local music player app that plays music from your device built wit
 | [share_plus](https://pub.dev/packages/share_plus)                                     | 8.0.2         | Flutter plugin for sharing content via the platform share UI, using the ACTION_SEND intent on Android and UIActivityViewController on iOS.                               |
 | [url_launcher](https://pub.dev/packages/url_launcher)                                 | 6.2.5         | A Flutter plugin for launching a URL in the mobile platform.                                                                                                             |
 | [lottie](https://pub.dev/packages/lottie)                                             | 3.1.0         | Lottie is a mobile library for Android and iOS that parses Lottie and JSON-based animations and renders them natively on mobile.                                         |
+| [marquee](https://pub.dev/packages/marquee)                                           | 2.2.3         | A Flutter widget that scrolls text infinitely.                                                                                                                           |
 
 ## 📦 Installation
 
