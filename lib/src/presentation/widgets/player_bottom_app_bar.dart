@@ -120,7 +120,11 @@ class _PlayerBottomAppBarState extends State<PlayerBottomAppBar> {
                               },
                             ),
                             IconButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.of(context).pushNamed(
+                                  AppRouter.queueRoute,
+                                );
+                              },
                               icon: const Icon(Icons.queue_music_outlined),
                             ),
                             const SizedBox(width: 20),

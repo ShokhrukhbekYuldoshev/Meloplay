@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:meloplay/src/core/di/service_locator.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'package:meloplay/src/bloc/theme/theme_bloc.dart';
+import 'package:meloplay/src/core/constants/assets.dart';
+import 'package:meloplay/src/core/di/service_locator.dart';
+import 'package:meloplay/src/core/router/app_router.dart';
+import 'package:meloplay/src/core/theme/themes.dart';
 import 'package:meloplay/src/presentation/pages/home/views/albums_view.dart';
 import 'package:meloplay/src/presentation/pages/home/views/artists_view.dart';
 import 'package:meloplay/src/presentation/pages/home/views/genres_view.dart';
+import 'package:meloplay/src/presentation/pages/home/views/playlists_view.dart';
 import 'package:meloplay/src/presentation/pages/home/views/songs_view.dart';
-import 'package:meloplay/src/core/router/app_router.dart';
-import 'package:meloplay/src/core/theme/themes.dart';
-import 'package:meloplay/src/presentation/widgets/home_card.dart';
-import 'package:meloplay/src/presentation/widgets/home_drawer.dart';
 import 'package:meloplay/src/presentation/widgets/player_bottom_app_bar.dart';
 
 class HomePage extends StatefulWidget {
@@ -46,6 +46,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   final tabs = [
     'Songs',
+    'Playlists',
     'Artists',
     'Albums',
     'Genres',
@@ -59,104 +60,131 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           // current song, play/pause button, song progress bar, song queue button
           bottomNavigationBar: const PlayerBottomAppBar(),
           extendBody: true,
-          drawer: const HomeDrawer(),
-          appBar: AppBar(
-            backgroundColor: Themes.getTheme().primaryColor,
-            title: const Text('Meloplay'),
-            // search button
-            actions: [
-              IconButton(
-                onPressed: () {
-                  // TODO: implement search
-                },
-                icon: const Icon(Icons.search_outlined),
-              )
-            ],
-          ),
-
-          body: Ink(
-            decoration: BoxDecoration(
-              gradient: Themes.getTheme().linearGradient,
-            ),
-            child: _hasPermission
-                ? Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: Row(
-                          children: [
-                            HomeCard(
-                              title: 'Favorites',
-                              icon: Icons.favorite_outlined,
-                              color: const Color(0xFF5D2285),
-                              onTap: () {
-                                Navigator.of(context).pushNamed(
-                                  AppRouter.favoritesRoute,
-                                );
-                              },
-                            ),
-                            const SizedBox(width: 16),
-                            HomeCard(
-                              title: 'Playlists',
-                              icon: Icons.playlist_play_outlined,
-                              color: const Color(0xFF136327),
-                              onTap: () {
-                                Navigator.of(context).pushNamed(
-                                  AppRouter.playlistsRoute,
-                                );
-                              },
-                            ),
-                            const SizedBox(width: 16),
-                            HomeCard(
-                              title: 'Recents',
-                              icon: Icons.history_outlined,
-                              color: const Color(0xFFD4850D),
-                              onTap: () {
-                                Navigator.of(context).pushNamed(
-                                  AppRouter.recentsRoute,
-                                );
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      TabBar(
-                        controller: _tabController,
-                        tabs: tabs.map((e) => Tab(text: e)).toList(),
-                      ),
-                      Expanded(
-                        child: TabBarView(
-                          controller: _tabController,
-                          children: const [
-                            SongsView(),
-                            ArtistsView(),
-                            AlbumsView(),
-                            GenresView(),
-                          ],
-                        ),
-                      ),
-                    ],
-                  )
-                : Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Center(
-                        child: Text('No permission to access library'),
-                      ),
-                      const SizedBox(height: 16),
-                      TextButton(
-                        onPressed: () async {
-                          // permission request
-                          await Permission.storage.request();
-                        },
-                        child: const Text('Retry'),
-                      )
-                    ],
-                  ),
-          ),
+          drawer: _buildDrawer(context),
+          appBar: _buildAppBar(),
+          body: _buildBody(context),
         );
       },
+    );
+  }
+
+  Ink _buildBody(BuildContext context) {
+    return Ink(
+      decoration: BoxDecoration(
+        gradient: Themes.getTheme().linearGradient,
+      ),
+      child: _hasPermission
+          ? Column(
+              children: [
+                TabBar(
+                  tabAlignment: TabAlignment.start,
+                  isScrollable: true,
+                  controller: _tabController,
+                  tabs: tabs.map((e) => Tab(text: e)).toList(),
+                ),
+                Expanded(
+                  child: TabBarView(
+                    controller: _tabController,
+                    children: const [
+                      SongsView(),
+                      PlaylistsView(),
+                      ArtistsView(),
+                      AlbumsView(),
+                      GenresView(),
+                    ],
+                  ),
+                ),
+              ],
+            )
+          : Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Center(
+                  child: Text('No permission to access library'),
+                ),
+                const SizedBox(height: 16),
+                TextButton(
+                  onPressed: () async {
+                    // permission request
+                    await Permission.storage.request();
+                  },
+                  child: const Text('Retry'),
+                )
+              ],
+            ),
+    );
+  }
+
+  AppBar _buildAppBar() {
+    return AppBar(
+      backgroundColor: Themes.getTheme().primaryColor,
+      title: const Text('Meloplay'),
+      // search button
+      actions: [
+        IconButton(
+          onPressed: () {
+            // TODO: implement search
+            Navigator.of(context).pushNamed(AppRouter.searchRoute);
+          },
+          icon: const Icon(Icons.search_outlined),
+        )
+      ],
+    );
+  }
+
+  Drawer _buildDrawer(BuildContext context) {
+    return Drawer(
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: [
+          BlocBuilder<ThemeBloc, ThemeState>(
+            builder: (context, state) {
+              return DrawerHeader(
+                decoration: BoxDecoration(
+                  color: Themes.getTheme().primaryColor,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Hero(
+                      tag: 'logo',
+                      child: Image.asset(
+                        Assets.logo,
+                        height: 64,
+                        width: 64,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    const Text(
+                      'Meloplay',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.info_outlined),
+            title: const Text('About'),
+            onTap: () {
+              Navigator.of(context).pushNamed(AppRouter.aboutRoute);
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.color_lens_outlined),
+            title: const Text('Themes'),
+            onTap: () {
+              Navigator.of(context).pushNamed(AppRouter.settingsRoute);
+            },
+          ),
+        ],
+      ),
     );
   }
 }

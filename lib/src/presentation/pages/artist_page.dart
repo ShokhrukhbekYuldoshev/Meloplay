@@ -116,7 +116,7 @@ class _ArtistPageState extends State<ArtistPage> {
                       borderRadius: BorderRadius.circular(0),
                     ),
                     child: const Icon(
-                      Icons.music_note_outlined,
+                      Icons.person_outlined,
                       size: 100,
                     ),
                   ),

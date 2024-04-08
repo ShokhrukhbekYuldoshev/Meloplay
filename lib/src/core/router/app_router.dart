@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:meloplay/src/presentation/pages/playlist_details_page.dart';
+import 'package:meloplay/src/presentation/pages/queue_page.dart';
+import 'package:meloplay/src/presentation/pages/search_page.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 import 'package:meloplay/src/presentation/pages/about_page.dart';
@@ -9,7 +11,6 @@ import 'package:meloplay/src/presentation/pages/favorites_page.dart';
 import 'package:meloplay/src/presentation/pages/genre_page.dart';
 import 'package:meloplay/src/presentation/pages/home/home_page.dart';
 import 'package:meloplay/src/presentation/pages/player_page.dart';
-import 'package:meloplay/src/presentation/pages/playlists_page.dart';
 import 'package:meloplay/src/presentation/pages/recents_page.dart';
 import 'package:meloplay/src/presentation/pages/themes_page.dart';
 import 'package:meloplay/src/presentation/pages/splash_page.dart';
@@ -18,7 +19,6 @@ class AppRouter {
   static const String splashRoute = '/';
   static const String homeRoute = '/home';
   static const String favoritesRoute = '/favorites';
-  static const String playlistsRoute = '/playlists';
   static const String recentsRoute = '/recents';
   static const String playerRoute = '/player';
   static const String artistRoute = '/artist';
@@ -27,6 +27,8 @@ class AppRouter {
   static const String aboutRoute = '/about';
   static const String settingsRoute = '/settings';
   static const String playlistDetailsRoute = '/playlist';
+  static const String queueRoute = '/queue';
+  static const String searchRoute = '/search';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -42,10 +44,7 @@ class AppRouter {
         return MaterialPageRoute<dynamic>(
           builder: (_) => const FavoritesPage(),
         );
-      case playlistsRoute:
-        return MaterialPageRoute<dynamic>(
-          builder: (_) => const PlaylistsPage(),
-        );
+
       case recentsRoute:
         return MaterialPageRoute<dynamic>(
           builder: (_) => const RecentsPage(),
@@ -85,6 +84,14 @@ class AppRouter {
           builder: (_) => PlaylistDetailsPage(
             playlist: settings.arguments as PlaylistModel,
           ),
+        );
+      case queueRoute:
+        return MaterialPageRoute<dynamic>(
+          builder: (_) => const QueuePage(),
+        );
+      case searchRoute:
+        return MaterialPageRoute<dynamic>(
+          builder: (_) => const SearchPage(),
         );
       default:
         return MaterialPageRoute<dynamic>(

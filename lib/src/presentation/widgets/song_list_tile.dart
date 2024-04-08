@@ -38,6 +38,7 @@ class _SongListTileState extends State<SongListTile> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<SequenceState?>(
+      key: ValueKey(widget.song.id),
       stream: player.sequenceState,
       builder: (context, snapshot) {
         MediaItem? currentMediaItem;

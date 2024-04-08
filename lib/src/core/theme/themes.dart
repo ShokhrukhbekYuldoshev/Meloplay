@@ -3,7 +3,7 @@ import 'package:hive/hive.dart';
 import 'package:meloplay/src/data/services/hive_box.dart';
 
 class Themes {
-  static final List<CustomTheme> _themes = [
+  static final List<ThemeColor> _themes = [
     PurpleTheme(),
     BlueTheme(),
     GreenTheme(),
@@ -30,7 +30,7 @@ class Themes {
   static get themes => _themes;
   static List<String> get themeNames => _themeNames;
 
-  static CustomTheme getThemeFromKey(String key) {
+  static ThemeColor getThemeFromKey(String key) {
     switch (key) {
       case 'Purple':
         return _themes[0];
@@ -66,21 +66,21 @@ class Themes {
     return themeName ?? 'Purple';
   }
 
-  static CustomTheme getTheme() {
+  static ThemeColor getTheme() {
     final Box<dynamic> box = Hive.box(HiveBox.boxName);
     final String? themeName = box.get(HiveBox.themeKey) as String?;
     return getThemeFromKey(themeName ?? 'Purple');
   }
 }
 
-abstract class CustomTheme {
+abstract class ThemeColor {
   final String themeName;
   final Color primaryColor;
   final Color secondaryColor;
   final ColorScheme colorScheme;
   final LinearGradient linearGradient;
 
-  const CustomTheme({
+  const ThemeColor({
     required this.themeName,
     required this.primaryColor,
     required this.secondaryColor,
@@ -89,7 +89,7 @@ abstract class CustomTheme {
   });
 }
 
-class PurpleTheme extends CustomTheme {
+class PurpleTheme extends ThemeColor {
   PurpleTheme()
       : super(
           themeName: 'Purple',
@@ -110,7 +110,7 @@ class PurpleTheme extends CustomTheme {
         );
 }
 
-class BlueTheme extends CustomTheme {
+class BlueTheme extends ThemeColor {
   BlueTheme()
       : super(
           themeName: 'Blue',
@@ -131,7 +131,7 @@ class BlueTheme extends CustomTheme {
         );
 }
 
-class GreenTheme extends CustomTheme {
+class GreenTheme extends ThemeColor {
   GreenTheme()
       : super(
           themeName: 'Green',
@@ -152,7 +152,7 @@ class GreenTheme extends CustomTheme {
         );
 }
 
-class OrangeTheme extends CustomTheme {
+class OrangeTheme extends ThemeColor {
   OrangeTheme()
       : super(
           themeName: 'Orange',
@@ -173,7 +173,7 @@ class OrangeTheme extends CustomTheme {
         );
 }
 
-class YellowTheme extends CustomTheme {
+class YellowTheme extends ThemeColor {
   YellowTheme()
       : super(
           themeName: 'Yellow',
@@ -194,7 +194,7 @@ class YellowTheme extends CustomTheme {
         );
 }
 
-class TealTheme extends CustomTheme {
+class TealTheme extends ThemeColor {
   TealTheme()
       : super(
           themeName: 'Teal',
@@ -215,7 +215,7 @@ class TealTheme extends CustomTheme {
         );
 }
 
-class RedTheme extends CustomTheme {
+class RedTheme extends ThemeColor {
   RedTheme()
       : super(
           themeName: 'Red',
@@ -236,7 +236,7 @@ class RedTheme extends CustomTheme {
         );
 }
 
-class BlackTheme extends CustomTheme {
+class BlackTheme extends ThemeColor {
   BlackTheme()
       : super(
           themeName: 'Black',
@@ -257,7 +257,7 @@ class BlackTheme extends CustomTheme {
         );
 }
 
-class WhiteTheme extends CustomTheme {
+class WhiteTheme extends ThemeColor {
   WhiteTheme()
       : super(
           themeName: 'White',

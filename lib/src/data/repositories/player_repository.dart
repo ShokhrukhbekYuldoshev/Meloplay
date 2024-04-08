@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:on_audio_query/on_audio_query.dart';
@@ -23,6 +25,7 @@ abstract class JustAudioPlayer {
   Stream<bool> get playing;
   Stream<int?> get currentIndex;
   Stream<SequenceState?> get sequenceState;
+  List<SongModel> get playlist;
   Stream<ProcessingState> get processingStateStream;
   Future<void> dispose();
   Future<void> setVolume(double volume);
@@ -64,6 +67,12 @@ class JustAudioPlayerImpl implements JustAudioPlayer {
       List<AudioSource> sources = [];
 
       for (var song in playlist) {
+        var artUri = 'content://media/external/audio/albumart/';
+
+        if (song.albumId != null) {
+          artUri += song.albumId.toString();
+        }
+
         sources.add(
           AudioSource.uri(
             Uri.parse(song.uri!),
@@ -71,8 +80,7 @@ class JustAudioPlayerImpl implements JustAudioPlayer {
               id: song.id.toString(),
               title: song.title,
               album: song.album,
-              // TODO: fix
-              // artUri: Uri.parse(song.uri!),
+              artUri: Platform.isAndroid ? Uri.parse(artUri) : null,
               artist: song.artist,
               duration: Duration(milliseconds: song.duration!),
               genre: song.genre,
@@ -193,4 +201,7 @@ class JustAudioPlayerImpl implements JustAudioPlayer {
   Future<void> setShuffleModeEnabled(bool enabled) async {
     await _player.setShuffleModeEnabled(enabled);
   }
+
+  @override
+  List<SongModel> get playlist => currentPlaylist;
 }

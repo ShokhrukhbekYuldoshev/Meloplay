@@ -1,7 +1,7 @@
 name: meloplay
 description: 'Meloplay is a local music player app that plays music from your device built with Flutter.'
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
-version: 1.2.2+1
+version: 1.2.3+1
 
 environment:
     sdk: '>=3.3.3 <4.0.0'
@@ -11,6 +11,7 @@ dependencies:
     flutter:
         sdk: flutter # flutter sdk
     flutter_bloc: ^8.1.5 # state management
+    flutter_cache_manager: ^3.3.1
     flutter_staggered_animations: ^1.1.1 # animation
     get_it: ^7.6.8 # dependency injection
     hive: ^2.2.3 # local database
@@ -37,6 +38,7 @@ flutter:
     assets:
         - assets/icon/
         - assets/lottie/
+        - assets/images/
 
 flutter_launcher_icons:
     image_path: 'assets/icon/icon.png'
