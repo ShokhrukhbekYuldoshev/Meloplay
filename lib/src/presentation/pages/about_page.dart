@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:meloplay/src/core/theme/themes.dart';
-import 'package:meloplay/src/core/constants/assets.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+
+import 'package:meloplay/src/core/constants/assets.dart';
+import 'package:meloplay/src/core/theme/themes.dart';
 
 class AboutPage extends StatefulWidget {
   const AboutPage({super.key});

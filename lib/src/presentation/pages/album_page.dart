@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:marquee/marquee.dart';
+import 'package:on_audio_query/on_audio_query.dart';
+
+import 'package:meloplay/src/core/di/service_locator.dart';
 import 'package:meloplay/src/core/extensions/string_extensions.dart';
 import 'package:meloplay/src/core/helpers/helpers.dart';
+import 'package:meloplay/src/core/theme/themes.dart';
 import 'package:meloplay/src/presentation/widgets/player_bottom_app_bar.dart';
 import 'package:meloplay/src/presentation/widgets/song_list_tile.dart';
-import 'package:meloplay/src/core/theme/themes.dart';
-import 'package:meloplay/src/core/di/service_locator.dart';
-import 'package:on_audio_query/on_audio_query.dart';
 
 class AlbumPage extends StatefulWidget {
   final AlbumModel album;
@@ -151,88 +152,10 @@ class _AlbumPageState extends State<AlbumPage> {
 
               // margin for bottom app bar
               const SliverToBoxAdapter(
-                child: SizedBox(height: 80),
+                child: SizedBox(height: 60),
               ),
             ],
-          )
-          // Column(
-          //   crossAxisAlignment: CrossAxisAlignment.start,
-          //   children: [
-          //     // back button
-          //     Row(
-          //       children: [
-          //         IconButton(
-          //           onPressed: () {
-          //             Navigator.of(context).pop();
-          //           },
-          //           icon: const Icon(Icons.arrow_back_ios),
-          //         ),
-          //       ],
-          //     ),
-          //     // album artwork
-          //     Expanded(
-          //       child: QueryArtworkWidget(
-          //         id: widget.album.id,
-          //         type: ArtworkType.ALBUM,
-          //         size: 10000,
-          //         artworkWidth: double.infinity,
-          //         artworkBorder: BorderRadius.circular(50),
-          //         nullArtworkWidget: Container(
-          //           width: double.infinity,
-          //           decoration: BoxDecoration(
-          //             color: Colors.grey.withOpacity(0.1),
-          //             borderRadius: BorderRadius.circular(50),
-          //           ),
-          //           child: const Icon(
-          //             Icons.music_note_outlined,
-          //             size: 100,
-          //           ),
-          //         ),
-          //       ),
-          //     ),
-          //     const SizedBox(height: 16),
-          //     // album name
-          //     Padding(
-          //       padding: const EdgeInsets.symmetric(horizontal: 16),
-          //       child: Text(
-          //         widget.album.album,
-          //         style: const TextStyle(
-          //           fontSize: 24,
-          //           fontWeight: FontWeight.bold,
-          //         ),
-          //       ),
-          //     ),
-          //     // artist name
-          //     Padding(
-          //       padding: const EdgeInsets.symmetric(horizontal: 16),
-          //       child: Text(
-          //         widget.album.artist ?? 'Unknown',
-          //         style: const TextStyle(
-          //           fontSize: 18,
-          //           color: Colors.grey,
-          //         ),
-          //       ),
-          //     ),
-          //     const SizedBox(height: 16),
-          //     // songs
-          //     Expanded(
-          //       child: ListView.builder(
-          //         padding: EdgeInsets.zero,
-          //         itemCount: _songs.length,
-          //         itemBuilder: (context, index) {
-          //           final SongModel song = _songs[index];
-
-          //           return SongListTile(
-          //             song: song,
-          //             songs: _songs,
-          //             showAlbumArt: false,
-          //           );
-          //         },
-          //       ),
-          //     ),
-          //   ],
-          // ),
-          ),
+          )),
     );
   }
 }

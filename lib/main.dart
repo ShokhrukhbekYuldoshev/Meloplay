@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:meloplay/src/bloc/search/search_bloc.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'package:meloplay/src/app.dart';
@@ -10,6 +9,7 @@ import 'package:meloplay/src/bloc/favorites/favorites_bloc.dart';
 import 'package:meloplay/src/bloc/home/home_bloc.dart';
 import 'package:meloplay/src/bloc/player/player_bloc.dart';
 import 'package:meloplay/src/bloc/recents/recents_bloc.dart';
+import 'package:meloplay/src/bloc/search/search_bloc.dart';
 import 'package:meloplay/src/bloc/song/song_bloc.dart';
 import 'package:meloplay/src/bloc/theme/theme_bloc.dart';
 import 'package:meloplay/src/core/di/service_locator.dart';

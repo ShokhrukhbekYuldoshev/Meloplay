@@ -49,7 +49,7 @@ class PlayerBloc extends Bloc<PlayerEvent, PlayerState> {
 
     on<PlayerSeek>((event, emit) async {
       try {
-        await repository.seek(event.position);
+        await repository.seek(event.position, index: event.index);
         emit(PlayerSeeked(event.position));
       } catch (e) {
         emit(PlayerError(e.toString()));

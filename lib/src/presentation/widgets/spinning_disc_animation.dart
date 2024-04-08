@@ -1,9 +1,10 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:on_audio_query/on_audio_query.dart';
+
 import 'package:meloplay/src/core/di/service_locator.dart';
 import 'package:meloplay/src/data/repositories/player_repository.dart';
-import 'package:on_audio_query/on_audio_query.dart';
 
 class SpinningDisc extends StatefulWidget {
   final int id;

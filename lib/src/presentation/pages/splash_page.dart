@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:meloplay/src/core/router/app_router.dart';
+
 import 'package:meloplay/src/core/constants/assets.dart';
+import 'package:meloplay/src/core/router/app_router.dart';
 import 'package:meloplay/src/core/theme/themes.dart';
 
 class SplashPage extends StatefulWidget {

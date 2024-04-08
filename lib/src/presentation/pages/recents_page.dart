@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:meloplay/src/bloc/recents/recents_bloc.dart';
 import 'package:meloplay/src/bloc/song/song_bloc.dart';
 import 'package:meloplay/src/core/theme/themes.dart';
@@ -71,17 +72,12 @@ class _RecentsPageState extends State<RecentsPage> {
       );
     }
     return ListView.builder(
-      padding: EdgeInsets.zero,
+      padding: const EdgeInsets.only(bottom: 60),
       itemCount: state.songs.length,
       itemBuilder: (context, index) {
-        return Column(
-          children: [
-            SongListTile(
-              song: state.songs[index],
-              songs: state.songs,
-            ),
-            if (index == state.songs.length - 1) const SizedBox(height: 80),
-          ],
+        return SongListTile(
+          song: state.songs[index],
+          songs: state.songs,
         );
       },
     );

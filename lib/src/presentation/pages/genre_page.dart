@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:on_audio_query/on_audio_query.dart';
+
+import 'package:meloplay/src/core/di/service_locator.dart';
+import 'package:meloplay/src/core/theme/themes.dart';
 import 'package:meloplay/src/presentation/widgets/player_bottom_app_bar.dart';
 import 'package:meloplay/src/presentation/widgets/song_list_tile.dart';
-import 'package:meloplay/src/core/theme/themes.dart';
-import 'package:meloplay/src/core/di/service_locator.dart';
-import 'package:on_audio_query/on_audio_query.dart';
 
 class GenrePage extends StatefulWidget {
   final GenreModel genre;
@@ -71,6 +72,8 @@ class _GenrePageState extends State<GenrePage> {
                 },
               ),
             ),
+            // margin for bottom app bar
+            const SizedBox(height: 60),
           ],
         ),
       ),

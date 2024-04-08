@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
+import 'package:meloplay/src/presentation/widgets/seek_bar.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 import 'package:meloplay/src/bloc/player/player_bloc.dart';
@@ -171,57 +172,7 @@ class _PlayerPageState extends State<PlayerPage> {
             const Spacer(),
 
             // seek bar
-            StreamBuilder<Duration>(
-              stream: player.position,
-              builder: (context, snapshot) {
-                final position = snapshot.data ?? Duration.zero;
-                return StreamBuilder<Duration?>(
-                  stream: player.duration,
-                  builder: (context, snapshot) {
-                    final duration = snapshot.data ?? Duration.zero;
-                    return Column(
-                      children: [
-                        Slider(
-                          value: position > duration
-                              ? duration.inMilliseconds.toDouble()
-                              : position.inMilliseconds.toDouble(),
-                          min: 0,
-                          max: duration.inMilliseconds.toDouble(),
-                          onChanged: (value) {
-                            context.read<PlayerBloc>().add(
-                                  PlayerSeek(
-                                    Duration(milliseconds: value.toInt()),
-                                  ),
-                                );
-                          },
-                        ),
-
-                        // position and duration text
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              '${position.inMinutes.toString().padLeft(2, '0')}:${(position.inSeconds % 60).toString().padLeft(2, '0')}',
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Text(
-                              '${duration.inMinutes.toString().padLeft(2, '0')}:${(duration.inSeconds % 60).toString().padLeft(2, '0')}',
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    );
-                  },
-                );
-              },
-            ),
+            SeekBar(player: player),
             const Spacer(),
 
             Row(

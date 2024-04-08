@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:marquee/marquee.dart';
-import 'package:meloplay/src/core/helpers/helpers.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 import 'package:meloplay/src/core/di/service_locator.dart';
 import 'package:meloplay/src/core/extensions/string_extensions.dart';
+import 'package:meloplay/src/core/helpers/helpers.dart';
 import 'package:meloplay/src/core/theme/themes.dart';
 import 'package:meloplay/src/presentation/widgets/player_bottom_app_bar.dart';
 import 'package:meloplay/src/presentation/widgets/song_list_tile.dart';
@@ -151,7 +151,7 @@ class _ArtistPageState extends State<ArtistPage> {
 
             // margin for bottom app bar
             const SliverToBoxAdapter(
-              child: SizedBox(height: 80),
+              child: SizedBox(height: 60),
             ),
           ],
         ),

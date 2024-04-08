@@ -30,6 +30,7 @@ Meloplay is a local music player app that plays music from your device built wit
 -   [x] Share music
 -   [x] Settings
 -   [x] Themes (multiple themes)
+-   [ ] Localization
 
 ## 📸 Screenshots
 

@@ -60,6 +60,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           // current song, play/pause button, song progress bar, song queue button
           bottomNavigationBar: const PlayerBottomAppBar(),
           extendBody: true,
+          backgroundColor: Themes.getTheme().secondaryColor,
           drawer: _buildDrawer(context),
           appBar: _buildAppBar(),
           body: _buildBody(context),
@@ -123,7 +124,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       actions: [
         IconButton(
           onPressed: () {
-            // TODO: implement search
             Navigator.of(context).pushNamed(AppRouter.searchRoute);
           },
           icon: const Icon(Icons.search_outlined),

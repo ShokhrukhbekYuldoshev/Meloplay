@@ -21,8 +21,9 @@ class PlayerStop extends PlayerEvent {}
 
 class PlayerSeek extends PlayerEvent {
   final Duration position;
+  final int? index;
 
-  PlayerSeek(this.position);
+  PlayerSeek(this.position, {this.index});
 }
 
 class PlayerNext extends PlayerEvent {}

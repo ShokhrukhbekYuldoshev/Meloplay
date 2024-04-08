@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:on_audio_query/on_audio_query.dart';
+
 import 'package:meloplay/src/bloc/search/search_bloc.dart';
 import 'package:meloplay/src/core/extensions/string_extensions.dart';
 import 'package:meloplay/src/core/theme/themes.dart';
 import 'package:meloplay/src/presentation/widgets/song_list_tile.dart';
-import 'package:on_audio_query/on_audio_query.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -19,6 +20,7 @@ class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Themes.getTheme().secondaryColor,
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Themes.getTheme().primaryColor,
@@ -272,6 +274,7 @@ class _SearchPageState extends State<SearchPage> {
                             ),
                         ],
                       ),
+                    const SizedBox(height: 60),
                   ],
                 ),
               ),

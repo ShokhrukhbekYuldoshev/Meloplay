@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:meloplay/src/core/theme/themes.dart';
 import 'package:on_audio_query/on_audio_query.dart';
+
+import 'package:meloplay/src/core/theme/themes.dart';
 
 class PlaylistDetailsPage extends StatefulWidget {
   final PlaylistModel playlist;

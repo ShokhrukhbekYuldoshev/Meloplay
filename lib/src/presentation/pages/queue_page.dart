@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:meloplay/src/core/di/service_locator.dart';
 import 'package:meloplay/src/core/theme/themes.dart';
 import 'package:meloplay/src/data/repositories/player_repository.dart';
@@ -34,7 +35,7 @@ class _QueuePageState extends State<QueuePage> {
     final playlist = sl<JustAudioPlayer>().playlist;
 
     return ListView.builder(
-      padding: EdgeInsets.zero,
+      padding: const EdgeInsets.only(bottom: 60),
       itemCount: playlist.length,
       itemBuilder: (context, index) {
         return SongListTile(

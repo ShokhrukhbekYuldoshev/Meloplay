@@ -15,7 +15,7 @@ abstract class JustAudioPlayer {
   Future<void> play();
   Future<void> pause();
   Future<void> stop();
-  Future<void> seek(Duration position);
+  Future<void> seek(Duration position, {int? index});
   Future<void> seekToNext();
   Future<void> seekToPrevious();
   Stream<Duration> get position;
@@ -144,7 +144,16 @@ class JustAudioPlayerImpl implements JustAudioPlayer {
   Future<void> stop() => _player.stop();
 
   @override
-  Future<void> seek(Duration position) => _player.seek(position);
+  Future<void> seek(Duration position, {int? index}) async {
+    if (index != null) {
+      await _player.seek(
+        position,
+        index: index,
+      );
+    } else {
+      await _player.seek(position);
+    }
+  }
 
   @override
   Future<void> seekToNext() => _player.seekToNext();
