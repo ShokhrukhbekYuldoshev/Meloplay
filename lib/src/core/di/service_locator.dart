@@ -3,6 +3,7 @@ import 'package:meloplay/src/bloc/favorites/favorites_bloc.dart';
 import 'package:meloplay/src/bloc/home/home_bloc.dart';
 import 'package:meloplay/src/bloc/player/player_bloc.dart';
 import 'package:meloplay/src/bloc/recents/recents_bloc.dart';
+import 'package:meloplay/src/bloc/scan/scan_cubit.dart';
 import 'package:meloplay/src/bloc/search/search_bloc.dart';
 import 'package:meloplay/src/bloc/song/song_bloc.dart';
 import 'package:meloplay/src/bloc/theme/theme_bloc.dart';
@@ -26,6 +27,8 @@ void init() {
   sl.registerFactory(() => FavoritesBloc(repository: sl()));
   sl.registerFactory(() => RecentsBloc(repository: sl()));
   sl.registerFactory(() => SearchBloc(repository: sl()));
+  // Cubit
+  sl.registerFactory(() => ScanCubit());
 
   // Repository
   sl.registerLazySingleton(() => ThemeRepository());

@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:meloplay/src/presentation/pages/playlist_details_page.dart';
-import 'package:meloplay/src/presentation/pages/queue_page.dart';
-import 'package:meloplay/src/presentation/pages/search_page.dart';
+import 'package:meloplay/src/presentation/pages/config/scan_page.dart';
+import 'package:meloplay/src/presentation/pages/config/settings_page.dart';
+import 'package:meloplay/src/presentation/pages/playlists/playlist_details_page.dart';
+import 'package:meloplay/src/presentation/pages/player/queue_page.dart';
+import 'package:meloplay/src/presentation/pages/home/search_page.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
-import 'package:meloplay/src/presentation/pages/about_page.dart';
-import 'package:meloplay/src/presentation/pages/album_page.dart';
-import 'package:meloplay/src/presentation/pages/artist_page.dart';
-import 'package:meloplay/src/presentation/pages/favorites_page.dart';
-import 'package:meloplay/src/presentation/pages/genre_page.dart';
+import 'package:meloplay/src/presentation/pages/details/album_page.dart';
+import 'package:meloplay/src/presentation/pages/details/artist_page.dart';
+import 'package:meloplay/src/presentation/pages/playlists/favorites_page.dart';
+import 'package:meloplay/src/presentation/pages/details/genre_page.dart';
 import 'package:meloplay/src/presentation/pages/home/home_page.dart';
-import 'package:meloplay/src/presentation/pages/player_page.dart';
-import 'package:meloplay/src/presentation/pages/recents_page.dart';
-import 'package:meloplay/src/presentation/pages/themes_page.dart';
+import 'package:meloplay/src/presentation/pages/player/player_page.dart';
+import 'package:meloplay/src/presentation/pages/playlists/recents_page.dart';
+import 'package:meloplay/src/presentation/pages/config/themes_page.dart';
 import 'package:meloplay/src/presentation/pages/splash_page.dart';
 
 class AppRouter {
@@ -24,11 +25,12 @@ class AppRouter {
   static const String artistRoute = '/artist';
   static const String albumRoute = '/album';
   static const String genreRoute = '/genre';
-  static const String aboutRoute = '/about';
+  static const String themesRoute = '/themes';
   static const String settingsRoute = '/settings';
   static const String playlistDetailsRoute = '/playlist';
   static const String queueRoute = '/queue';
   static const String searchRoute = '/search';
+  static const String scanRoute = '/scan';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -71,13 +73,17 @@ class AppRouter {
             genre: settings.arguments as GenreModel,
           ),
         );
-      case aboutRoute:
+      case themesRoute:
         return MaterialPageRoute<dynamic>(
-          builder: (_) => const AboutPage(),
+          builder: (_) => const ThemesPage(),
         );
       case settingsRoute:
         return MaterialPageRoute<dynamic>(
-          builder: (_) => const ThemesPage(),
+          builder: (_) => const SettingsPage(),
+        );
+      case scanRoute:
+        return MaterialPageRoute<dynamic>(
+          builder: (_) => const ScanPage(),
         );
       case playlistDetailsRoute:
         return MaterialPageRoute<dynamic>(

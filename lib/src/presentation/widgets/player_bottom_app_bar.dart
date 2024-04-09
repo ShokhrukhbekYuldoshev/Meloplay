@@ -152,22 +152,25 @@ class _PlayerBottomAppBarState extends State<PlayerBottomAppBar> {
               children: [
                 Text(
                   mediaItem.title,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 4),
                 Text(
                   mediaItem.artist ?? 'Unknown',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
+                    color: Colors.grey,
                   ),
                 ),
                 const SizedBox(height: 20),
-                SeekBar(player: player, isWhite: true),
+                SeekBar(player: player),
                 const SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -184,6 +187,7 @@ class _PlayerBottomAppBarState extends State<PlayerBottomAppBar> {
                         color: Colors.white,
                       ),
                       iconSize: 40,
+                      tooltip: 'Previous',
                     ),
                     const SizedBox(width: 20),
                     // play/pause button
@@ -213,6 +217,7 @@ class _PlayerBottomAppBarState extends State<PlayerBottomAppBar> {
                                   color: Colors.white,
                                 ),
                           iconSize: 40,
+                          tooltip: 'Play/Pause',
                         );
                       },
                     ),
@@ -227,6 +232,7 @@ class _PlayerBottomAppBarState extends State<PlayerBottomAppBar> {
                         color: Colors.white,
                       ),
                       iconSize: 40,
+                      tooltip: 'Next',
                     ),
                   ],
                 ),
@@ -255,11 +261,11 @@ class _PlayerBottomAppBarState extends State<PlayerBottomAppBar> {
           builder: (context, snapshot) {
             final playing = snapshot.data ?? false;
             return IconButton(
-              onPressed: () async {
+              onPressed: () {
                 if (playing) {
-                  await player.pause();
+                  context.read<bloc.PlayerBloc>().add(bloc.PlayerPause());
                 } else {
-                  await player.play();
+                  context.read<bloc.PlayerBloc>().add(bloc.PlayerPlay());
                 }
               },
               icon: playing

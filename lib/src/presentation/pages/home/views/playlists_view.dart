@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:meloplay/src/core/constants/assets.dart';
 import 'package:meloplay/src/core/router/app_router.dart';
 
 class PlaylistsView extends StatefulWidget {
@@ -20,7 +21,7 @@ class _PlaylistsViewState extends State<PlaylistsView>
     final cards = [
       const SizedBox(width: 16),
       _buildCard(
-        image: 'assets/images/heart.jpg',
+        image: Assets.heart,
         label: 'Favorites',
         icon: Icons.favorite_border_outlined,
         color: Colors.red,
@@ -32,7 +33,7 @@ class _PlaylistsViewState extends State<PlaylistsView>
       ),
       const SizedBox(width: 16),
       _buildCard(
-        image: 'assets/images/earphones.jpg',
+        image: Assets.earphones,
         label: 'Recents',
         icon: Icons.history_outlined,
         color: const Color(0xFFF321D0),

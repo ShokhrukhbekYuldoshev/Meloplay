@@ -45,6 +45,7 @@ class _SearchPageState extends State<SearchPage> {
               });
             },
             icon: const Icon(Icons.clear),
+            tooltip: 'Clear',
           ),
         ],
       ),

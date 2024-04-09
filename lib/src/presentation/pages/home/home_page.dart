@@ -127,6 +127,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             Navigator.of(context).pushNamed(AppRouter.searchRoute);
           },
           icon: const Icon(Icons.search_outlined),
+          tooltip: 'Search',
         )
       ],
     );
@@ -169,20 +170,22 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               );
             },
           ),
-          ListTile(
-            leading: const Icon(Icons.info_outlined),
-            title: const Text('About'),
-            onTap: () {
-              Navigator.of(context).pushNamed(AppRouter.aboutRoute);
-            },
-          ),
+          // themes
           ListTile(
             leading: const Icon(Icons.color_lens_outlined),
             title: const Text('Themes'),
             onTap: () {
-              Navigator.of(context).pushNamed(AppRouter.settingsRoute);
+              Navigator.of(context).pushNamed(AppRouter.themesRoute);
             },
           ),
+          // settings
+          ListTile(
+            leading: const Icon(Icons.settings),
+            title: const Text('Settings'),
+            onTap: () {
+              Navigator.of(context).pushNamed(AppRouter.settingsRoute);
+            },
+          )
         ],
       ),
     );

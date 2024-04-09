@@ -1,7 +1,8 @@
 import 'package:bloc/bloc.dart';
+import 'package:meta/meta.dart';
+
 import 'package:meloplay/src/data/models/search_result.dart';
 import 'package:meloplay/src/data/repositories/search_repository.dart';
-import 'package:meta/meta.dart';
 
 part 'search_event.dart';
 part 'search_state.dart';

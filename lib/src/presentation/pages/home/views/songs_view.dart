@@ -4,7 +4,7 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:meloplay/src/bloc/home/home_bloc.dart';
 import 'package:meloplay/src/core/di/service_locator.dart';
 import 'package:on_audio_query/on_audio_query.dart';
-
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:meloplay/src/presentation/widgets/song_list_tile.dart';
 
 class SongsView extends StatefulWidget {
@@ -40,6 +40,10 @@ class _SongsViewState extends State<SongsView>
             songs.addAll(state.songs);
             isLoading = false;
           });
+
+          Fluttertoast.showToast(
+            msg: '${state.songs.length} songs loaded',
+          );
         }
       },
       child: isLoading
@@ -47,23 +51,28 @@ class _SongsViewState extends State<SongsView>
               child: CircularProgressIndicator(),
             )
           : AnimationLimiter(
-              child: ListView.builder(
-                padding: EdgeInsets.zero,
-                itemCount: songs.length,
-                itemBuilder: (context, index) {
-                  final song = songs[index];
-
-                  return AnimationConfiguration.staggeredList(
-                    position: index,
-                    duration: const Duration(milliseconds: 500),
-                    child: FlipAnimation(
-                      child: SongListTile(
-                        song: song,
-                        songs: songs,
-                      ),
-                    ),
-                  );
+              child: RefreshIndicator(
+                onRefresh: () async {
+                  context.read<HomeBloc>().add(GetSongsEvent());
                 },
+                child: ListView.builder(
+                  padding: EdgeInsets.zero,
+                  itemCount: songs.length,
+                  itemBuilder: (context, index) {
+                    final song = songs[index];
+
+                    return AnimationConfiguration.staggeredList(
+                      position: index,
+                      duration: const Duration(milliseconds: 500),
+                      child: FlipAnimation(
+                        child: SongListTile(
+                          song: song,
+                          songs: songs,
+                        ),
+                      ),
+                    );
+                  },
+                ),
               ),
             ),
     );

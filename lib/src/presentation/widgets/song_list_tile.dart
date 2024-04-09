@@ -171,6 +171,7 @@ class _SongListTileState extends State<SongListTile> {
         _buildModalBottomSheet(context);
       },
       icon: const Icon(Icons.more_vert_outlined),
+      tooltip: 'More',
     );
   }
 

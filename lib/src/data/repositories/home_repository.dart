@@ -1,15 +1,24 @@
+import 'package:hive/hive.dart';
 import 'package:meloplay/src/core/di/service_locator.dart';
+import 'package:meloplay/src/data/services/hive_box.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 class HomeRepository {
   final OnAudioQuery _audioQuery = sl<OnAudioQuery>();
+  final Box<dynamic> _box = Hive.box(HiveBox.boxName);
 
   Future<List<SongModel>> getSongs() async {
     // get all songs
     var songs = await _audioQuery.querySongs();
 
-    // remove songs less than 10 seconds long (10,000 milliseconds)
-    songs.removeWhere((song) => (song.duration ?? 0) < 10000);
+    // remove songs less than n seconds long (n * 1000 milliseconds)
+    // and less than 10 MB in size
+    songs.removeWhere((song) {
+      return (song.duration ?? 0) <
+              _box.get(HiveBox.minSongDurationKey, defaultValue: 0) * 1000 ||
+          (song.size) <
+              _box.get(HiveBox.minSongSizeKey, defaultValue: 0) * 1024;
+    });
 
     return songs;
   }

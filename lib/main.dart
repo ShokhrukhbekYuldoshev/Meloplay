@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:meloplay/src/bloc/scan/scan_cubit.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'package:meloplay/src/app.dart';
@@ -64,6 +65,9 @@ Future<void> main() async {
         ),
         BlocProvider(
           create: (context) => sl<SearchBloc>(),
+        ),
+        BlocProvider(
+          create: (context) => sl<ScanCubit>(),
         ),
       ],
       child: const MyApp(),

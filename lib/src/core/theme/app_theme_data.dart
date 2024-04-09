@@ -8,15 +8,14 @@ class AppThemeData {
       colorScheme: theme.colorScheme,
       useMaterial3: true,
       sliderTheme: SliderThemeData(
+        activeTrackColor: Colors.white,
+        inactiveTrackColor: Colors.grey,
+        thumbColor: Colors.white,
         trackHeight: 2.0,
-        inactiveTrackColor: theme.primaryColor.withOpacity(0.3),
-        overlayColor: theme.primaryColor.withOpacity(0.3),
         thumbShape: const RoundSliderThumbShape(
           enabledThumbRadius: 6.0,
         ),
-        overlayShape: const RoundSliderOverlayShape(
-          overlayRadius: 12.0,
-        ),
+        overlayShape: SliderComponentShape.noOverlay,
       ),
       drawerTheme: DrawerThemeData(
         backgroundColor: theme.primaryColor,

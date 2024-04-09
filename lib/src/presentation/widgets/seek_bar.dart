@@ -7,11 +7,9 @@ class SeekBar extends StatelessWidget {
   const SeekBar({
     super.key,
     required this.player,
-    this.isWhite = false,
   });
 
   final JustAudioPlayer player;
-  final bool isWhite;
 
   @override
   Widget build(BuildContext context) {
@@ -40,28 +38,21 @@ class SeekBar extends StatelessWidget {
                   },
                 ),
 
+                const SizedBox(height: 4),
                 // position and duration text
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
                       '${position.inMinutes.toString().padLeft(2, '0')}:${(position.inSeconds % 60).toString().padLeft(2, '0')}',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: isWhite
-                            ? Colors.white
-                            : Theme.of(context).textTheme.bodyMedium!.color,
+                      style: const TextStyle(
+                        color: Colors.white,
                       ),
                     ),
                     Text(
                       '${duration.inMinutes.toString().padLeft(2, '0')}:${(duration.inSeconds % 60).toString().padLeft(2, '0')}',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: isWhite
-                            ? Colors.white
-                            : Theme.of(context).textTheme.bodyMedium!.color,
+                      style: const TextStyle(
+                        color: Colors.white,
                       ),
                     ),
                   ],
