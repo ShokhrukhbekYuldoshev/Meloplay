@@ -1,0 +1,4 @@
+workflows:
+ default-workflow:
+    environment:
+      java: 17
