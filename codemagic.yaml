@@ -6,6 +6,8 @@ workflows:
         environment:
             flutter: stable
             java: 17
+            groups:
+                - group
             # android_signing:
             #     - keystore_reference
             # groups:
@@ -14,6 +16,13 @@ workflows:
             #     PACKAGE_NAME: 'io.codemagic.flutteryaml' # <-- Put your package name here
             #     GOOGLE_PLAY_TRACK: 'alpha'
             # flutter: stable
+        triggering:
+            events:
+            - tag
+            branch_patterns:
+            - pattern: '*'
+                include: true
+                source: true
         scripts:
             # - name: Set up local.properties
             #   script: |
@@ -36,6 +45,21 @@ workflows:
               #     flutter build appbundle --release \
               #       --build-name=1.0.$BUILD_NUMBER \
               #       --build-number=$BUILD_NUMBER
+            - name: Publish to GitHub
+              script: | 
+                    #!/usr/bin/env zsh
+
+                    # Publish only for tag builds
+                    if [ -z ${CM_TAG} ]; then
+                    echo "Not a tag build, will not publish GitHub release"
+                    exit 0
+                    fi
+
+                    gh release create "${CM_TAG}" \
+                    --title "Meloplay ${CM_TAG}" \
+                    # --notes-file changelog.md \
+                    build/app/outputs/bundle/release/app-release.aab
+                    
         artifacts:
             - build/**/outputs/**/*.aab
             # - build/**/outputs/**/mapping.txt
