@@ -1,7 +1,7 @@
 extension StringExtension on String {
   /// Capitalize the first letter
   String capitalize() {
-    return '${this[0].toUpperCase()}${substring(1)}';
+    return '${this[0].toUpperCase()}${substring(1).toLowerCase()}';
   }
 
   // A function that pluralizes a word based on the provided count. Returns the pluralized form of the word.

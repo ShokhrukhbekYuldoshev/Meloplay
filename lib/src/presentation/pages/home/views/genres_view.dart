@@ -69,8 +69,8 @@ class _GenresViewState extends State<GenresView>
                           artworkBorder: BorderRadius.circular(10),
                           size: 10000,
                           nullArtworkWidget: Container(
-                            width: 48,
-                            height: 48,
+                            width: 50,
+                            height: 50,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
                               color: Colors.grey.withOpacity(0.1),

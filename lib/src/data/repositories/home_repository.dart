@@ -9,7 +9,16 @@ class HomeRepository {
 
   Future<List<SongModel>> getSongs() async {
     // get all songs
-    var songs = await _audioQuery.querySongs();
+    var songs = await _audioQuery.querySongs(
+      sortType: SongSortType.values[_box.get(
+        HiveBox.songSortTypeKey,
+        defaultValue: SongSortType.TITLE.index,
+      )],
+      orderType: OrderType.values[_box.get(
+        HiveBox.songOrderTypeKey,
+        defaultValue: OrderType.ASC_OR_SMALLER.index,
+      )],
+    );
 
     // remove songs less than n seconds long (n * 1000 milliseconds)
     // and less than 10 MB in size
@@ -37,5 +46,10 @@ class HomeRepository {
 
   Future<List<PlaylistModel>> getPlaylists() async {
     return await _audioQuery.queryPlaylists();
+  }
+
+  Future<void> sortSongs(int songSortType, int orderType) async {
+    await _box.put(HiveBox.songSortTypeKey, songSortType);
+    await _box.put(HiveBox.songOrderTypeKey, orderType);
   }
 }

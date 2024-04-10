@@ -35,7 +35,7 @@ class _QueuePageState extends State<QueuePage> {
     final playlist = sl<JustAudioPlayer>().playlist;
 
     return ListView.builder(
-      padding: const EdgeInsets.only(bottom: 60),
+      padding: const EdgeInsets.only(bottom: 100),
       itemCount: playlist.length,
       itemBuilder: (context, index) {
         return SongListTile(

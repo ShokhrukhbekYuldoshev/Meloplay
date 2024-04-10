@@ -1,7 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:hive/hive.dart';
-import 'package:meloplay/src/data/services/hive_box.dart';
+// ignore: depend_on_referenced_packages
 import 'package:meta/meta.dart';
+
+import 'package:meloplay/src/data/services/hive_box.dart';
 
 part 'scan_state.dart';
 

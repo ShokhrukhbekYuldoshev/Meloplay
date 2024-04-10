@@ -13,4 +13,7 @@ class HiveBox {
 
   static const String minSongDurationKey = 'minSongDuration';
   static const String minSongSizeKey = 'minSongSize';
+
+  static const String songSortTypeKey = 'songSortType';
+  static const String songOrderTypeKey = 'songOrderType';
 }

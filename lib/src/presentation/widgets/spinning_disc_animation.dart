@@ -64,8 +64,8 @@ class _SpinningDiscState extends State<SpinningDisc>
             quality: 100,
             artworkBorder: BorderRadius.circular(100),
             nullArtworkWidget: Container(
-              width: 48,
-              height: 48,
+              width: 50,
+              height: 50,
               decoration: BoxDecoration(
                 color: Colors.grey.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(100),

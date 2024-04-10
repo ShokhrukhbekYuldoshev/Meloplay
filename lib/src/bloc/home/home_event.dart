@@ -11,3 +11,10 @@ class GetArtistsEvent extends HomeEvent {}
 class GetAlbumsEvent extends HomeEvent {}
 
 class GetGenresEvent extends HomeEvent {}
+
+class SortSongsEvent extends HomeEvent {
+  final int songSortType;
+  final int orderType;
+
+  SortSongsEvent(this.songSortType, this.orderType);
+}

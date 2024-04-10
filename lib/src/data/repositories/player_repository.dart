@@ -53,61 +53,49 @@ class JustAudioPlayerImpl implements JustAudioPlayer {
     MediaItem mediaItem,
     List<SongModel> playlist,
   ) async {
-    // Check if the playlist is the current playlist
-    if (playlist == currentPlaylist) {
-      // If the playlist is the current playlist, just play the current song
-      await _player.seek(
-        Duration.zero,
-        index: playlist.indexWhere(
-          (element) => element.id.toString() == mediaItem.id,
-        ),
-      );
-      await _player.play();
-    } else {
-      List<AudioSource> sources = [];
+    List<AudioSource> sources = [];
 
-      for (var song in playlist) {
-        var artUri = 'content://media/external/audio/albumart/';
+    for (var song in playlist) {
+      var artUri = 'content://media/external/audio/albumart/';
 
-        if (song.albumId != null) {
-          artUri += song.albumId.toString();
-        }
+      if (song.albumId != null) {
+        artUri += song.albumId.toString();
+      }
 
-        sources.add(
-          AudioSource.uri(
-            Uri.parse(song.uri!),
-            tag: MediaItem(
-              id: song.id.toString(),
-              title: song.title,
-              album: song.album,
-              artUri: Platform.isAndroid ? Uri.parse(artUri) : null,
-              artist: song.artist,
-              duration: Duration(milliseconds: song.duration!),
-              genre: song.genre,
-            ),
+      sources.add(
+        AudioSource.uri(
+          Uri.parse(song.uri!),
+          tag: MediaItem(
+            id: song.id.toString(),
+            title: song.title,
+            album: song.album,
+            artUri: Platform.isAndroid ? Uri.parse(artUri) : null,
+            artist: song.artist,
+            duration: Duration(milliseconds: song.duration!),
+            genre: song.genre,
           ),
-        );
-      }
-
-      int initialIndex = 0;
-
-      for (int i = 0; i < playlist.length; i++) {
-        if (playlist[i].id.toString() == mediaItem.id) {
-          initialIndex = i;
-          break;
-        }
-      }
-
-      await _player.setAudioSource(
-        initialIndex: initialIndex,
-        ConcatenatingAudioSource(
-          children: sources,
         ),
       );
-
-      currentPlaylist = playlist;
-      await _player.play();
     }
+
+    int initialIndex = 0;
+
+    for (int i = 0; i < playlist.length; i++) {
+      if (playlist[i].id.toString() == mediaItem.id) {
+        initialIndex = i;
+        break;
+      }
+    }
+
+    await _player.setAudioSource(
+      initialIndex: initialIndex,
+      ConcatenatingAudioSource(
+        children: sources,
+      ),
+    );
+
+    currentPlaylist = playlist;
+    await _player.play();
   }
 
   @override

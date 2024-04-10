@@ -151,7 +151,7 @@ class _ArtistPageState extends State<ArtistPage> {
 
             // margin for bottom app bar
             const SliverToBoxAdapter(
-              child: SizedBox(height: 60),
+              child: SizedBox(height: 100),
             ),
           ],
         ),

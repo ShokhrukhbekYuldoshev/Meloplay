@@ -72,7 +72,7 @@ class _RecentsPageState extends State<RecentsPage> {
       );
     }
     return ListView.builder(
-      padding: const EdgeInsets.only(bottom: 60),
+      padding: const EdgeInsets.only(bottom: 100),
       itemCount: state.songs.length,
       itemBuilder: (context, index) {
         return SongListTile(

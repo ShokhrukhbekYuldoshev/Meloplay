@@ -57,5 +57,18 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         emit(HomeError(e.toString()));
       }
     });
+    on<SortSongsEvent>((event, emit) async {
+      emit(HomeLoading());
+      try {
+        await repository.sortSongs(event.songSortType, event.orderType);
+        final songs = await repository.getSongs();
+        emit(
+          SongsLoaded(songs),
+        );
+      } catch (e, s) {
+        debugPrintStack(label: e.toString(), stackTrace: s);
+        emit(HomeError(e.toString()));
+      }
+    });
   }
 }

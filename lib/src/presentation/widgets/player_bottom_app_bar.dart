@@ -116,10 +116,10 @@ class _PlayerBottomAppBarState extends State<PlayerBottomAppBar> {
         QueryArtworkWidget(
           keepOldArtwork: true,
           artworkHeight: double.infinity,
+          artworkWidth: double.infinity,
           id: int.parse(mediaItem.id),
           type: ArtworkType.AUDIO,
           size: 10000,
-          artworkWidth: double.infinity,
           artworkBorder: BorderRadius.circular(0),
           nullArtworkWidget: Container(
             width: double.infinity,
@@ -315,67 +315,66 @@ class _SwipeSongState extends State<SwipeSong> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<bloc.PlayerBloc, bloc.PlayerState>(
-      listener: (context, state) {
-        if (widget.sequence?.currentIndex != pageController.page?.round()) {
-          pageController.jumpToPage(
-            widget.sequence?.currentIndex ?? 0,
-          );
+    return StreamBuilder<int?>(
+      stream: sl<JustAudioPlayer>().currentIndex,
+      builder: (context, snapshot) {
+        if (snapshot.hasData && pageController.hasClients) {
+          pageController.jumpToPage(snapshot.data!);
         }
-      },
-      child: PageView.builder(
-        itemCount: widget.sequence?.sequence.length ?? 0,
-        controller: pageController,
-        onPageChanged: (index) {
-          if (widget.sequence?.currentIndex != index) {
-            context.read<bloc.PlayerBloc>().add(
-                  bloc.PlayerSeek(
-                    Duration.zero,
-                    index: index,
-                  ),
-                );
-          }
-        },
-        itemBuilder: (context, index) {
-          MediaItem mediaItem = widget.sequence?.sequence[index].tag;
-          return Row(
-            children: [
-              SpinningDisc(
-                id: int.parse(mediaItem.id),
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      mediaItem.title,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
+        return PageView.builder(
+          itemCount: widget.sequence?.sequence.length ?? 0,
+          controller: pageController,
+          onPageChanged: (index) {
+            if (widget.sequence?.currentIndex != index) {
+              context.read<bloc.PlayerBloc>().add(
+                    bloc.PlayerSeek(
+                      Duration.zero,
+                      index: index,
                     ),
-                    Text(
-                      mediaItem.artist ?? 'Unknown',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        color: Themes.getTheme()
-                            .colorScheme
-                            .onSurface
-                            .withOpacity(0.7),
-                      ),
-                    ),
-                  ],
+                  );
+            }
+          },
+          itemBuilder: (context, index) {
+            MediaItem mediaItem = widget.sequence?.sequence[index].tag;
+            return Row(
+              children: [
+                SpinningDisc(
+                  id: int.parse(mediaItem.id),
                 ),
-              ),
-              const SizedBox(width: 16),
-            ],
-          );
-        },
-      ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        mediaItem.title,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        mediaItem.artist ?? 'Unknown',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          color: Themes.getTheme()
+                              .colorScheme
+                              .onSurface
+                              .withOpacity(0.7),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 16),
+              ],
+            );
+          },
+        );
+      },
     );
   }
 }

@@ -73,7 +73,7 @@ class _GenrePageState extends State<GenrePage> {
               ),
             ),
             // margin for bottom app bar
-            const SizedBox(height: 60),
+            const SizedBox(height: 100),
           ],
         ),
       ),

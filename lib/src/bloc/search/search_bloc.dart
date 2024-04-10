@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+// ignore: depend_on_referenced_packages
 import 'package:meta/meta.dart';
 
 import 'package:meloplay/src/data/models/search_result.dart';
