@@ -21,9 +21,8 @@ workflows:
                 - tag
             branch_patterns:
                 - pattern: '*'
-                include: true
-                source: true
-        scripts:
+                  include: true
+                  source: true
             # - name: Set up local.properties
             #   script: |
             #       echo "flutter.sdk=$HOME/programs/flutter" > "$CM_BUILD_DIR/android/local.properties"
