@@ -18,9 +18,9 @@ workflows:
             # flutter: stable
         triggering:
             events:
-            - tag
+                - tag
             branch_patterns:
-            - pattern: '*'
+                - pattern: '*'
                 include: true
                 source: true
         scripts:
