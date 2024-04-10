@@ -111,6 +111,7 @@ class _SongsViewState extends State<SongsView>
                               ],
                             ),
                             onTap: () {
+                              // enable shuffle
                               context.read<PlayerBloc>().add(
                                     PlayerSetShuffleModeEnabled(true),
                                   );
@@ -119,6 +120,7 @@ class _SongsViewState extends State<SongsView>
                               final randomSong =
                                   songs[Random().nextInt(songs.length)];
 
+                              // play random song
                               context.read<PlayerBloc>().add(
                                     PlayerLoadSongs(
                                       songs,
@@ -153,6 +155,12 @@ class _SongsViewState extends State<SongsView>
                               ],
                             ),
                             onTap: () {
+                              // disable shuffle
+                              context.read<PlayerBloc>().add(
+                                    PlayerSetShuffleModeEnabled(false),
+                                  );
+
+                              // play first song
                               context.read<PlayerBloc>().add(
                                     PlayerLoadSongs(
                                       songs,

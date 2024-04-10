@@ -56,7 +56,7 @@ workflows:
                     fi
 
                     gh release create "${CM_TAG}" \
-                    --title "Meloplay ${CM_TAG}" \
+                    # --title "Meloplay ${CM_TAG}" \
                     # --notes-file changelog.md \
                     build/app/outputs/bundle/release/app-release.aab
                     
