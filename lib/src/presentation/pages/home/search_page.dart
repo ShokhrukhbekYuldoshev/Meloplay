@@ -26,9 +26,6 @@ class _SearchPageState extends State<SearchPage> {
         backgroundColor: Themes.getTheme().primaryColor,
         title: TextField(
           onChanged: (value) {
-            if (value.isEmpty) {
-              return;
-            }
             context.read<SearchBloc>().add(SearchQueryChanged(value));
           },
           controller: searchController,
@@ -96,7 +93,7 @@ class _SearchPageState extends State<SearchPage> {
                                   ),
                                 ),
                                 Text(
-                                  '${state.searchResult.songs.length} results',
+                                  '${state.searchResult.songs.length} ${'result'.pluralize(state.searchResult.songs.length)}',
                                   style: const TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w500,
@@ -134,7 +131,7 @@ class _SearchPageState extends State<SearchPage> {
                                   ),
                                 ),
                                 Text(
-                                  '${state.searchResult.albums.length} results',
+                                  '${state.searchResult.albums.length} ${'result'.pluralize(state.searchResult.albums.length)}',
                                   style: const TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w500,
@@ -184,7 +181,7 @@ class _SearchPageState extends State<SearchPage> {
                                   ),
                                 ),
                                 Text(
-                                  '${state.searchResult.artists.length} results',
+                                  '${state.searchResult.artists.length} ${'result'.pluralize(state.searchResult.artists.length)}',
                                   style: const TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w500,
@@ -242,7 +239,7 @@ class _SearchPageState extends State<SearchPage> {
                                   ),
                                 ),
                                 Text(
-                                  '${state.searchResult.genres.length} results',
+                                  '${state.searchResult.genres.length} ${'result'.pluralize(state.searchResult.genres.length)}',
                                   style: const TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w500,

@@ -47,7 +47,7 @@ class _GenresViewState extends State<GenresView>
             )
           : AnimationLimiter(
               child: ListView.builder(
-                padding: EdgeInsets.zero,
+                padding: const EdgeInsets.only(bottom: 100),
                 itemCount: genres.length,
                 itemBuilder: (context, index) {
                   final genre = genres[index];

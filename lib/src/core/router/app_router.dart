@@ -31,6 +31,7 @@ class AppRouter {
   static const String queueRoute = '/queue';
   static const String searchRoute = '/search';
   static const String scanRoute = '/scan';
+  static const String addSongToPlaylistRoute = '/addSongToPlaylist';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -98,6 +99,13 @@ class AppRouter {
       case searchRoute:
         return MaterialPageRoute<dynamic>(
           builder: (_) => const SearchPage(),
+        );
+      case addSongToPlaylistRoute:
+        return MaterialPageRoute<dynamic>(
+          builder: (_) => AddSongToPlaylist(
+            songs: (settings.arguments as Map)['songs'] as List<SongModel>,
+            playlist: (settings.arguments as Map)['playlist'] as PlaylistModel,
+          ),
         );
       default:
         return MaterialPageRoute<dynamic>(

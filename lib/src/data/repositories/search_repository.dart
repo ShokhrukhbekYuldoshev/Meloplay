@@ -10,7 +10,6 @@ class SearchRepository {
       query,
       WithFiltersType.AUDIOS,
     );
-    // print(songs);
 
     final List<dynamic> albums = await _audioQuery.queryWithFilters(
       query,

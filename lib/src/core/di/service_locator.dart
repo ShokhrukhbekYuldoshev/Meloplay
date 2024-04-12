@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+import 'package:meloplay/src/bloc/playlists/playlists_cubit.dart';
 import 'package:meloplay/src/bloc/favorites/favorites_bloc.dart';
 import 'package:meloplay/src/bloc/home/home_bloc.dart';
 import 'package:meloplay/src/bloc/player/player_bloc.dart';
@@ -29,6 +30,7 @@ void init() {
   sl.registerFactory(() => SearchBloc(repository: sl()));
   // Cubit
   sl.registerFactory(() => ScanCubit());
+  sl.registerFactory(() => PlaylistsCubit());
 
   // Repository
   sl.registerLazySingleton(() => ThemeRepository());
