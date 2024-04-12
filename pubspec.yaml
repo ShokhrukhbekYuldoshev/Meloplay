@@ -14,7 +14,7 @@ dependencies:
     flutter_cache_manager: ^3.3.1
     flutter_staggered_animations: ^1.1.1 # animation
     fluttertoast: ^8.2.4
-    get_it: ^7.6.8 # dependency injection
+    get_it: ^7.6.9 # dependency injection
     hive: ^2.2.3 # local database
     hive_flutter: ^1.1.0 # local database
     just_audio: ^0.9.37 # audio player
@@ -22,11 +22,11 @@ dependencies:
     lottie: ^3.1.0
     marquee: ^2.2.3
     on_audio_query: ^2.9.0 # get songs from device
-    package_info_plus: ^6.0.0 # get app info
+    package_info_plus: ^7.0.0 # get app info
     permission_handler: ^11.3.1 # get permission
     rxdart: ^0.27.7 # stream
-    share_plus: ^8.0.2 # share song
-    url_launcher: ^6.2.5 # open url
+    share_plus: ^8.0.3 # share song
+    url_launcher: ^6.2.6 # open url
 
 dev_dependencies:
     flutter_test:
