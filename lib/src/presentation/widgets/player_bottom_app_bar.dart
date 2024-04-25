@@ -134,7 +134,7 @@ class _PlayerBottomAppBarState extends State<PlayerBottomAppBar> {
           ),
         ),
         BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+          filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
           child: Container(
             width: double.infinity,
             height: double.infinity,

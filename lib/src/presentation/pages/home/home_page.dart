@@ -81,7 +81,13 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   tabAlignment: TabAlignment.start,
                   isScrollable: true,
                   controller: _tabController,
-                  tabs: tabs.map((e) => Tab(text: e)).toList(),
+                  tabs: tabs
+                      .map(
+                        (e) => Tab(
+                          text: e,
+                        ),
+                      )
+                      .toList(),
                 ),
                 Expanded(
                   child: TabBarView(

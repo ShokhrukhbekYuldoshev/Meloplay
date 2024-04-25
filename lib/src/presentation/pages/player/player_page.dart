@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:marquee/marquee.dart';
-import 'package:meloplay/src/presentation/widgets/seek_bar.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 import 'package:meloplay/src/bloc/player/player_bloc.dart';
@@ -14,6 +13,7 @@ import 'package:meloplay/src/core/di/service_locator.dart';
 import 'package:meloplay/src/data/repositories/player_repository.dart';
 import 'package:meloplay/src/data/repositories/song_repository.dart';
 import 'package:meloplay/src/presentation/widgets/animated_favorite_button.dart';
+import 'package:meloplay/src/presentation/widgets/seek_bar.dart';
 
 class PlayerPage extends StatefulWidget {
   const PlayerPage({
@@ -91,7 +91,7 @@ class _PlayerPageState extends State<PlayerPage> {
                 ),
               ),
               BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
                 child: Container(
                   width: double.infinity,
                   height: double.infinity,
@@ -108,128 +108,274 @@ class _PlayerPageState extends State<PlayerPage> {
                   32,
                   16,
                 ),
-                child: Column(
-                  children: [
-                    // artwork
-                    Expanded(
-                      flex: 4,
-                      child: Stack(
-                        fit: StackFit.expand,
-                        children: [
-                          QueryArtworkWidget(
-                            keepOldArtwork: true,
-                            id: int.parse(mediaItem.id),
-                            type: ArtworkType.AUDIO,
-                            size: 10000,
-                            artworkWidth: double.infinity,
-                            nullArtworkWidget: Container(
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                color: Colors.grey.withOpacity(0.1),
-                                borderRadius: BorderRadius.circular(50),
+                child: LayoutBuilder(builder: (context, constraints) {
+                  // large screen
+                  if (constraints.maxWidth > 600) {
+                    // large screen divided in 2 columns
+                    // 1: artwork
+                    // 2: info
+                    return Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // artwork
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width / 3,
+                          child: Stack(
+                            fit: StackFit.expand,
+                            children: [
+                              QueryArtworkWidget(
+                                keepOldArtwork: true,
+                                id: int.parse(mediaItem.id),
+                                type: ArtworkType.AUDIO,
+                                size: 10000,
+                                artworkWidth: double.infinity,
+                                nullArtworkWidget: Container(
+                                  width: double.infinity,
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey.withOpacity(0.1),
+                                    borderRadius: BorderRadius.circular(50),
+                                  ),
+                                  child: Icon(
+                                    Icons.music_note_outlined,
+                                    size:
+                                        MediaQuery.of(context).size.height / 10,
+                                  ),
+                                ),
                               ),
-                              child: Icon(
-                                Icons.music_note_outlined,
-                                size: MediaQuery.of(context).size.height / 10,
-                              ),
-                            ),
-                          ),
-                          Align(
-                            alignment: Alignment.bottomRight,
-                            child: BlocBuilder<SongBloc, SongState>(
-                              builder: (context, state) {
-                                return AnimatedFavoriteButton(
-                                  isFavorite: sl<SongRepository>()
-                                      .isFavorite(mediaItem.id),
-                                  onTap: () {
-                                    context.read<SongBloc>().add(
-                                          ToggleFavorite(mediaItem.id),
-                                        );
+                              Align(
+                                alignment: Alignment.bottomRight,
+                                child: BlocBuilder<SongBloc, SongState>(
+                                  builder: (context, state) {
+                                    return AnimatedFavoriteButton(
+                                      isFavorite: sl<SongRepository>()
+                                          .isFavorite(mediaItem.id),
+                                      onTap: () {
+                                        context.read<SongBloc>().add(
+                                              ToggleFavorite(mediaItem.id),
+                                            );
+                                      },
+                                    );
                                   },
-                                );
-                              },
-                            ),
+                                ),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                    ),
-                    const Spacer(),
-                    // title and artist
-                    StreamBuilder<SequenceState?>(
-                      stream: player.sequenceState,
-                      builder: (context, snapshot) {
-                        if (!snapshot.hasData) {
-                          return const SizedBox.shrink();
-                        }
-                        final sequence = snapshot.data;
+                        ),
 
-                        MediaItem? mediaItem =
-                            sequence!.sequence[sequence.currentIndex].tag;
+                        const SizedBox(width: 32),
 
-                        return Column(
+                        // info
+                        Expanded(
+                          flex: 3,
+                          child: Column(
+                            children: [
+                              // title and artist
+                              StreamBuilder<SequenceState?>(
+                                stream: player.sequenceState,
+                                builder: (context, snapshot) {
+                                  if (!snapshot.hasData) {
+                                    return const SizedBox.shrink();
+                                  }
+                                  final sequence = snapshot.data;
+
+                                  MediaItem? mediaItem = sequence!
+                                      .sequence[sequence.currentIndex].tag;
+
+                                  return Column(
+                                    children: [
+                                      SizedBox(
+                                        height: 30,
+                                        child: mediaItem!.title.length > 50
+                                            ? Marquee(
+                                                text: mediaItem.title,
+                                                blankSpace: 100,
+                                                startAfter:
+                                                    const Duration(seconds: 3),
+                                                pauseAfterRound:
+                                                    const Duration(seconds: 3),
+                                                style: const TextStyle(
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.white,
+                                                ),
+                                              )
+                                            : Text(
+                                                mediaItem.title,
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: const TextStyle(
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                      ),
+                                      Text(
+                                        mediaItem.artist ?? 'Unknown',
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              ),
+                              const Spacer(),
+                              // seek bar
+                              SeekBar(player: player),
+                              const Spacer(),
+                              // shuffle, previous, play/pause, next, repeat
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  //  shuffle button
+                                  _buildShuffleButton(),
+                                  // previous button
+                                  _buildPreviousButton(context),
+                                  // play/pause button
+                                  _buildPlayPauseButton(),
+                                  // next button
+                                  _buildNextButton(context),
+                                  // repeat button
+                                  _buildRepeatButton(),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    );
+                  }
+
+                  // small screen
+                  return Column(
+                    children: [
+                      // artwork
+                      Expanded(
+                        flex: 4,
+                        child: Stack(
+                          fit: StackFit.expand,
                           children: [
-                            SizedBox(
-                              height: 40,
-                              child: mediaItem!.title.length > 36
-                                  ? Marquee(
-                                      text: mediaItem.title,
-                                      blankSpace: 100,
-                                      startAfter: const Duration(seconds: 3),
-                                      pauseAfterRound:
-                                          const Duration(seconds: 3),
-                                      style: const TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white,
-                                      ),
-                                    )
-                                  : Text(
-                                      mediaItem.title,
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white,
-                                      ),
-                                    ),
+                            QueryArtworkWidget(
+                              keepOldArtwork: true,
+                              id: int.parse(mediaItem.id),
+                              type: ArtworkType.AUDIO,
+                              size: 10000,
+                              artworkWidth: double.infinity,
+                              nullArtworkWidget: Container(
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  color: Colors.grey.withOpacity(0.1),
+                                  borderRadius: BorderRadius.circular(50),
+                                ),
+                                child: Icon(
+                                  Icons.music_note_outlined,
+                                  size: MediaQuery.of(context).size.height / 10,
+                                ),
+                              ),
                             ),
-                            Text(
-                              mediaItem.artist ?? 'Unknown',
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
+                            Align(
+                              alignment: Alignment.bottomRight,
+                              child: BlocBuilder<SongBloc, SongState>(
+                                builder: (context, state) {
+                                  return AnimatedFavoriteButton(
+                                    isFavorite: sl<SongRepository>()
+                                        .isFavorite(mediaItem.id),
+                                    onTap: () {
+                                      context.read<SongBloc>().add(
+                                            ToggleFavorite(mediaItem.id),
+                                          );
+                                    },
+                                  );
+                                },
                               ),
                             ),
                           ],
-                        );
-                      },
-                    ),
-                    const Spacer(),
-                    // seek bar
-                    SeekBar(player: player),
-                    const Spacer(),
-                    // shuffle, previous, play/pause, next, repeat
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        //  shuffle button
-                        _buildShuffleButton(),
-                        // previous button
-                        _buildPreviousButton(context),
-                        // play/pause button
-                        _buildPlayPauseButton(),
-                        // next button
-                        _buildNextButton(context),
-                        // repeat button
-                        _buildRepeatButton(),
-                      ],
-                    ),
-                  ],
-                ),
+                        ),
+                      ),
+                      const Spacer(),
+                      // title and artist
+                      StreamBuilder<SequenceState?>(
+                        stream: player.sequenceState,
+                        builder: (context, snapshot) {
+                          if (!snapshot.hasData) {
+                            return const SizedBox.shrink();
+                          }
+                          final sequence = snapshot.data;
+
+                          MediaItem? mediaItem =
+                              sequence!.sequence[sequence.currentIndex].tag;
+
+                          return Column(
+                            children: [
+                              SizedBox(
+                                height: 30,
+                                child: mediaItem!.title.length > 30
+                                    ? Marquee(
+                                        text: mediaItem.title,
+                                        blankSpace: 100,
+                                        startAfter: const Duration(seconds: 3),
+                                        pauseAfterRound:
+                                            const Duration(seconds: 3),
+                                        style: const TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                        ),
+                                      )
+                                    : Text(
+                                        mediaItem.title,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                              ),
+                              Text(
+                                mediaItem.artist ?? 'Unknown',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      ),
+                      const Spacer(),
+                      // seek bar
+                      SeekBar(player: player),
+                      const Spacer(),
+                      // shuffle, previous, play/pause, next, repeat
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          //  shuffle button
+                          _buildShuffleButton(),
+                          // previous button
+                          _buildPreviousButton(context),
+                          // play/pause button
+                          _buildPlayPauseButton(),
+                          // next button
+                          _buildNextButton(context),
+                          // repeat button
+                          _buildRepeatButton(),
+                        ],
+                      ),
+                    ],
+                  );
+                }),
               ),
             ],
           );

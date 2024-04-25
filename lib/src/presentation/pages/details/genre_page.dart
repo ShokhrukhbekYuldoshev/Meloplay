@@ -60,7 +60,7 @@ class _GenrePageState extends State<GenrePage> {
           children: [
             Expanded(
               child: ListView.builder(
-                padding: EdgeInsets.zero,
+                padding: const EdgeInsets.only(bottom: 100),
                 itemCount: _songs.length,
                 itemBuilder: (context, index) {
                   final SongModel song = _songs[index];
@@ -72,8 +72,6 @@ class _GenrePageState extends State<GenrePage> {
                 },
               ),
             ),
-            // margin for bottom app bar
-            const SizedBox(height: 100),
           ],
         ),
       ),

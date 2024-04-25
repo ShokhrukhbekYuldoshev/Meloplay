@@ -34,7 +34,7 @@ class _PlaylistsViewState extends State<PlaylistsView>
 
     final cards = [
       const SizedBox(width: 16),
-      _buildCard(
+      PlaylistCard(
         image: Assets.heart,
         label: 'Favorites',
         icon: Icons.favorite_border_outlined,
@@ -46,7 +46,7 @@ class _PlaylistsViewState extends State<PlaylistsView>
         },
       ),
       const SizedBox(width: 16),
-      _buildCard(
+      PlaylistCard(
         image: Assets.earphones,
         label: 'Recents',
         icon: Icons.history_outlined,
@@ -138,13 +138,50 @@ class _PlaylistsViewState extends State<PlaylistsView>
     );
   }
 
-  _buildCard({
-    required String image,
-    required String label,
-    required IconData icon,
-    required VoidCallback onTap,
-    required Color color,
-  }) {
+  AlertDialog _buildDeletePlaylistDialog(
+    PlaylistModel playlist,
+    BuildContext context,
+  ) {
+    return AlertDialog(
+      title: const Text('Delete playlist'),
+      content: Text('Are you sure you want to delete "${playlist.playlist}"?'),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: const Text('Cancel'),
+        ),
+        TextButton(
+          onPressed: () async {
+            context.read<PlaylistsCubit>().deletePlaylist(playlist.id);
+            Navigator.of(context).pop();
+          },
+          child: const Text('Confirm'),
+        ),
+      ],
+    );
+  }
+}
+
+class PlaylistCard extends StatelessWidget {
+  final String image;
+  final String label;
+  final IconData icon;
+  final VoidCallback onTap;
+  final Color color;
+
+  const PlaylistCard({
+    super.key,
+    required this.image,
+    required this.label,
+    required this.icon,
+    required this.onTap,
+    required this.color,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Expanded(
       child: GestureDetector(
         onTap: onTap,
@@ -182,31 +219,6 @@ class _PlaylistsViewState extends State<PlaylistsView>
           ),
         ),
       ),
-    );
-  }
-
-  AlertDialog _buildDeletePlaylistDialog(
-    PlaylistModel playlist,
-    BuildContext context,
-  ) {
-    return AlertDialog(
-      title: const Text('Delete playlist'),
-      content: Text('Are you sure you want to delete "${playlist.playlist}"?'),
-      actions: [
-        TextButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          child: const Text('Cancel'),
-        ),
-        TextButton(
-          onPressed: () async {
-            context.read<PlaylistsCubit>().deletePlaylist(playlist.id);
-            Navigator.of(context).pop();
-          },
-          child: const Text('Confirm'),
-        ),
-      ],
     );
   }
 }

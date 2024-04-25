@@ -64,7 +64,6 @@ class _ThemesPageState extends State<ThemesPage> {
       children: [
         Ink(
           width: double.infinity,
-          height: 100,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16),
             gradient: Themes.getThemeFromKey(themeName).linearGradient,
