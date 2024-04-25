@@ -40,46 +40,41 @@ Meloplay is a local music player app that plays music from your device built wit
 
 [splash]: screenshots/splash.jpg 'Splash'
 [songs]: screenshots/songs.jpg 'Songs'
-[song_sheet]: screenshots/song_sheet.jpg 'Song sheet'
-[player-1]: screenshots/player-1.jpg 'Player 1'
-[player-2]: screenshots/player-2.jpg 'Player 2'
+[player]: screenshots/player.jpg 'Player'
+[playlists]: screenshots/playlists.jpg 'Playlists'
 [artists]: screenshots/artists.jpg 'Artists'
 [albums]: screenshots/albums.jpg 'Albums'
 [genres]: screenshots/genres.jpg 'Genres'
+[drawer]: screenshots/drawer.jpg 'Drawer'
+[themes]: screenshots/themes.jpg 'Themes'
 [artist]: screenshots/artist.jpg 'Artist'
 [album]: screenshots/album.jpg 'Album'
 [genre]: screenshots/genre.jpg 'Genre'
-[drawer]: screenshots/drawer.jpg 'Drawer'
-[about]: screenshots/about.jpg 'About'
+[search]: screenshots/search.jpg 'Search'
 [settings]: screenshots/settings.jpg 'Settings'
-[settings_orange]: screenshots/settings_orange.jpg 'Settings orange'
-[songs_orange]: screenshots/songs_orange.jpg 'Songs orange'
+[scan]: screenshots/scan.jpg 'Scan'
 
 <!-- Table -->
 
-|      Splash       |      Songs      |        Song sheet         |
-| :---------------: | :-------------: | :-----------------------: |
-| ![Splash][splash] | ![Songs][songs] | ![Song sheet][song_sheet] |
+|      Splash       |      Songs      |      Player       |
+| :---------------: | :-------------: | :---------------: |
+| ![Splash][splash] | ![Songs][songs] | ![Player][player] |
 
-|       Player 1        |       Player 2        |       Artists       |
-| :-------------------: | :-------------------: | :-----------------: |
-| ![Player 1][player-1] | ![Player 2][player-2] | ![Artists][artists] |
+|        Playlists        |       Artists       |      Albums       |
+| :---------------------: | :-----------------: | :---------------: |
+| ![Playlists][playlists] | ![Artists][artists] | ![Albums][albums] |
 
-|      Albums       |      Genres       |      Artist       |
+|      Genres       |      Drawer       |      Themes       |
 | :---------------: | :---------------: | :---------------: |
-| ![Albums][albums] | ![Genres][genres] | ![Artist][artist] |
+| ![Genres][genres] | ![Drawer][drawer] | ![Themes][themes] |
 
-|      Album      |      Genre      |      Drawer       |
-| :-------------: | :-------------: | :---------------: |
-| ![Album][album] | ![Genre][genre] | ![Drawer][drawer] |
+|      Artist       |      Album      |      Genre      |
+| :---------------: | :-------------: | :-------------: |
+| ![Artist][artist] | ![Album][album] | ![Genre][genre] |
 
-|      About      |       Settings        |           Settings orange           |
-| :-------------: | :-------------------: | :---------------------------------: |
-| ![About][about] | ![Settings][settings] | ![Settings orange][settings_orange] |
-
-|         Songs orange          |
-| :---------------------------: |
-| ![Songs orange][songs_orange] |
+|      Search       |       Settings        |     Scan      |
+| :---------------: | :-------------------: | :-----------: |
+| ![Search][search] | ![Settings][settings] | ![Scan][scan] |
 
 ## 📚 Dependencies
 
@@ -88,19 +83,21 @@ Meloplay is a local music player app that plays music from your device built wit
 | [bloc](https://pub.dev/packages/bloc)                                                 | 8.1.4         | A predictable state management library                                                                                                                                   |
 | [flutter_bloc](https://pub.dev/packages/flutter_bloc)                                 | 8.1.5         | Flutter Widgets that make it easy to implement BLoC design patterns                                                                                                      |
 | [flutter_staggered_animations](https://pub.dev/packages/flutter_staggered_animations) | 1.1.1         | A plugin for adding staggered animations to your Flutter apps                                                                                                            |
+| [fluttertoast](https://pub.dev/packages/fluttertoast)                                 | 8.2.5         | Flutter plugin for displaying toast messages.                                                                                                                            |
+| [flutter_cache_manager](https://pub.dev/packages/flutter_cache_manager)               | 3.3.2         | A Flutter plugin for caching images and other resources.                                                                                                                 |
 | [get_it](https://pub.dev/packages/get_it)                                             | 7.7.0         | Simple direct Service Locator that allows to decouple the interface from a concrete implementation and to access the concrete implementation from everywhere in your App |
 | [hive](https://pub.dev/packages/hive)                                                 | 2.2.3         | A lightweight and blazing fast key-value database                                                                                                                        |
 | [hive_flutter](https://pub.dev/packages/hive_flutter)                                 | 1.1.0         | Hive database implementation for Flutter                                                                                                                                 |
 | [just_audio](https://pub.dev/packages/just_audio)                                     | 0.9.37        | A feature-rich audio player for Flutter                                                                                                                                  |
 | [just_audio_background](https://pub.dev/packages/just_audio_background)               | 0.0.1-beta.11 | A plugin for playing audio in the background on Android and iOS.                                                                                                         |
+| [lottie](https://pub.dev/packages/lottie)                                             | 3.1.0         | Lottie is a mobile library for Android and iOS that parses Lottie and JSON-based animations and renders them natively on mobile.                                         |
+| [marquee](https://pub.dev/packages/marquee)                                           | 2.2.3         | A Flutter widget that scrolls text infinitely.                                                                                                                           |
 | [on_audio_query](https://pub.dev/packages/on_audio_query)                             | 2.9.0         | A Flutter plugin to query songs on Android and iOS                                                                                                                       |
 | [package_info_plus](https://pub.dev/packages/package_info_plus)                       | 8.0.0         | Flutter plugin for querying information about the application package, such as CFBundleVersion on iOS or versionCode on Android.                                         |
 | [permission_handler](https://pub.dev/packages/permission_handler)                     | 11.3.1        | A Flutter plugin for permission handling. This plugin provides a cross-platform (iOS, Android) API to request and check permissions.                                     |
 | [rxdart](https://pub.dev/packages/rxdart)                                             | 0.27.7        | RxDart is an implementation of the popular reactiveX api for asynchronous programming, leveraging the native Dart Streams API.                                           |
 | [share_plus](https://pub.dev/packages/share_plus)                                     | 9.0.0         | Flutter plugin for sharing content via the platform share UI, using the ACTION_SEND intent on Android and UIActivityViewController on iOS.                               |
 | [url_launcher](https://pub.dev/packages/url_launcher)                                 | 6.2.6         | A Flutter plugin for launching a URL in the mobile platform.                                                                                                             |
-| [lottie](https://pub.dev/packages/lottie)                                             | 3.1.0         | Lottie is a mobile library for Android and iOS that parses Lottie and JSON-based animations and renders them natively on mobile.                                         |
-| [marquee](https://pub.dev/packages/marquee)                                           | 2.2.3         | A Flutter widget that scrolls text infinitely.                                                                                                                           |
 
 ## 📦 Installation
 
