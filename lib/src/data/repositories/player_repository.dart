@@ -2,9 +2,10 @@ import 'dart:io';
 
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
+import 'package:meloplay/src/data/repositories/song_repository.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
-abstract class JustAudioPlayer {
+abstract class MusicPlayer {
   Future<void> init();
   Future<void> load(
     MediaItem mediaItem,
@@ -34,7 +35,7 @@ abstract class JustAudioPlayer {
   Future<void> setLoopMode(LoopMode loopMode);
 }
 
-class JustAudioPlayerImpl implements JustAudioPlayer {
+class JustAudioPlayer implements MusicPlayer {
   final AudioPlayer _player = AudioPlayer();
   List<SongModel> currentPlaylist = [];
 
@@ -46,6 +47,14 @@ class JustAudioPlayerImpl implements JustAudioPlayer {
       androidNotificationOngoing: true,
       androidStopForegroundOnPause: true,
     );
+
+    // subscribe to changes in playback state to add to the recently played
+    _player.playbackEventStream.listen((event) {
+      if (event.currentIndex != null && currentPlaylist.isNotEmpty) {
+        String songId = currentPlaylist[event.currentIndex!].id.toString();
+        SongRepository().addToRecentlyPlayed(songId);
+      }
+    });
   }
 
   @override
@@ -156,11 +165,9 @@ class JustAudioPlayerImpl implements JustAudioPlayer {
   Stream<Duration?> get duration => _player.durationStream;
 
   @override
-  // shuffle mode enabled
   Stream<bool> get shuffleModeEnabled => _player.shuffleModeEnabledStream;
 
   @override
-  // loop mode
   Stream<LoopMode> get loopMode => _player.loopModeStream;
 
   @override

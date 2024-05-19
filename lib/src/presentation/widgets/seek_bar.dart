@@ -9,7 +9,7 @@ class SeekBar extends StatelessWidget {
     required this.player,
   });
 
-  final JustAudioPlayer player;
+  final MusicPlayer player;
 
   @override
   Widget build(BuildContext context) {

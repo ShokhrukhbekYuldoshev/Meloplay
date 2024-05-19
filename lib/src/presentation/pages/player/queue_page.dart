@@ -32,7 +32,7 @@ class _QueuePageState extends State<QueuePage> {
   }
 
   Widget _buildBody() {
-    final playlist = sl<JustAudioPlayer>().playlist;
+    final playlist = sl<MusicPlayer>().playlist;
 
     return ListView.builder(
       padding: const EdgeInsets.only(bottom: 100),

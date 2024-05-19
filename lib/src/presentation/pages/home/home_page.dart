@@ -78,6 +78,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           ? Column(
               children: [
                 TabBar(
+                  dividerColor:
+                      Theme.of(context).colorScheme.onPrimary.withOpacity(
+                            0.3,
+                          ),
                   tabAlignment: TabAlignment.start,
                   isScrollable: true,
                   controller: _tabController,
@@ -150,8 +154,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 decoration: BoxDecoration(
                   color: Themes.getTheme().primaryColor,
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                child: Row(
                   children: [
                     Hero(
                       tag: 'logo',
@@ -162,7 +165,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       ),
                     ),
                     const SizedBox(
-                      height: 8,
+                      width: 8,
                     ),
                     const Text(
                       'Meloplay',

@@ -50,7 +50,7 @@ class _PlaylistsViewState extends State<PlaylistsView>
         image: Assets.earphones,
         label: 'Recents',
         icon: Icons.history_outlined,
-        color: const Color(0xFFF321D0),
+        color: Colors.yellow,
         onTap: () {
           Navigator.of(context).pushNamed(
             AppRouter.recentsRoute,
@@ -186,11 +186,23 @@ class PlaylistCard extends StatelessWidget {
       child: GestureDetector(
         onTap: onTap,
         child: Container(
-          color: Colors.grey.withOpacity(0.2),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            color: Colors.grey.withOpacity(0.2),
+          ),
           child: Column(
             children: [
-              Image.asset(
-                image,
+              ClipRRect(
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(16),
+                  topRight: Radius.circular(16),
+                ),
+                child: Image.asset(
+                  image,
+                  height: 150,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                ),
               ),
               const SizedBox(height: 8),
               Row(

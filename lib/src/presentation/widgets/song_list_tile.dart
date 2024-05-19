@@ -10,7 +10,6 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:share_plus/share_plus.dart';
 
 import 'package:meloplay/src/bloc/player/player_bloc.dart';
-import 'package:meloplay/src/bloc/song/song_bloc.dart';
 import 'package:meloplay/src/core/constants/assets.dart';
 import 'package:meloplay/src/core/di/service_locator.dart';
 import 'package:meloplay/src/core/router/app_router.dart';
@@ -33,7 +32,7 @@ class SongListTile extends StatefulWidget {
 }
 
 class _SongListTileState extends State<SongListTile> {
-  final player = sl<JustAudioPlayer>();
+  final player = sl<MusicPlayer>();
 
   @override
   Widget build(BuildContext context) {
@@ -51,13 +50,8 @@ class _SongListTileState extends State<SongListTile> {
           onTap: () async {
             MediaItem mediaItem = player.getMediaItemFromSong(widget.song);
 
-            if (context.mounted) {
-              context.read<SongBloc>().add(
-                    AddToRecentlyPlayed(mediaItem.id),
-                  );
-            }
-
             // if this is currently playing, navigate to player
+            // else load songs
             if (currentMediaItem?.id == mediaItem.id) {
               if (context.mounted) {
                 Navigator.of(context).pushNamed(

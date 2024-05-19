@@ -37,7 +37,7 @@ class _SpinningDiscState extends State<SpinningDisc>
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<bool>(
-      stream: sl<JustAudioPlayer>().playing,
+      stream: sl<MusicPlayer>().playing,
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return Container();

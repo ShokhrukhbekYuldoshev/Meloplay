@@ -25,7 +25,7 @@ class PlayerPage extends StatefulWidget {
 }
 
 class _PlayerPageState extends State<PlayerPage> {
-  final player = sl<JustAudioPlayer>();
+  final player = sl<MusicPlayer>();
   SequenceState? sequence;
 
   @override

@@ -27,4 +27,14 @@ class RecentsRepository {
         .where((song) => recentSongsIds.contains(song.id.toString()))
         .toList();
   }
+
+  Future<SongModel?> fetchLastPlayed() async {
+    var recents = await fetchRecents();
+
+    if (recents.isNotEmpty) {
+      return recents.first;
+    } else {
+      return null;
+    }
+  }
 }

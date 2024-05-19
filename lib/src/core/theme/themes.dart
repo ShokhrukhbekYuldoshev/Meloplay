@@ -13,6 +13,7 @@ class Themes {
     RedTheme(),
     BlackTheme(),
     WhiteTheme(),
+    GrayTheme(),
   ];
 
   static final List<String> _themeNames = [
@@ -25,6 +26,7 @@ class Themes {
     'Red',
     'Black',
     'White',
+    'Gray',
   ];
 
   static get themes => _themes;
@@ -50,6 +52,8 @@ class Themes {
         return _themes[7];
       case 'White':
         return _themes[8];
+      case 'Gray':
+        return _themes[9];
       default:
         return _themes[0];
     }
@@ -93,8 +97,8 @@ class PurpleTheme extends ThemeColor {
   PurpleTheme()
       : super(
           themeName: 'Purple',
-          primaryColor: const Color(0xff21143d),
-          secondaryColor: const Color(0xff47210c),
+          primaryColor: const Color(0xff0e0725),
+          secondaryColor: const Color(0xff5c03bc),
           colorScheme: ColorScheme.fromSwatch(
             primarySwatch: Colors.purple,
             brightness: Brightness.dark,
@@ -103,8 +107,8 @@ class PurpleTheme extends ThemeColor {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              Color(0xff21143d),
-              Color(0xff47210c),
+              Color(0xff0e0725),
+              Color(0xff5c03bc),
             ],
           ),
         );
@@ -114,8 +118,8 @@ class BlueTheme extends ThemeColor {
   BlueTheme()
       : super(
           themeName: 'Blue',
-          primaryColor: const Color(0xff0c1a47),
-          secondaryColor: const Color(0xFF16488A),
+          primaryColor: const Color(0xff000328),
+          secondaryColor: const Color(0xFF00458e),
           colorScheme: ColorScheme.fromSwatch(
             primarySwatch: Colors.blue,
             brightness: Brightness.dark,
@@ -124,8 +128,8 @@ class BlueTheme extends ThemeColor {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              Color(0xff0c1a47),
-              Color(0xFF16488A),
+              Color(0xff000328),
+              Color(0xFF00458e),
             ],
           ),
         );
@@ -135,8 +139,8 @@ class GreenTheme extends ThemeColor {
   GreenTheme()
       : super(
           themeName: 'Green',
-          primaryColor: const Color(0xff0c471a),
-          secondaryColor: const Color(0xFF168A48),
+          primaryColor: const Color(0xff0c0c0c),
+          secondaryColor: const Color(0xFF0f971c),
           colorScheme: ColorScheme.fromSwatch(
             primarySwatch: Colors.green,
             brightness: Brightness.dark,
@@ -145,8 +149,8 @@ class GreenTheme extends ThemeColor {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              Color(0xff0c471a),
-              Color(0xFF168A48),
+              Color(0xff0c0c0c),
+              Color(0xFF0f971c),
             ],
           ),
         );
@@ -177,8 +181,8 @@ class YellowTheme extends ThemeColor {
   YellowTheme()
       : super(
           themeName: 'Yellow',
-          primaryColor: const Color(0xff47410c),
-          secondaryColor: const Color(0xFF8A7A16),
+          primaryColor: const Color(0xff161616),
+          secondaryColor: const Color(0xFFb79c05),
           colorScheme: ColorScheme.fromSwatch(
             primarySwatch: Colors.yellow,
             brightness: Brightness.dark,
@@ -187,8 +191,8 @@ class YellowTheme extends ThemeColor {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              Color(0xff47410c),
-              Color(0xFF8A7A16),
+              Color(0xff161616),
+              Color(0xFFb79c05),
             ],
           ),
         );
@@ -219,8 +223,8 @@ class RedTheme extends ThemeColor {
   RedTheme()
       : super(
           themeName: 'Red',
-          primaryColor: const Color(0xff470c1a),
-          secondaryColor: const Color(0xFF8A1648),
+          primaryColor: const Color(0xff1b0a07),
+          secondaryColor: const Color(0xFF7f0012),
           colorScheme: ColorScheme.fromSwatch(
             primarySwatch: Colors.red,
             brightness: Brightness.dark,
@@ -229,8 +233,8 @@ class RedTheme extends ThemeColor {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              Color(0xff470c1a),
-              Color(0xFF8A1648),
+              Color(0xff1b0a07),
+              Color(0xFF7f0012),
             ],
           ),
         );
@@ -261,8 +265,8 @@ class WhiteTheme extends ThemeColor {
   WhiteTheme()
       : super(
           themeName: 'White',
-          primaryColor: const Color(0XFFFFFFFF),
-          secondaryColor: const Color(0xFFC7C7C7),
+          primaryColor: const Color(0XFFD3CCE3),
+          secondaryColor: const Color(0xFFE9E4F0),
           colorScheme: ColorScheme.fromSwatch(
             primarySwatch: Colors.grey,
             brightness: Brightness.light,
@@ -271,8 +275,29 @@ class WhiteTheme extends ThemeColor {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              Color(0XFFFFFFFF),
-              Color(0xFFC7C7C7),
+              Color(0XFFD3CCE3),
+              Color(0xFFE9E4F0),
+            ],
+          ),
+        );
+}
+
+class GrayTheme extends ThemeColor {
+  GrayTheme()
+      : super(
+          themeName: 'Gray',
+          primaryColor: const Color(0xff232526),
+          secondaryColor: const Color(0xFF414345),
+          colorScheme: ColorScheme.fromSwatch(
+            primarySwatch: Colors.grey,
+            brightness: Brightness.dark,
+          ),
+          linearGradient: const LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Color(0xff232526),
+              Color(0xFF414345),
             ],
           ),
         );

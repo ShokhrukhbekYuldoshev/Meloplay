@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:just_audio/just_audio.dart';
 
 import 'package:meloplay/src/bloc/recents/recents_bloc.dart';
-import 'package:meloplay/src/bloc/song/song_bloc.dart';
+import 'package:meloplay/src/core/di/service_locator.dart';
 import 'package:meloplay/src/core/theme/themes.dart';
+import 'package:meloplay/src/data/repositories/player_repository.dart';
 import 'package:meloplay/src/presentation/widgets/player_bottom_app_bar.dart';
 import 'package:meloplay/src/presentation/widgets/song_list_tile.dart';
 
@@ -15,6 +17,8 @@ class RecentsPage extends StatefulWidget {
 }
 
 class _RecentsPageState extends State<RecentsPage> {
+  final player = sl<MusicPlayer>();
+
   @override
   void initState() {
     super.initState();
@@ -37,29 +41,24 @@ class _RecentsPageState extends State<RecentsPage> {
         decoration: BoxDecoration(
           gradient: Themes.getTheme().linearGradient,
         ),
-        child: BlocListener<SongBloc, SongState>(
-          listener: (context, state) {
-            if (state is AddToRecentlyPlayedSuccess) {
+        child: StreamBuilder<SequenceState?>(
+          stream: player.sequenceState,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
               context.read<RecentsBloc>().add(FetchRecents());
             }
+
+            return BlocBuilder<RecentsBloc, RecentsState>(
+              buildWhen: (_, current) => current is RecentsLoaded,
+              builder: (context, state) {
+                if (state is RecentsLoaded) {
+                  return _buildBody(state);
+                } else {
+                  return const SizedBox();
+                }
+              },
+            );
           },
-          child: BlocBuilder<RecentsBloc, RecentsState>(
-            builder: (context, state) {
-              if (state is RecentsLoading) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              } else if (state is RecentsLoaded) {
-                return _buildBody(state);
-              } else if (state is RecentsError) {
-                return Center(
-                  child: Text(state.message),
-                );
-              } else {
-                return const SizedBox();
-              }
-            },
-          ),
         ),
       ),
     );

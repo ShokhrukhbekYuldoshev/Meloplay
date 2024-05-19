@@ -34,7 +34,7 @@ Future<void> main() async {
   await Hive.openBox(HiveBox.boxName);
 
   // initialize audio service
-  await sl<JustAudioPlayer>().init();
+  await sl<MusicPlayer>().init();
 
   // run app
   runApp(

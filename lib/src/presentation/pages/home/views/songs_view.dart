@@ -30,6 +30,7 @@ class _SongsViewState extends State<SongsView>
   final audioQuery = sl<OnAudioQuery>();
   final songs = <SongModel>[];
   bool isLoading = true;
+  final _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -64,6 +65,7 @@ class _SongsViewState extends State<SongsView>
                 context.read<HomeBloc>().add(GetSongsEvent());
               },
               child: CustomScrollView(
+                controller: _scrollController,
                 slivers: [
                   SliverToBoxAdapter(
                     child: Padding(
@@ -185,6 +187,9 @@ class _SongsViewState extends State<SongsView>
                       ),
                     ),
                   ),
+                  const SliverToBoxAdapter(
+                    child: SizedBox(height: 16),
+                  ),
                   AnimationLimiter(
                     child: SliverList(
                       delegate: SliverChildBuilderDelegate(
@@ -212,6 +217,15 @@ class _SongsViewState extends State<SongsView>
                 ],
               ),
             ),
+    );
+  }
+
+  void scrollToTop() {
+    _scrollController.animateTo(
+      0.0, // Scroll to the top
+      duration:
+          const Duration(milliseconds: 500), // Duration of the scroll animation
+      curve: Curves.easeInOut, // Animation curve
     );
   }
 }

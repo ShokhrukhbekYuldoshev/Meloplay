@@ -10,7 +10,7 @@ part 'player_event.dart';
 part 'player_state.dart';
 
 class PlayerBloc extends Bloc<PlayerEvent, PlayerState> {
-  PlayerBloc({required JustAudioPlayer repository}) : super(PlayerInitial()) {
+  PlayerBloc({required MusicPlayer repository}) : super(PlayerInitial()) {
     on<PlayerLoadSongs>((event, emit) async {
       try {
         emit(PlayerLoading());

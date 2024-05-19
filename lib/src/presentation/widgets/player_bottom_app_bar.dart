@@ -25,7 +25,7 @@ class PlayerBottomAppBar extends StatefulWidget {
 }
 
 class _PlayerBottomAppBarState extends State<PlayerBottomAppBar> {
-  final player = sl<JustAudioPlayer>();
+  final player = sl<MusicPlayer>();
   bool isPlaying = false;
   bool isExpanded = false;
 
@@ -92,7 +92,7 @@ class _PlayerBottomAppBarState extends State<PlayerBottomAppBar> {
                   ),
                   child: AnimatedContainer(
                     duration: const Duration(milliseconds: 150),
-                    height: isExpanded ? 264 : 60,
+                    height: isExpanded ? 216 : 60,
                     child: BottomAppBar(
                       color: Themes.getTheme().primaryColor,
                       padding: const EdgeInsets.all(0),
@@ -145,7 +145,7 @@ class _PlayerBottomAppBarState extends State<PlayerBottomAppBar> {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.fromLTRB(16, 32, 16, 32),
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
           child: SingleChildScrollView(
             physics: const NeverScrollableScrollPhysics(),
             child: Column(
@@ -316,7 +316,7 @@ class _SwipeSongState extends State<SwipeSong> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<int?>(
-      stream: sl<JustAudioPlayer>().currentIndex,
+      stream: sl<MusicPlayer>().currentIndex,
       builder: (context, snapshot) {
         if (snapshot.hasData && pageController.hasClients) {
           pageController.jumpToPage(snapshot.data!);
