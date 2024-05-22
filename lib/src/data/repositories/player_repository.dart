@@ -17,6 +17,10 @@ abstract class MusicPlayer {
   SongModel getSongModelFromMediaItem(MediaItem mediaItem);
   Future<void> savePlaylist();
   Future<List<SongModel>> loadPlaylist();
+  Future<void> setSequenceFromPlaylist(
+    List<SongModel> playlist,
+    SongModel lastPlayedSong,
+  );
 
   Future<void> play();
   Future<void> pause();
@@ -38,11 +42,6 @@ abstract class MusicPlayer {
   Future<void> setSpeed(double speed);
   Future<void> setShuffleModeEnabled(bool enabled);
   Future<void> setLoopMode(LoopMode loopMode);
-
-  Future<void> getSequenceFromPlaylist(
-    List<SongModel> playlist,
-    SongModel lastPlayedSong,
-  );
 }
 
 class JustAudioPlayer implements MusicPlayer {
@@ -160,7 +159,7 @@ class JustAudioPlayer implements MusicPlayer {
   }
 
   @override
-  Future<void> getSequenceFromPlaylist(
+  Future<void> setSequenceFromPlaylist(
     List<SongModel> playlist,
     SongModel lastPlayedSong,
   ) async {
@@ -179,7 +178,7 @@ class JustAudioPlayer implements MusicPlayer {
       title: song.title,
       artist: song.artist,
       duration: Duration(milliseconds: song.duration!),
-      // artUri: Uri.parse(song.uri!),
+      // artUri:
     );
   }
 

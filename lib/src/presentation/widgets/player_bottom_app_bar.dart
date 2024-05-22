@@ -57,7 +57,7 @@ class _PlayerBottomAppBarState extends State<PlayerBottomAppBar> {
     // get last played song
     SongModel? lastPlayedSong = await sl<RecentsRepository>().fetchLastPlayed();
     if (lastPlayedSong != null) {
-      await player.getSequenceFromPlaylist(playlist, lastPlayedSong);
+      await player.setSequenceFromPlaylist(playlist, lastPlayedSong);
     }
   }
 
@@ -69,15 +69,15 @@ class _PlayerBottomAppBarState extends State<PlayerBottomAppBar> {
           return StreamBuilder<SequenceState?>(
             stream: player.sequenceState,
             builder: (context, snapshot) {
-              SequenceState? sequence;
               if (!snapshot.hasData) {
                 // if no sequence is loaded, load from hive
-                _getPlaylist();
+                if (player.playlist.isEmpty) {
+                  _getPlaylist();
+                }
                 return const SizedBox();
-              } else {
-                sequence = snapshot.data;
               }
 
+              var sequence = snapshot.data;
               MediaItem mediaItem =
                   sequence?.sequence[sequence.currentIndex].tag;
 
