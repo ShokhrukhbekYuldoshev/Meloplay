@@ -11,6 +11,7 @@ import 'package:meloplay/src/core/di/service_locator.dart';
 import 'package:meloplay/src/core/router/app_router.dart';
 import 'package:meloplay/src/core/theme/themes.dart';
 import 'package:meloplay/src/data/repositories/player_repository.dart';
+import 'package:meloplay/src/data/repositories/recents_repository.dart';
 import 'package:meloplay/src/presentation/widgets/seek_bar.dart';
 import 'package:meloplay/src/presentation/widgets/spinning_disc_animation.dart';
 import 'package:on_audio_query/on_audio_query.dart';
@@ -29,6 +30,8 @@ class _PlayerBottomAppBarState extends State<PlayerBottomAppBar> {
   bool isPlaying = false;
   bool isExpanded = false;
 
+  List<SongModel> playlist = [];
+
   @override
   void initState() {
     super.initState();
@@ -46,6 +49,18 @@ class _PlayerBottomAppBarState extends State<PlayerBottomAppBar> {
     }
   }
 
+  Future<void> _getPlaylist() async {
+    playlist = await player.loadPlaylist();
+    if (playlist.isEmpty) {
+      return;
+    }
+    // get last played song
+    SongModel? lastPlayedSong = await sl<RecentsRepository>().fetchLastPlayed();
+    if (lastPlayedSong != null) {
+      await player.getSequenceFromPlaylist(playlist, lastPlayedSong);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -54,11 +69,15 @@ class _PlayerBottomAppBarState extends State<PlayerBottomAppBar> {
           return StreamBuilder<SequenceState?>(
             stream: player.sequenceState,
             builder: (context, snapshot) {
+              SequenceState? sequence;
               if (!snapshot.hasData) {
-                return const SizedBox.shrink();
+                // if no sequence is loaded, load from hive
+                _getPlaylist();
+                return const SizedBox();
+              } else {
+                sequence = snapshot.data;
               }
 
-              final sequence = snapshot.data;
               MediaItem mediaItem =
                   sequence?.sequence[sequence.currentIndex].tag;
 

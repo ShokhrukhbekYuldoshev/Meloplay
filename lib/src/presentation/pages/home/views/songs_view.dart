@@ -134,7 +134,7 @@ class _SongsViewState extends State<SongsView>
                                   context.read<PlayerBloc>().add(
                                         PlayerLoadSongs(
                                           songs,
-                                          sl<JustAudioPlayer>()
+                                          sl<MusicPlayer>()
                                               .getMediaItemFromSong(randomSong),
                                         ),
                                       );
@@ -175,7 +175,7 @@ class _SongsViewState extends State<SongsView>
                                   context.read<PlayerBloc>().add(
                                         PlayerLoadSongs(
                                           songs,
-                                          sl<JustAudioPlayer>()
+                                          sl<MusicPlayer>()
                                               .getMediaItemFromSong(songs[0]),
                                         ),
                                       );

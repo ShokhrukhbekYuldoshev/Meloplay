@@ -1,8 +1,10 @@
 import 'dart:io';
 
+import 'package:hive/hive.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:meloplay/src/data/repositories/song_repository.dart';
+import 'package:meloplay/src/data/services/hive_box.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 abstract class MusicPlayer {
@@ -13,6 +15,9 @@ abstract class MusicPlayer {
   );
   MediaItem getMediaItemFromSong(SongModel song);
   SongModel getSongModelFromMediaItem(MediaItem mediaItem);
+  Future<void> savePlaylist();
+  Future<List<SongModel>> loadPlaylist();
+
   Future<void> play();
   Future<void> pause();
   Future<void> stop();
@@ -33,11 +38,18 @@ abstract class MusicPlayer {
   Future<void> setSpeed(double speed);
   Future<void> setShuffleModeEnabled(bool enabled);
   Future<void> setLoopMode(LoopMode loopMode);
+
+  Future<void> getSequenceFromPlaylist(
+    List<SongModel> playlist,
+    SongModel lastPlayedSong,
+  );
 }
 
 class JustAudioPlayer implements MusicPlayer {
   final AudioPlayer _player = AudioPlayer();
   List<SongModel> currentPlaylist = [];
+
+  var box = Hive.box(HiveBox.boxName);
 
   @override
   Future<void> init() async {
@@ -55,13 +67,26 @@ class JustAudioPlayer implements MusicPlayer {
         SongRepository().addToRecentlyPlayed(songId);
       }
     });
+
+    // set loop mode
+    if (box.get(HiveBox.loopModeKey) != null) {
+      _player.setLoopMode(LoopMode.values[box.get(HiveBox.loopModeKey)]);
+    }
+
+    // set shuffle mode
+    if (box.get(HiveBox.shuffleModeKey) != null) {
+      _player.setShuffleModeEnabled(
+        box.get(HiveBox.shuffleModeKey),
+      );
+    }
   }
 
   @override
   Future<void> load(
     MediaItem mediaItem,
-    List<SongModel> playlist,
-  ) async {
+    List<SongModel> playlist, {
+    bool play = true,
+  }) async {
     List<AudioSource> sources = [];
 
     for (var song in playlist) {
@@ -103,8 +128,47 @@ class JustAudioPlayer implements MusicPlayer {
       ),
     );
 
+    // set current playlist
     currentPlaylist = playlist;
-    await _player.play();
+
+    // save current playlist
+    await savePlaylist();
+
+    if (play) {
+      // play the song
+      await _player.play();
+    }
+  }
+
+  /// save current playlist to hive
+  @override
+  Future savePlaylist() async {
+    await box.put(
+      HiveBox.lastPlayedPlaylistKey,
+      currentPlaylist.map((song) => song.getMap).toList(),
+    );
+  }
+
+  /// load current playlist from hive
+  @override
+  Future<List<SongModel>> loadPlaylist() async {
+    List<dynamic> playlist = box.get(
+      HiveBox.lastPlayedPlaylistKey,
+      defaultValue: List.empty(),
+    );
+    return playlist.map((song) => SongModel(song)).toList();
+  }
+
+  @override
+  Future<void> getSequenceFromPlaylist(
+    List<SongModel> playlist,
+    SongModel lastPlayedSong,
+  ) async {
+    await load(
+      getMediaItemFromSong(lastPlayedSong),
+      playlist,
+      play: false,
+    );
   }
 
   @override
@@ -198,11 +262,13 @@ class JustAudioPlayer implements MusicPlayer {
 
   @override
   Future<void> setLoopMode(LoopMode loopMode) async {
+    await box.put(HiveBox.loopModeKey, loopMode.index);
     await _player.setLoopMode(loopMode);
   }
 
   @override
   Future<void> setShuffleModeEnabled(bool enabled) async {
+    await box.put(HiveBox.shuffleModeKey, enabled);
     await _player.setShuffleModeEnabled(enabled);
   }
 

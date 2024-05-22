@@ -38,6 +38,8 @@ class _RecentsPageState extends State<RecentsPage> {
         title: const Text('Recents'),
       ),
       body: Ink(
+        height: double.infinity,
+        width: double.infinity,
         decoration: BoxDecoration(
           gradient: Themes.getTheme().linearGradient,
         ),
