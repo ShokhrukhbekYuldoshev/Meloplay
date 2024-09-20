@@ -5,9 +5,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:lottie/lottie.dart';
+import 'package:meloplay/src/core/helpers/helpers.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:share_plus/share_plus.dart';
 
 import 'package:meloplay/src/bloc/player/player_bloc.dart';
 import 'package:meloplay/src/core/constants/assets.dart';
@@ -279,17 +279,7 @@ class _SongListTileState extends State<SongListTile> {
               leading: const Icon(Icons.share_outlined),
               title: const Text('Share'),
               onTap: () async {
-                List<XFile> files = [];
-                // convert song to xfile
-                final songFile = XFile(widget.song.data);
-                files.add(songFile);
-                await Share.shareXFiles(
-                  files,
-                  text: widget.song.title,
-                );
-                if (context.mounted) {
-                  Navigator.of(context).pop();
-                }
+                await shareSong(context, widget.song.data, widget.song.title);
               },
             ),
           ],

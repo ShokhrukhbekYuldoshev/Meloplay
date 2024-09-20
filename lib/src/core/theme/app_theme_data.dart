@@ -20,6 +20,9 @@ class AppThemeData {
       drawerTheme: DrawerThemeData(
         backgroundColor: theme.primaryColor,
       ),
+      bottomSheetTheme: BottomSheetThemeData(
+        backgroundColor: theme.primaryColor,
+      ),
     );
   }
 }

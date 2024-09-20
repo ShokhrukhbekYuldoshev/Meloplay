@@ -14,14 +14,12 @@ abstract class MusicPlayer {
     List<SongModel> playlist,
   );
   MediaItem getMediaItemFromSong(SongModel song);
-  SongModel getSongModelFromMediaItem(MediaItem mediaItem);
   Future<void> savePlaylist();
   Future<List<SongModel>> loadPlaylist();
   Future<void> setSequenceFromPlaylist(
     List<SongModel> playlist,
     SongModel lastPlayedSong,
   );
-
   Future<void> play();
   Future<void> pause();
   Future<void> stop();
@@ -47,6 +45,7 @@ abstract class MusicPlayer {
 class JustAudioPlayer implements MusicPlayer {
   final AudioPlayer _player = AudioPlayer();
   List<SongModel> currentPlaylist = [];
+  late ConcatenatingAudioSource _queue;
 
   var box = Hive.box(HiveBox.boxName);
 
@@ -120,12 +119,13 @@ class JustAudioPlayer implements MusicPlayer {
       }
     }
 
-    await _player.setAudioSource(
-      initialIndex: initialIndex,
-      ConcatenatingAudioSource(
-        children: sources,
-      ),
+    // set queue
+    _queue = ConcatenatingAudioSource(
+      children: sources,
     );
+
+    // set initial index
+    await _player.setAudioSource(initialIndex: initialIndex, _queue);
 
     // set current playlist
     currentPlaylist = playlist;
@@ -178,20 +178,7 @@ class JustAudioPlayer implements MusicPlayer {
       title: song.title,
       artist: song.artist,
       duration: Duration(milliseconds: song.duration!),
-      // artUri:
     );
-  }
-
-  @override
-  SongModel getSongModelFromMediaItem(MediaItem mediaItem) {
-    return SongModel({
-      'id': int.parse(mediaItem.id),
-      'title': mediaItem.title,
-      'artist': mediaItem.artist,
-      'album': mediaItem.album,
-      'duration': mediaItem.duration?.inMilliseconds,
-      'uri': mediaItem.extras!['url'],
-    });
   }
 
   @override

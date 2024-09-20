@@ -58,6 +58,24 @@ class _PlayerPageState extends State<PlayerPage> {
           },
           color: Colors.white,
         ),
+        actions: [
+          // more button
+          PopupMenuButton(
+            icon: const Icon(
+              Icons.more_vert_outlined,
+            ),
+            itemBuilder: (context) {
+              return [
+                PopupMenuItem(
+                  onTap: () {
+                    showSleepTimer(context);
+                  },
+                  child: const Text('Sleep timer'),
+                ),
+              ];
+            },
+          ),
+        ],
       ),
       extendBodyBehindAppBar: true,
       body: StreamBuilder<SequenceState?>(
@@ -254,10 +272,12 @@ class _PlayerPageState extends State<PlayerPage> {
 
                   // small screen
                   return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // artwork
-                      Expanded(
-                        flex: 4,
+                      SizedBox(
+                        width: double.infinity,
+                        height: MediaQuery.of(context).size.width - 64,
                         child: Stack(
                           fit: StackFit.expand,
                           children: [
@@ -298,7 +318,7 @@ class _PlayerPageState extends State<PlayerPage> {
                           ],
                         ),
                       ),
-                      const Spacer(),
+                      const SizedBox(height: 16),
                       // title and artist
                       StreamBuilder<SequenceState?>(
                         stream: player.sequenceState,
@@ -312,6 +332,7 @@ class _PlayerPageState extends State<PlayerPage> {
                               sequence!.sequence[sequence.currentIndex].tag;
 
                           return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               SizedBox(
                                 height: 30,
@@ -353,10 +374,10 @@ class _PlayerPageState extends State<PlayerPage> {
                           );
                         },
                       ),
-                      const Spacer(),
+                      const SizedBox(height: 64),
                       // seek bar
                       SeekBar(player: player),
-                      const Spacer(),
+                      const SizedBox(height: 16),
                       // shuffle, previous, play/pause, next, repeat
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -505,6 +526,99 @@ class _PlayerPageState extends State<PlayerPage> {
                     ),
           iconSize: 30,
           tooltip: 'Repeat',
+        );
+      },
+    );
+  }
+
+  void showSleepTimer(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return SingleChildScrollView(
+          child: Column(
+            children: [
+              ListTile(
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(30),
+                    topRight: Radius.circular(30),
+                  ),
+                ),
+                title: const Text('Off'),
+                onTap: () {
+                  // context.read<PlayerBloc>().add(PlayerSetSleepTimer(null));
+                  Navigator.of(context).pop();
+                },
+              ),
+              ListTile(
+                title: const Text('5 minutes'),
+                onTap: () {
+                  // context.read<PlayerBloc>().add(
+                  //       PlayerSetSleepTimer(
+                  //         const Duration(minutes: 5),
+                  //       ),
+                  //     );
+                  Navigator.of(context).pop();
+                },
+              ),
+              ListTile(
+                title: const Text('10 minutes'),
+                onTap: () {
+                  // context.read<PlayerBloc>().add(
+                  //       PlayerSetSleepTimer(
+                  //         const Duration(minutes: 10),
+                  //       ),
+                  //     );
+                  Navigator.of(context).pop();
+                },
+              ),
+              ListTile(
+                title: const Text('15 minutes'),
+                onTap: () {
+                  // context.read<PlayerBloc>().add(
+                  //       PlayerSetSleepTimer(
+                  //         const Duration(minutes: 15),
+                  //       ),
+                  //     );
+                  Navigator.of(context).pop();
+                },
+              ),
+              ListTile(
+                title: const Text('30 minutes'),
+                onTap: () {
+                  // context.read<PlayerBloc>().add(
+                  //       PlayerSetSleepTimer(
+                  //         const Duration(minutes: 30),
+                  //       ),
+                  //     );
+                  Navigator.of(context).pop();
+                },
+              ),
+              ListTile(
+                title: const Text('45 minutes'),
+                onTap: () {
+                  // context.read<PlayerBloc>().add(
+                  //       PlayerSetSleepTimer(
+                  //         const Duration(minutes: 45),
+                  //       ),
+                  //     );
+                  Navigator.of(context).pop();
+                },
+              ),
+              ListTile(
+                title: const Text('1 hour'),
+                onTap: () {
+                  // context.read<PlayerBloc>().add(
+                  //       PlayerSetSleepTimer(
+                  //         const Duration(hours: 1),
+                  //       ),
+                  //     );
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          ),
         );
       },
     );
