@@ -12,6 +12,9 @@ import 'package:meloplay/src/core/router/app_router.dart';
 import 'package:meloplay/src/core/theme/themes.dart';
 import 'package:meloplay/src/data/repositories/player_repository.dart';
 import 'package:meloplay/src/data/repositories/recents_repository.dart';
+import 'package:meloplay/src/presentation/widgets/buttons/next_button.dart';
+import 'package:meloplay/src/presentation/widgets/buttons/play_pause_button.dart';
+import 'package:meloplay/src/presentation/widgets/buttons/previous_button.dart';
 import 'package:meloplay/src/presentation/widgets/seek_bar.dart';
 import 'package:meloplay/src/presentation/widgets/spinning_disc_animation.dart';
 import 'package:on_audio_query/on_audio_query.dart';
@@ -194,65 +197,11 @@ class _PlayerBottomAppBarState extends State<PlayerBottomAppBar> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // previous button
-                    IconButton(
-                      onPressed: () {
-                        context
-                            .read<bloc.PlayerBloc>()
-                            .add(bloc.PlayerPrevious());
-                      },
-                      icon: const Icon(
-                        Icons.skip_previous_outlined,
-                        color: Colors.white,
-                      ),
-                      iconSize: 40,
-                      tooltip: 'Previous',
-                    ),
+                    PreviousButton(),
                     const SizedBox(width: 20),
-                    // play/pause button
-                    StreamBuilder<bool>(
-                      stream: player.playing,
-                      builder: (context, snapshot) {
-                        final playing = snapshot.data ?? false;
-                        return IconButton(
-                          onPressed: () {
-                            if (playing) {
-                              context
-                                  .read<bloc.PlayerBloc>()
-                                  .add(bloc.PlayerPause());
-                            } else {
-                              context
-                                  .read<bloc.PlayerBloc>()
-                                  .add(bloc.PlayerPlay());
-                            }
-                          },
-                          icon: playing
-                              ? const Icon(
-                                  Icons.pause_outlined,
-                                  color: Colors.white,
-                                )
-                              : const Icon(
-                                  Icons.play_arrow_outlined,
-                                  color: Colors.white,
-                                ),
-                          iconSize: 40,
-                          tooltip: 'Play/Pause',
-                        );
-                      },
-                    ),
+                    PlayPauseButton(),
                     const SizedBox(width: 20),
-                    // next button
-                    IconButton(
-                      onPressed: () {
-                        context.read<bloc.PlayerBloc>().add(bloc.PlayerNext());
-                      },
-                      icon: const Icon(
-                        Icons.skip_next_outlined,
-                        color: Colors.white,
-                      ),
-                      iconSize: 40,
-                      tooltip: 'Next',
-                    ),
+                    NextButton(),
                   ],
                 ),
               ],
@@ -274,25 +223,7 @@ class _PlayerBottomAppBarState extends State<PlayerBottomAppBar> {
             mediaItem: mediaItem,
           ),
         ),
-        // play/pause button
-        StreamBuilder<bool>(
-          stream: player.playing,
-          builder: (context, snapshot) {
-            final playing = snapshot.data ?? false;
-            return IconButton(
-              onPressed: () {
-                if (playing) {
-                  context.read<bloc.PlayerBloc>().add(bloc.PlayerPause());
-                } else {
-                  context.read<bloc.PlayerBloc>().add(bloc.PlayerPlay());
-                }
-              },
-              icon: playing
-                  ? const Icon(Icons.pause_outlined)
-                  : const Icon(Icons.play_arrow_outlined),
-            );
-          },
-        ),
+        PlayPauseButton(width: 20),
         IconButton(
           onPressed: () {
             Navigator.of(context).pushNamed(

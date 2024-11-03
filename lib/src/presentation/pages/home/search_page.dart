@@ -25,6 +25,7 @@ class _SearchPageState extends State<SearchPage> {
         elevation: 0,
         backgroundColor: Themes.getTheme().primaryColor,
         title: TextField(
+          autofocus: true,
           onChanged: (value) {
             context.read<SearchBloc>().add(SearchQueryChanged(value));
           },

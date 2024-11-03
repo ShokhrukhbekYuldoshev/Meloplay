@@ -5,9 +5,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:marquee/marquee.dart';
+import 'package:meloplay/src/presentation/widgets/buttons/next_button.dart';
+import 'package:meloplay/src/presentation/widgets/buttons/play_pause_button.dart';
+import 'package:meloplay/src/presentation/widgets/buttons/previous_button.dart';
+import 'package:meloplay/src/presentation/widgets/buttons/repeat_button.dart';
+import 'package:meloplay/src/presentation/widgets/buttons/shuffle_button.dart';
 import 'package:on_audio_query/on_audio_query.dart';
-
-import 'package:meloplay/src/bloc/player/player_bloc.dart';
 import 'package:meloplay/src/bloc/song/song_bloc.dart';
 import 'package:meloplay/src/core/di/service_locator.dart';
 import 'package:meloplay/src/data/repositories/player_repository.dart';
@@ -251,16 +254,11 @@ class _PlayerPageState extends State<PlayerPage> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
                                 children: [
-                                  //  shuffle button
-                                  _buildShuffleButton(),
-                                  // previous button
-                                  _buildPreviousButton(context),
-                                  // play/pause button
-                                  _buildPlayPauseButton(),
-                                  // next button
-                                  _buildNextButton(context),
-                                  // repeat button
-                                  _buildRepeatButton(),
+                                  ShuffleButton(),
+                                  PreviousButton(),
+                                  PlayPauseButton(),
+                                  NextButton(),
+                                  RepeatButton(),
                                 ],
                               ),
                             ],
@@ -382,16 +380,11 @@ class _PlayerPageState extends State<PlayerPage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          //  shuffle button
-                          _buildShuffleButton(),
-                          // previous button
-                          _buildPreviousButton(context),
-                          // play/pause button
-                          _buildPlayPauseButton(),
-                          // next button
-                          _buildNextButton(context),
-                          // repeat button
-                          _buildRepeatButton(),
+                          ShuffleButton(),
+                          PreviousButton(),
+                          PlayPauseButton(),
+                          NextButton(),
+                          RepeatButton(),
                         ],
                       ),
                     ],
@@ -402,132 +395,6 @@ class _PlayerPageState extends State<PlayerPage> {
           );
         },
       ),
-    );
-  }
-
-  StreamBuilder<bool> _buildShuffleButton() {
-    return StreamBuilder<bool>(
-      stream: player.shuffleModeEnabled,
-      builder: (context, snapshot) {
-        return IconButton(
-          onPressed: () async {
-            context.read<PlayerBloc>().add(
-                  PlayerSetShuffleModeEnabled(
-                    !(snapshot.data ?? false),
-                  ),
-                );
-          },
-          icon: snapshot.data == false
-              ? const Icon(
-                  Icons.shuffle_outlined,
-                  color: Colors.grey,
-                )
-              : const Icon(
-                  Icons.shuffle_outlined,
-                  color: Colors.white,
-                ),
-          iconSize: 30,
-          tooltip: 'Shuffle',
-        );
-      },
-    );
-  }
-
-  IconButton _buildPreviousButton(BuildContext context) {
-    return IconButton(
-      onPressed: () {
-        context.read<PlayerBloc>().add(PlayerPrevious());
-      },
-      icon: const Icon(
-        Icons.skip_previous_outlined,
-        color: Colors.white,
-      ),
-      iconSize: 40,
-      tooltip: 'Previous',
-    );
-  }
-
-  StreamBuilder<bool> _buildPlayPauseButton() {
-    return StreamBuilder<bool>(
-      stream: player.playing,
-      builder: (context, snapshot) {
-        final playing = snapshot.data ?? false;
-        return IconButton(
-          onPressed: () {
-            if (playing) {
-              context.read<PlayerBloc>().add(PlayerPause());
-            } else {
-              context.read<PlayerBloc>().add(PlayerPlay());
-            }
-          },
-          icon: playing
-              ? const Icon(
-                  Icons.pause_outlined,
-                  color: Colors.white,
-                )
-              : const Icon(
-                  Icons.play_arrow_outlined,
-                  color: Colors.white,
-                ),
-          iconSize: 40,
-          tooltip: 'Play/Pause',
-        );
-      },
-    );
-  }
-
-  IconButton _buildNextButton(BuildContext context) {
-    return IconButton(
-      onPressed: () {
-        context.read<PlayerBloc>().add(PlayerNext());
-      },
-      icon: const Icon(
-        Icons.skip_next_outlined,
-        color: Colors.white,
-      ),
-      iconSize: 40,
-      tooltip: 'Next',
-    );
-  }
-
-  StreamBuilder<LoopMode> _buildRepeatButton() {
-    return StreamBuilder<LoopMode>(
-      stream: player.loopMode,
-      builder: (context, snapshot) {
-        return IconButton(
-          onPressed: () {
-            if (snapshot.data == LoopMode.off) {
-              context.read<PlayerBloc>().add(
-                    PlayerSetLoopMode(LoopMode.all),
-                  );
-            } else if (snapshot.data == LoopMode.all) {
-              context.read<PlayerBloc>().add(
-                    PlayerSetLoopMode(LoopMode.one),
-                  );
-            } else {
-              context.read<PlayerBloc>().add(
-                    PlayerSetLoopMode(LoopMode.off),
-                  );
-            }
-          },
-          icon: snapshot.data == LoopMode.off
-              ? const Icon(
-                  Icons.repeat_outlined,
-                  color: Colors.grey,
-                )
-              : snapshot.data == LoopMode.all
-                  ? const Icon(
-                      Icons.repeat_outlined,
-                      color: Colors.white,
-                    )
-                  : const Icon(
-                      Icons.repeat_one_outlined,
-                      color: Colors.white,
-                    ),
-          iconSize: 30,
-          tooltip: 'Repeat',
-        );
-      },
     );
   }
 

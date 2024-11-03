@@ -47,6 +47,7 @@ class _SongListTileState extends State<SongListTile> {
         }
 
         return ListTile(
+          contentPadding: EdgeInsets.only(left: 16),
           onTap: () async {
             MediaItem mediaItem = player.getMediaItemFromSong(widget.song);
 
@@ -80,53 +81,63 @@ class _SongListTileState extends State<SongListTile> {
       return null;
     }
 
-    // if the current media item is the same as the song, show a playing animation
-    if (currentMediaItem != null &&
-        currentMediaItem.id == widget.song.id.toString()) {
-      return Container(
-        width: 50,
-        height: 50,
-        padding: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: Colors.grey.withOpacity(0.1),
+    return Stack(
+      children: [
+        QueryArtworkWidget(
+          keepOldArtwork: true,
+          id: widget.song.albumId ?? 0,
+          type: ArtworkType.ALBUM,
+          artworkBorder: BorderRadius.circular(10),
+          size: 500,
+          nullArtworkWidget: Container(
+            width: 50,
+            height: 50,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: Colors.grey.withOpacity(0.1),
+            ),
+            child: const Icon(
+              Icons.music_note_outlined,
+            ),
+          ),
         ),
-        child: StreamBuilder<bool>(
-          stream: player.playing,
-          builder: (context, snapshot) {
-            return ColorFiltered(
-              colorFilter: ColorFilter.mode(
-                Theme.of(context).colorScheme.primary,
-                BlendMode.srcIn,
-              ),
-              child: Lottie.asset(
-                Assets.playingAnimation,
-                animate: snapshot.data ?? false,
-              ),
-            );
-          },
-        ),
-      );
-    }
+        if (currentMediaItem != null &&
+            currentMediaItem.id == widget.song.id.toString())
+          Positioned.fill(
+            child: StreamBuilder<bool>(
+              stream: player.playing,
+              builder: (context, snapshot) {
+                final isPlaying = snapshot.data ?? false;
 
-    // otherwise, show the album art
-    return QueryArtworkWidget(
-      keepOldArtwork: true,
-      id: widget.song.albumId ?? 0,
-      type: ArtworkType.ALBUM,
-      artworkBorder: BorderRadius.circular(10),
-      size: 500,
-      nullArtworkWidget: Container(
-        width: 50,
-        height: 50,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: Colors.grey.withOpacity(0.1),
-        ),
-        child: const Icon(
-          Icons.music_note_outlined,
-        ),
-      ),
+                return Stack(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.black.withOpacity(0.6),
+                      ),
+                    ),
+                    Align(
+                      alignment: Alignment.center,
+                      child: ColorFiltered(
+                        colorFilter: ColorFilter.mode(
+                          Theme.of(context).colorScheme.primary,
+                          BlendMode.srcIn,
+                        ),
+                        child: Lottie.asset(
+                          Assets.playingAnimation,
+                          animate: isPlaying,
+                          height: 32,
+                          width: 32,
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              },
+            ),
+          ),
+      ],
     );
   }
 

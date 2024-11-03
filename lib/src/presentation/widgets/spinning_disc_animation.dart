@@ -23,7 +23,7 @@ class _SpinningDiscState extends State<SpinningDisc>
   void initState() {
     super.initState();
     _controller = AnimationController(
-      duration: const Duration(seconds: 5),
+      duration: const Duration(seconds: 10),
       vsync: this,
     )..repeat();
   }

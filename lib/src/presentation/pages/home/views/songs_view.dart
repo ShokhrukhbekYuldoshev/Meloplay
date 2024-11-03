@@ -3,8 +3,10 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:meloplay/src/core/constants/assets.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 import 'package:meloplay/src/bloc/home/home_bloc.dart';
@@ -67,6 +69,10 @@ class _SongsViewState extends State<SongsView>
               child: CustomScrollView(
                 controller: _scrollController,
                 slivers: [
+                  // margin
+                  const SliverToBoxAdapter(
+                    child: SizedBox(height: 16),
+                  ),
                   SliverToBoxAdapter(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -75,8 +81,8 @@ class _SongsViewState extends State<SongsView>
                         children: [
                           // number of songs
                           Text(
-                            '${songs.length} songs',
-                            style: Theme.of(context).textTheme.titleMedium,
+                            '${songs.length} Songs',
+                            style: Theme.of(context).textTheme.bodyLarge,
                           ),
                           // sort button
                           IconButton(
@@ -87,7 +93,7 @@ class _SongsViewState extends State<SongsView>
                                 builder: (context) => const SortBottomSheet(),
                               );
                             },
-                            icon: const Icon(Icons.sort),
+                            icon: const Icon(Icons.swap_vert),
                           ),
                         ],
                       ),
@@ -110,7 +116,10 @@ class _SongsViewState extends State<SongsView>
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    const Icon(Icons.shuffle),
+                                    SvgPicture.asset(
+                                      Assets.shuffleSvg,
+                                      width: 20,
+                                    ),
                                     const SizedBox(width: 8),
                                     Text(
                                       'Shuffle',
@@ -155,7 +164,7 @@ class _SongsViewState extends State<SongsView>
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    const Icon(Icons.play_arrow),
+                                    SvgPicture.asset(Assets.playSvg, width: 20),
                                     const SizedBox(width: 8),
                                     Text(
                                       'Play',

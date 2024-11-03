@@ -1,10 +1,10 @@
 name: meloplay
 description: "Meloplay is a local music player app that plays music from your device built with Flutter."
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
-version: 1.3.5
+version: 1.3.6
 
 environment:
-  sdk: ">=3.5.3 <4.0.0"
+  sdk: ">=3.5.4 <4.0.0"
 
 dependencies:
   bloc: ^8.1.4 # state management
@@ -13,20 +13,21 @@ dependencies:
   flutter_bloc: ^8.1.6 # state management
   flutter_cache_manager: ^3.4.1
   flutter_staggered_animations: ^1.1.1 # animation
+  flutter_svg: ^2.0.11
   fluttertoast: ^8.2.8
-  get_it: ^8.0.0 # dependency injection
+  get_it: ^8.0.2 # dependency injection
   hive: ^2.2.3 # local database
   hive_flutter: ^1.1.0 # local database
-  just_audio: ^0.9.41 # audio player
+  just_audio: ^0.9.42 # audio player
   just_audio_background: ^0.0.1-beta.11 # audio player background
-  lottie: ^3.1.2
-  marquee: ^2.2.3
+  lottie: ^3.1.3
+  marquee: ^2.3.0
   on_audio_query: ^2.9.0 # get songs from device
-  package_info_plus: ^8.0.2 # get app info
+  package_info_plus: ^8.1.0 # get app info
   permission_handler: ^11.3.1 # get permission
   rxdart: ^0.28.0 # stream
-  share_plus: ^10.0.2 # share song
-  url_launcher: ^6.3.0 # open url
+  share_plus: ^10.1.1 # share song
+  url_launcher: ^6.3.1 # open url
 
 dev_dependencies:
   flutter_test:
@@ -34,20 +35,10 @@ dev_dependencies:
   flutter_lints: ^5.0.0 # linter
   flutter_launcher_icons: ^0.14.1 # app icon generator
 
-# Fix for marquee dependency after Flutter 3.2.2 upgrade
-dependency_overrides:
-  fading_edge_scrollview: ^4.1.1
-
 flutter:
   uses-material-design: true
   assets:
     - assets/icon/
     - assets/lottie/
     - assets/images/
-
-flutter_launcher_icons:
-  image_path: "assets/icon/icon.png"
-  android: true
-  ios: true
-# dart pub get
-# dart run flutter_launcher_icons
+    - assets/svg/
