@@ -119,6 +119,13 @@ class _SongsViewState extends State<SongsView>
                                     SvgPicture.asset(
                                       Assets.shuffleSvg,
                                       width: 20,
+                                      colorFilter: ColorFilter.mode(
+                                        Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium!
+                                            .color!,
+                                        BlendMode.srcIn,
+                                      ),
                                     ),
                                     const SizedBox(width: 8),
                                     Text(
@@ -164,7 +171,17 @@ class _SongsViewState extends State<SongsView>
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    SvgPicture.asset(Assets.playSvg, width: 20),
+                                    SvgPicture.asset(
+                                      Assets.playSvg,
+                                      width: 20,
+                                      colorFilter: ColorFilter.mode(
+                                        Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium!
+                                            .color!,
+                                        BlendMode.srcIn,
+                                      ),
+                                    ),
                                     const SizedBox(width: 8),
                                     Text(
                                       'Play',

@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:just_audio_background/just_audio_background.dart';
+import 'package:meloplay/src/bloc/song/song_bloc.dart';
 
 class AnimatedFavoriteButton extends StatefulWidget {
   final bool isFavorite;
-  final Function onTap;
+  final MediaItem mediaItem;
 
   const AnimatedFavoriteButton({
     super.key,
     required this.isFavorite,
-    required this.onTap,
+    required this.mediaItem,
   });
 
   @override
@@ -42,7 +45,9 @@ class _AnimatedFavoriteButtonState extends State<AnimatedFavoriteButton>
     return GestureDetector(
       onTap: () {
         _controller.forward();
-        widget.onTap();
+        context.read<SongBloc>().add(
+              ToggleFavorite(widget.mediaItem.id),
+            );
       },
       child: Container(
         margin: const EdgeInsets.only(right: 16, bottom: 16),

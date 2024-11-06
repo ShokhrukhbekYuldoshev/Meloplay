@@ -85,12 +85,12 @@ Meloplay is a local music player app that plays music from your device built wit
 | [flutter_staggered_animations](https://pub.dev/packages/flutter_staggered_animations) | 1.1.1         | A plugin for adding staggered animations to your Flutter apps                                                                                                            |
 | [fluttertoast](https://pub.dev/packages/fluttertoast)                                 | 8.2.8         | Flutter plugin for displaying toast messages.                                                                                                                            |
 | [flutter_cache_manager](https://pub.dev/packages/flutter_cache_manager)               | 3.4.1         | A Flutter plugin for caching images and other resources.                                                                                                                 |
-| [flutter_svg](https://pub.dev/packages/flutter_svg)                                   | 2.0.11        | Flutter plugin for displaying SVG images.                                                                                                                                |
+| [flutter_svg](https://pub.dev/packages/flutter_svg)                                   | 2.0.13        | Flutter plugin for displaying SVG images.                                                                                                                                |
 | [get_it](https://pub.dev/packages/get_it)                                             | 8.0.2         | Simple direct Service Locator that allows to decouple the interface from a concrete implementation and to access the concrete implementation from everywhere in your App |
 | [hive](https://pub.dev/packages/hive)                                                 | 2.2.3         | A lightweight and blazing fast key-value database                                                                                                                        |
 | [hive_flutter](https://pub.dev/packages/hive_flutter)                                 | 1.1.0         | Hive database implementation for Flutter                                                                                                                                 |
 | [just_audio](https://pub.dev/packages/just_audio)                                     | 0.9.42        | A feature-rich audio player for Flutter                                                                                                                                  |
-| [just_audio_background](https://pub.dev/packages/just_audio_background)               | 0.0.1-beta.11 | A plugin for playing audio in the background on Android and iOS.                                                                                                         |
+| [just_audio_background](https://pub.dev/packages/just_audio_background)               | 0.0.1-beta.13 | A plugin for playing audio in the background on Android and iOS.                                                                                                         |
 | [lottie](https://pub.dev/packages/lottie)                                             | 3.1.3         | Lottie is a mobile library for Android and iOS that parses Lottie and JSON-based animations and renders them natively on mobile.                                         |
 | [marquee](https://pub.dev/packages/marquee)                                           | 2.3.0         | A Flutter widget that scrolls text infinitely.                                                                                                                           |
 | [on_audio_query](https://pub.dev/packages/on_audio_query)                             | 2.9.0         | A Flutter plugin to query songs on Android and iOS                                                                                                                       |
@@ -182,7 +182,7 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 
 ## 📝 License
 
-Distributed under the MIT License. See [LICENSE](LICENSE) for more information.
+Distributed under the Attribution-NonCommercial-ShareAlike 4.0 International License. See [LICENSE](LICENSE) for more information.
 
 ## 📧 Contact
 

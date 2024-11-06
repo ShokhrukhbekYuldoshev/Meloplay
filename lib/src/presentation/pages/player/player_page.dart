@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:just_audio/just_audio.dart';
@@ -170,11 +171,7 @@ class _PlayerPageState extends State<PlayerPage> {
                                     return AnimatedFavoriteButton(
                                       isFavorite: sl<SongRepository>()
                                           .isFavorite(mediaItem.id),
-                                      onTap: () {
-                                        context.read<SongBloc>().add(
-                                              ToggleFavorite(mediaItem.id),
-                                            );
-                                      },
+                                      mediaItem: mediaItem,
                                     );
                                   },
                                 ),
@@ -206,39 +203,52 @@ class _PlayerPageState extends State<PlayerPage> {
                                     children: [
                                       SizedBox(
                                         height: 30,
-                                        child: mediaItem!.title.length > 50
-                                            ? Marquee(
-                                                text: mediaItem.title,
-                                                blankSpace: 100,
-                                                startAfter:
-                                                    const Duration(seconds: 3),
-                                                pauseAfterRound:
-                                                    const Duration(seconds: 3),
-                                                style: const TextStyle(
-                                                  fontSize: 20,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.white,
-                                                ),
-                                              )
-                                            : Text(
-                                                mediaItem.title,
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: const TextStyle(
-                                                  fontSize: 20,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.white,
-                                                ),
-                                              ),
+                                        child: AutoSizeText(
+                                          mediaItem!.title,
+                                          maxLines: 1,
+                                          style: const TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white,
+                                          ),
+                                          minFontSize: 20,
+                                          overflowReplacement: Marquee(
+                                            text: mediaItem.title,
+                                            blankSpace: 100,
+                                            startAfter:
+                                                const Duration(seconds: 3),
+                                            pauseAfterRound:
+                                                const Duration(seconds: 3),
+                                            style: const TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ),
                                       ),
-                                      Text(
-                                        mediaItem.artist ?? 'Unknown',
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: const TextStyle(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white,
+                                      SizedBox(
+                                        height: 30,
+                                        child: AutoSizeText(
+                                          mediaItem.artist ?? 'Unknown',
+                                          maxLines: 1,
+                                          style: const TextStyle(
+                                            fontSize: 16,
+                                            color: Colors.white,
+                                          ),
+                                          minFontSize: 16,
+                                          overflowReplacement: Marquee(
+                                            text: mediaItem.artist ?? 'Unknown',
+                                            blankSpace: 100,
+                                            startAfter:
+                                                const Duration(seconds: 3),
+                                            pauseAfterRound:
+                                                const Duration(seconds: 3),
+                                            style: const TextStyle(
+                                              fontSize: 16,
+                                              color: Colors.white,
+                                            ),
+                                          ),
                                         ),
                                       ),
                                     ],
@@ -304,11 +314,7 @@ class _PlayerPageState extends State<PlayerPage> {
                                   return AnimatedFavoriteButton(
                                     isFavorite: sl<SongRepository>()
                                         .isFavorite(mediaItem.id),
-                                    onTap: () {
-                                      context.read<SongBloc>().add(
-                                            ToggleFavorite(mediaItem.id),
-                                          );
-                                    },
+                                    mediaItem: mediaItem,
                                   );
                                 },
                               ),
@@ -334,38 +340,48 @@ class _PlayerPageState extends State<PlayerPage> {
                             children: [
                               SizedBox(
                                 height: 30,
-                                child: mediaItem!.title.length > 30
-                                    ? Marquee(
-                                        text: mediaItem.title,
-                                        blankSpace: 100,
-                                        startAfter: const Duration(seconds: 3),
-                                        pauseAfterRound:
-                                            const Duration(seconds: 3),
-                                        style: const TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white,
-                                        ),
-                                      )
-                                    : Text(
-                                        mediaItem.title,
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: const TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white,
-                                        ),
-                                      ),
+                                child: AutoSizeText(
+                                  mediaItem!.title,
+                                  maxLines: 1,
+                                  minFontSize: 20,
+                                  style: const TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                  overflowReplacement: Marquee(
+                                    text: mediaItem.title,
+                                    blankSpace: 100,
+                                    startAfter: const Duration(seconds: 3),
+                                    pauseAfterRound: const Duration(seconds: 3),
+                                    style: const TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
                               ),
-                              Text(
-                                mediaItem.artist ?? 'Unknown',
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
+                              SizedBox(
+                                height: 30,
+                                child: AutoSizeText(
+                                  mediaItem.artist ?? 'Unknown',
+                                  maxLines: 1,
+                                  minFontSize: 15,
+                                  style: const TextStyle(
+                                    fontSize: 15,
+                                    color: Colors.white,
+                                  ),
+                                  overflowReplacement: Marquee(
+                                    text: mediaItem.artist ?? 'Unknown',
+                                    blankSpace: 100,
+                                    startAfter: const Duration(seconds: 3),
+                                    pauseAfterRound: const Duration(seconds: 3),
+                                    style: const TextStyle(
+                                      fontSize: 15,
+                                      color: Colors.white,
+                                    ),
+                                  ),
                                 ),
                               ),
                             ],

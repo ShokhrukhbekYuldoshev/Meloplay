@@ -66,7 +66,8 @@ class _PlayerBottomAppBarState extends State<PlayerBottomAppBar> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
+      margin: const EdgeInsets.only(left: 16, right: 16, bottom: 8),
       child: BlocBuilder<ThemeBloc, ThemeState>(
         builder: (context, state) {
           return StreamBuilder<SequenceState?>(
@@ -104,24 +105,16 @@ class _PlayerBottomAppBarState extends State<PlayerBottomAppBar> {
                   }
                 },
                 child: ClipRRect(
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(
-                      32,
-                    ),
-                    topRight: Radius.circular(
-                      32,
-                    ),
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(32),
                   ),
                   child: AnimatedContainer(
                     duration: const Duration(milliseconds: 150),
                     height: isExpanded ? 216 : 60,
-                    child: BottomAppBar(
-                      color: Themes.getTheme().primaryColor,
-                      padding: const EdgeInsets.all(0),
-                      child: isExpanded
-                          ? _buildExpanded(sequence!, mediaItem)
-                          : _buildCollapsed(sequence!, mediaItem),
-                    ),
+                    color: Themes.getTheme().primaryColor,
+                    child: isExpanded
+                        ? _buildExpanded(sequence!, mediaItem)
+                        : _buildCollapsed(sequence!, mediaItem),
                   ),
                 ),
               );
@@ -172,24 +165,42 @@ class _PlayerBottomAppBarState extends State<PlayerBottomAppBar> {
             physics: const NeverScrollableScrollPhysics(),
             child: Column(
               children: [
-                Text(
-                  mediaItem.title,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  mediaItem.artist ?? 'Unknown',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    color: Colors.grey,
-                  ),
+                Row(
+                  children: [
+                    // disc
+                    SpinningDisc(
+                      id: int.parse(mediaItem.id),
+                    ),
+                    const SizedBox(width: 16),
+                    // song info
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            mediaItem.title,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            mediaItem.artist ?? 'Unknown',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                  ],
                 ),
                 const SizedBox(height: 20),
                 SeekBar(player: player),
@@ -223,7 +234,10 @@ class _PlayerBottomAppBarState extends State<PlayerBottomAppBar> {
             mediaItem: mediaItem,
           ),
         ),
-        PlayPauseButton(width: 20),
+        PlayPauseButton(
+          width: 20,
+          color: Theme.of(context).textTheme.bodyMedium!.color!,
+        ),
         IconButton(
           onPressed: () {
             Navigator.of(context).pushNamed(

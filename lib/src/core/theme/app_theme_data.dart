@@ -39,6 +39,7 @@ class AppThemeData {
       bottomSheetTheme: BottomSheetThemeData(
         backgroundColor: theme.primaryColor,
       ),
+      dialogBackgroundColor: theme.primaryColor,
     );
   }
 }

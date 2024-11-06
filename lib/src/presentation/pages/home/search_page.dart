@@ -27,7 +27,7 @@ class _SearchPageState extends State<SearchPage> {
         title: TextField(
           autofocus: true,
           onChanged: (value) {
-            context.read<SearchBloc>().add(SearchQueryChanged(value));
+            context.read<SearchBloc>().add(SearchQueryChanged(value.trim()));
           },
           controller: searchController,
           decoration: const InputDecoration(

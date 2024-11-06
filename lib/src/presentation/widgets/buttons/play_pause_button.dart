@@ -10,9 +10,11 @@ class PlayPauseButton extends StatelessWidget {
   const PlayPauseButton({
     super.key,
     this.width = 40,
+    this.color = Colors.white,
   });
 
   final double width;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +35,7 @@ class PlayPauseButton extends StatelessWidget {
               ? SvgPicture.asset(
                   Assets.pauseSvg,
                   colorFilter: ColorFilter.mode(
-                    Colors.white,
+                    color,
                     BlendMode.srcIn,
                   ),
                   width: width,
@@ -41,7 +43,7 @@ class PlayPauseButton extends StatelessWidget {
               : SvgPicture.asset(
                   Assets.playSvg,
                   colorFilter: ColorFilter.mode(
-                    Colors.white,
+                    color,
                     BlendMode.srcIn,
                   ),
                   width: width,
