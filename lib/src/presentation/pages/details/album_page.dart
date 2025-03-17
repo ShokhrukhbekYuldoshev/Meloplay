@@ -52,9 +52,7 @@ class _AlbumPageState extends State<AlbumPage> {
       bottomNavigationBar: const PlayerBottomAppBar(),
       extendBody: true,
       body: Ink(
-        decoration: BoxDecoration(
-          gradient: Themes.getTheme().linearGradient,
-        ),
+        decoration: BoxDecoration(gradient: Themes.getTheme().linearGradient),
         child: CustomScrollView(
           slivers: [
             SliverAppBar(
@@ -70,9 +68,7 @@ class _AlbumPageState extends State<AlbumPage> {
                     if (isLarge) {
                       return Text(
                         widget.album.album,
-                        style: const TextStyle(
-                          color: Colors.white,
-                        ),
+                        style: const TextStyle(color: Colors.white),
                       );
                     } else if (!isLong) {
                       return Text(
@@ -103,7 +99,7 @@ class _AlbumPageState extends State<AlbumPage> {
                 ),
                 background: QueryArtworkWidget(
                   artworkBlendMode: BlendMode.darken,
-                  artworkColor: Colors.black.withOpacity(0.5),
+                  artworkColor: Colors.black.withValues(alpha: 0.5),
                   id: widget.album.id,
                   type: ArtworkType.ALBUM,
                   size: 10000,
@@ -112,13 +108,10 @@ class _AlbumPageState extends State<AlbumPage> {
                   nullArtworkWidget: Container(
                     width: double.infinity,
                     decoration: BoxDecoration(
-                      color: Colors.grey.withOpacity(0.1),
+                      color: Colors.grey.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(0),
                     ),
-                    child: const Icon(
-                      Icons.music_note_outlined,
-                      size: 100,
-                    ),
+                    child: const Icon(Icons.music_note_outlined, size: 100),
                   ),
                 ),
               ),
@@ -127,8 +120,10 @@ class _AlbumPageState extends State<AlbumPage> {
             // number of songs
             SliverToBoxAdapter(
               child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 16,
+                ),
                 child: Text(
                   '${_songs.length} ${'song'.pluralize(_songs.length)}',
                   style: Theme.of(context).textTheme.titleLarge,
@@ -138,22 +133,17 @@ class _AlbumPageState extends State<AlbumPage> {
 
             // song list
             SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  return SongListTile(
-                    song: _songs[index],
-                    showAlbumArt: false,
-                    songs: _songs,
-                  );
-                },
-                childCount: _songs.length,
-              ),
+              delegate: SliverChildBuilderDelegate((context, index) {
+                return SongListTile(
+                  song: _songs[index],
+                  showAlbumArt: false,
+                  songs: _songs,
+                );
+              }, childCount: _songs.length),
             ),
 
             // margin for bottom app bar
-            const SliverToBoxAdapter(
-              child: SizedBox(height: 100),
-            ),
+            const SliverToBoxAdapter(child: SizedBox(height: 100)),
           ],
         ),
       ),

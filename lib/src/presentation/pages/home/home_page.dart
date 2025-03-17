@@ -38,21 +38,13 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   Future checkAndRequestPermissions({bool retry = false}) async {
     // The param 'retryRequest' is false, by default.
-    _hasPermission = await _audioQuery.checkAndRequest(
-      retryRequest: retry,
-    );
+    _hasPermission = await _audioQuery.checkAndRequest(retryRequest: retry);
 
     // Only call update the UI if application has all required permissions.
     _hasPermission ? setState(() {}) : checkAndRequestPermissions(retry: true);
   }
 
-  final tabs = [
-    'Songs',
-    'Playlists',
-    'Artists',
-    'Albums',
-    'Genres',
-  ];
+  final tabs = ['Songs', 'Playlists', 'Artists', 'Albums', 'Genres'];
 
   @override
   Widget build(BuildContext context) {
@@ -74,58 +66,48 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   Ink _buildBody(BuildContext context) {
     return Ink(
-      decoration: BoxDecoration(
-        gradient: Themes.getTheme().linearGradient,
-      ),
-      child: _hasPermission
-          ? Column(
-              children: [
-                TabBar(
-                  dividerColor:
-                      Theme.of(context).colorScheme.onPrimary.withOpacity(
-                            0.3,
-                          ),
-                  tabAlignment: TabAlignment.start,
-                  isScrollable: true,
-                  controller: _tabController,
-                  tabs: tabs
-                      .map(
-                        (e) => Tab(
-                          text: e,
-                        ),
-                      )
-                      .toList(),
-                ),
-                Expanded(
-                  child: TabBarView(
+      decoration: BoxDecoration(gradient: Themes.getTheme().linearGradient),
+      child:
+          _hasPermission
+              ? Column(
+                children: [
+                  TabBar(
+                    dividerColor: Theme.of(
+                      context,
+                    ).colorScheme.onPrimary.withValues(alpha: 0.3),
+                    tabAlignment: TabAlignment.start,
+                    isScrollable: true,
                     controller: _tabController,
-                    children: const [
-                      SongsView(),
-                      PlaylistsView(),
-                      ArtistsView(),
-                      AlbumsView(),
-                      GenresView(),
-                    ],
+                    tabs: tabs.map((e) => Tab(text: e)).toList(),
                   ),
-                ),
-              ],
-            )
-          : Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Center(
-                  child: Text('No permission to access library'),
-                ),
-                const SizedBox(height: 16),
-                TextButton(
-                  onPressed: () async {
-                    // permission request
-                    await Permission.storage.request();
-                  },
-                  child: const Text('Retry'),
-                )
-              ],
-            ),
+                  Expanded(
+                    child: TabBarView(
+                      controller: _tabController,
+                      children: const [
+                        SongsView(),
+                        PlaylistsView(),
+                        ArtistsView(),
+                        AlbumsView(),
+                        GenresView(),
+                      ],
+                    ),
+                  ),
+                ],
+              )
+              : Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Center(child: Text('No permission to access library')),
+                  const SizedBox(height: 16),
+                  TextButton(
+                    onPressed: () async {
+                      // permission request
+                      await Permission.storage.request();
+                    },
+                    child: const Text('Retry'),
+                  ),
+                ],
+              ),
     );
   }
 
@@ -155,7 +137,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           },
           icon: const Icon(Icons.search_outlined),
           tooltip: 'Search',
-        )
+        ),
       ],
     );
   }
@@ -177,15 +159,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   children: [
                     Hero(
                       tag: 'logo',
-                      child: Image.asset(
-                        Assets.logo,
-                        height: 64,
-                        width: 64,
-                      ),
+                      child: Image.asset(Assets.logo, height: 64, width: 64),
                     ),
-                    const SizedBox(
-                      width: 8,
-                    ),
+                    const SizedBox(width: 8),
                     const Text(
                       'Meloplay',
                       style: TextStyle(
@@ -199,7 +175,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             },
           ),
           Divider(
-            color: Colors.grey.withOpacity(0.1),
+            color: Colors.grey.withValues(alpha: 0.1),
             indent: 16,
             endIndent: 16,
           ),
@@ -224,7 +200,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             onTap: () {
               Navigator.of(context).pushNamed(AppRouter.settingsRoute);
             },
-          )
+          ),
         ],
       ),
     );

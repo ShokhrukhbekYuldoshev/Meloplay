@@ -29,8 +29,8 @@ class _AnimatedFavoriteButtonState extends State<AnimatedFavoriteButton>
       duration: const Duration(milliseconds: 200),
       vsync: this,
     )..addListener(() {
-        setState(() {});
-      });
+      setState(() {});
+    });
 
     _animation = Tween<double>(begin: 1.0, end: 1.2).animate(_controller)
       ..addStatusListener((status) {
@@ -45,15 +45,13 @@ class _AnimatedFavoriteButtonState extends State<AnimatedFavoriteButton>
     return GestureDetector(
       onTap: () {
         _controller.forward();
-        context.read<SongBloc>().add(
-              ToggleFavorite(widget.mediaItem.id),
-            );
+        context.read<SongBloc>().add(ToggleFavorite(widget.mediaItem.id));
       },
       child: Container(
         margin: const EdgeInsets.only(right: 16, bottom: 16),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.black.withOpacity(0.5),
+          color: Colors.black.withValues(alpha: 0.5),
           borderRadius: BorderRadius.circular(50),
         ),
         child: Transform.scale(

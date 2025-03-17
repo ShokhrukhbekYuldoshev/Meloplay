@@ -27,17 +27,10 @@ class _ThemesPageState extends State<ThemesPage> {
           appBar: AppBar(
             backgroundColor: Themes.getTheme().primaryColor,
             elevation: 0,
-            title: const Text(
-              'Themes',
-            ),
+            title: const Text('Themes'),
           ),
           body: Ink(
-            padding: const EdgeInsets.fromLTRB(
-              32,
-              16,
-              32,
-              16,
-            ),
+            padding: const EdgeInsets.fromLTRB(32, 16, 32, 16),
             decoration: BoxDecoration(
               gradient: Themes.getTheme().linearGradient,
             ),
@@ -69,10 +62,9 @@ class _ThemesPageState extends State<ThemesPage> {
             gradient: Themes.getThemeFromKey(themeName).linearGradient,
             boxShadow: [
               BoxShadow(
-                color: Themes.getThemeFromKey(themeName)
-                    .colorScheme
-                    .primary
-                    .withOpacity(0.5),
+                color: Themes.getThemeFromKey(
+                  themeName,
+                ).colorScheme.primary.withValues(alpha: 0.5),
                 blurRadius: 8,
                 spreadRadius: -5,
                 offset: const Offset(0, 0),
@@ -82,9 +74,7 @@ class _ThemesPageState extends State<ThemesPage> {
           child: InkWell(
             borderRadius: BorderRadius.circular(16),
             onTap: () {
-              context.read<ThemeBloc>().add(
-                    ChangeTheme(themeName),
-                  );
+              context.read<ThemeBloc>().add(ChangeTheme(themeName));
             },
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -94,12 +84,13 @@ class _ThemesPageState extends State<ThemesPage> {
                   themeName,
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: Themes.getThemeFromKey(
-                              themeName,
-                            ).colorScheme.brightness ==
-                            Brightness.dark
-                        ? Colors.white
-                        : Colors.black,
+                    color:
+                        Themes.getThemeFromKey(
+                                  themeName,
+                                ).colorScheme.brightness ==
+                                Brightness.dark
+                            ? Colors.white
+                            : Colors.black,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -117,10 +108,7 @@ class _ThemesPageState extends State<ThemesPage> {
                 shape: BoxShape.circle,
                 color: Colors.deepPurple,
               ),
-              child: const Icon(
-                Icons.check,
-                color: Colors.white,
-              ),
+              child: const Icon(Icons.check, color: Colors.white),
             ),
           ),
       ],

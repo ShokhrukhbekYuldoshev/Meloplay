@@ -20,9 +20,7 @@ import 'package:meloplay/src/presentation/widgets/spinning_disc_animation.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 class PlayerBottomAppBar extends StatefulWidget {
-  const PlayerBottomAppBar({
-    super.key,
-  });
+  const PlayerBottomAppBar({super.key});
 
   @override
   State<PlayerBottomAppBar> createState() => _PlayerBottomAppBarState();
@@ -67,7 +65,8 @@ class _PlayerBottomAppBarState extends State<PlayerBottomAppBar> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(left: 16, right: 16, bottom: 8),
+      margin: const EdgeInsets.only(left: 16, right: 16, bottom: 32),
+
       child: BlocBuilder<ThemeBloc, ThemeState>(
         builder: (context, state) {
           return StreamBuilder<SequenceState?>(
@@ -88,9 +87,7 @@ class _PlayerBottomAppBarState extends State<PlayerBottomAppBar> {
               return GestureDetector(
                 behavior: HitTestBehavior.opaque,
                 onTap: () async {
-                  Navigator.of(context).pushNamed(
-                    AppRouter.playerRoute,
-                  );
+                  Navigator.of(context).pushNamed(AppRouter.playerRoute);
                 },
                 // slide up to show player
                 onVerticalDragUpdate: (details) {
@@ -105,16 +102,15 @@ class _PlayerBottomAppBarState extends State<PlayerBottomAppBar> {
                   }
                 },
                 child: ClipRRect(
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(32),
-                  ),
+                  borderRadius: const BorderRadius.all(Radius.circular(32)),
                   child: AnimatedContainer(
                     duration: const Duration(milliseconds: 150),
                     height: isExpanded ? 216 : 60,
                     color: Themes.getTheme().primaryColor,
-                    child: isExpanded
-                        ? _buildExpanded(sequence!, mediaItem)
-                        : _buildCollapsed(sequence!, mediaItem),
+                    child:
+                        isExpanded
+                            ? _buildExpanded(sequence!, mediaItem)
+                            : _buildCollapsed(sequence!, mediaItem),
                   ),
                 ),
               );
@@ -135,17 +131,12 @@ class _PlayerBottomAppBarState extends State<PlayerBottomAppBar> {
           id: int.parse(mediaItem.id),
           type: ArtworkType.AUDIO,
           size: 10000,
-          artworkBorder: BorderRadius.circular(0),
           nullArtworkWidget: Container(
             width: double.infinity,
             decoration: BoxDecoration(
-              color: Colors.grey.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(0),
+              color: Colors.grey.withValues(alpha: 0.1),
             ),
-            child: const Icon(
-              Icons.music_note_outlined,
-              size: 100,
-            ),
+            child: const Icon(Icons.music_note_outlined, size: 100),
           ),
         ),
         BackdropFilter(
@@ -154,8 +145,7 @@ class _PlayerBottomAppBarState extends State<PlayerBottomAppBar> {
             width: double.infinity,
             height: double.infinity,
             decoration: BoxDecoration(
-              color: Colors.black.withOpacity(0.5),
-              borderRadius: BorderRadius.circular(0),
+              color: Colors.black.withValues(alpha: 0.5),
             ),
           ),
         ),
@@ -168,9 +158,7 @@ class _PlayerBottomAppBarState extends State<PlayerBottomAppBar> {
                 Row(
                   children: [
                     // disc
-                    SpinningDisc(
-                      id: int.parse(mediaItem.id),
-                    ),
+                    SpinningDisc(id: int.parse(mediaItem.id)),
                     const SizedBox(width: 16),
                     // song info
                     Expanded(
@@ -192,9 +180,7 @@ class _PlayerBottomAppBarState extends State<PlayerBottomAppBar> {
                             mediaItem.artist ?? 'Unknown',
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              color: Colors.grey,
-                            ),
+                            style: const TextStyle(color: Colors.grey),
                           ),
                         ],
                       ),
@@ -228,21 +214,14 @@ class _PlayerBottomAppBarState extends State<PlayerBottomAppBar> {
       children: [
         const SizedBox(width: 20),
         // song info with swiping
-        Expanded(
-          child: SwipeSong(
-            sequence: sequence,
-            mediaItem: mediaItem,
-          ),
-        ),
+        Expanded(child: SwipeSong(sequence: sequence, mediaItem: mediaItem)),
         PlayPauseButton(
           width: 20,
           color: Theme.of(context).textTheme.bodyMedium!.color!,
         ),
         IconButton(
           onPressed: () {
-            Navigator.of(context).pushNamed(
-              AppRouter.queueRoute,
-            );
+            Navigator.of(context).pushNamed(AppRouter.queueRoute);
           },
           icon: const Icon(Icons.queue_music_outlined),
         ),
@@ -253,11 +232,7 @@ class _PlayerBottomAppBarState extends State<PlayerBottomAppBar> {
 }
 
 class SwipeSong extends StatefulWidget {
-  const SwipeSong({
-    super.key,
-    required this.sequence,
-    required this.mediaItem,
-  });
+  const SwipeSong({super.key, required this.sequence, required this.mediaItem});
 
   final SequenceState? sequence;
   final MediaItem mediaItem;
@@ -291,20 +266,15 @@ class _SwipeSongState extends State<SwipeSong> {
           onPageChanged: (index) {
             if (widget.sequence?.currentIndex != index) {
               context.read<bloc.PlayerBloc>().add(
-                    bloc.PlayerSeek(
-                      Duration.zero,
-                      index: index,
-                    ),
-                  );
+                bloc.PlayerSeek(Duration.zero, index: index),
+              );
             }
           },
           itemBuilder: (context, index) {
             MediaItem mediaItem = widget.sequence?.sequence[index].tag;
             return Row(
               children: [
-                SpinningDisc(
-                  id: int.parse(mediaItem.id),
-                ),
+                SpinningDisc(id: int.parse(mediaItem.id)),
                 const SizedBox(width: 8),
                 Expanded(
                   child: Column(
@@ -315,19 +285,15 @@ class _SwipeSongState extends State<SwipeSong> {
                         mediaItem.title,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
+                        style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
                       Text(
                         mediaItem.artist ?? 'Unknown',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                          color: Themes.getTheme()
-                              .colorScheme
-                              .onSurface
-                              .withOpacity(0.7),
+                          color: Themes.getTheme().colorScheme.onSurface
+                              .withValues(alpha: 0.7),
                         ),
                       ),
                     ],

@@ -20,9 +20,7 @@ import 'package:meloplay/src/presentation/widgets/animated_favorite_button.dart'
 import 'package:meloplay/src/presentation/widgets/seek_bar.dart';
 
 class PlayerPage extends StatefulWidget {
-  const PlayerPage({
-    super.key,
-  });
+  const PlayerPage({super.key});
 
   @override
   State<PlayerPage> createState() => _PlayerPageState();
@@ -30,18 +28,6 @@ class PlayerPage extends StatefulWidget {
 
 class _PlayerPageState extends State<PlayerPage> {
   final player = sl<MusicPlayer>();
-  SequenceState? sequence;
-
-  @override
-  void initState() {
-    super.initState();
-
-    player.sequenceState.listen((state) {
-      setState(() {
-        sequence = state;
-      });
-    });
-  }
 
   @override
   void setState(VoidCallback fn) {
@@ -65,9 +51,7 @@ class _PlayerPageState extends State<PlayerPage> {
         actions: [
           // more button
           PopupMenuButton(
-            icon: const Icon(
-              Icons.more_vert_outlined,
-            ),
+            icon: const Icon(Icons.more_vert_outlined),
             itemBuilder: (context) {
               return [
                 PopupMenuItem(
@@ -103,22 +87,19 @@ class _PlayerPageState extends State<PlayerPage> {
                 nullArtworkWidget: Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: Colors.grey.withOpacity(0.1),
+                    color: Colors.grey.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(0),
                   ),
-                  child: const Icon(
-                    Icons.music_note_outlined,
-                    size: 100,
-                  ),
+                  child: const Icon(Icons.music_note_outlined, size: 100),
                 ),
               ),
               BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+                filter: ImageFilter.blur(sigmaX: 50, sigmaY: 50),
                 child: Container(
                   width: double.infinity,
                   height: double.infinity,
                   decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.5),
+                    color: Colors.black.withValues(alpha: 0.5),
                     borderRadius: BorderRadius.circular(0),
                   ),
                 ),
@@ -130,18 +111,171 @@ class _PlayerPageState extends State<PlayerPage> {
                   32,
                   16,
                 ),
-                child: LayoutBuilder(builder: (context, constraints) {
-                  // large screen
-                  if (constraints.maxWidth > 600) {
-                    // large screen divided in 2 columns
-                    // 1: artwork
-                    // 2: info
-                    return Row(
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    // large screen
+                    if (constraints.maxWidth > 600) {
+                      // large screen divided in 2 columns
+                      // 1: artwork
+                      // 2: info
+                      return Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // artwork
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width / 3,
+                            child: Stack(
+                              fit: StackFit.expand,
+                              children: [
+                                QueryArtworkWidget(
+                                  keepOldArtwork: true,
+                                  id: int.parse(mediaItem.id),
+                                  type: ArtworkType.AUDIO,
+                                  size: 10000,
+                                  artworkWidth: double.infinity,
+                                  nullArtworkWidget: Container(
+                                    width: double.infinity,
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey.withValues(alpha: 0.1),
+                                      borderRadius: BorderRadius.circular(50),
+                                    ),
+                                    child: Icon(
+                                      Icons.music_note_outlined,
+                                      size:
+                                          MediaQuery.of(context).size.height /
+                                          10,
+                                    ),
+                                  ),
+                                ),
+                                Align(
+                                  alignment: Alignment.bottomRight,
+                                  child: BlocBuilder<SongBloc, SongState>(
+                                    builder: (context, state) {
+                                      return AnimatedFavoriteButton(
+                                        isFavorite: sl<SongRepository>()
+                                            .isFavorite(mediaItem.id),
+                                        mediaItem: mediaItem,
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+
+                          const SizedBox(width: 32),
+
+                          // info
+                          Expanded(
+                            flex: 3,
+                            child: Column(
+                              children: [
+                                // title and artist
+                                StreamBuilder<SequenceState?>(
+                                  stream: player.sequenceState,
+                                  builder: (context, snapshot) {
+                                    if (!snapshot.hasData) {
+                                      return const SizedBox.shrink();
+                                    }
+                                    final sequence = snapshot.data;
+
+                                    MediaItem? mediaItem =
+                                        sequence!
+                                            .sequence[sequence.currentIndex]
+                                            .tag;
+
+                                    return Column(
+                                      children: [
+                                        SizedBox(
+                                          height: 30,
+                                          child: AutoSizeText(
+                                            mediaItem!.title,
+                                            maxLines: 1,
+                                            style: const TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.white,
+                                            ),
+                                            minFontSize: 20,
+                                            overflowReplacement: Marquee(
+                                              text: mediaItem.title,
+                                              blankSpace: 100,
+                                              startAfter: const Duration(
+                                                seconds: 3,
+                                              ),
+                                              pauseAfterRound: const Duration(
+                                                seconds: 3,
+                                              ),
+                                              style: const TextStyle(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 30,
+                                          child: AutoSizeText(
+                                            mediaItem.artist ?? 'Unknown',
+                                            maxLines: 1,
+                                            style: const TextStyle(
+                                              fontSize: 16,
+                                              color: Colors.white,
+                                            ),
+                                            minFontSize: 16,
+                                            overflowReplacement: Marquee(
+                                              text:
+                                                  mediaItem.artist ?? 'Unknown',
+                                              blankSpace: 100,
+                                              startAfter: const Duration(
+                                                seconds: 3,
+                                              ),
+                                              pauseAfterRound: const Duration(
+                                                seconds: 3,
+                                              ),
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                ),
+                                const Spacer(),
+                                // seek bar
+                                SeekBar(player: player),
+                                const Spacer(),
+                                // shuffle, previous, play/pause, next, repeat
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    ShuffleButton(),
+                                    PreviousButton(),
+                                    PlayPauseButton(),
+                                    NextButton(),
+                                    RepeatButton(),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      );
+                    }
+
+                    // small screen
+                    return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         // artwork
                         SizedBox(
-                          width: MediaQuery.of(context).size.width / 3,
+                          width: double.infinity,
+                          height: MediaQuery.of(context).size.width - 64,
                           child: Stack(
                             fit: StackFit.expand,
                             children: [
@@ -151,11 +285,12 @@ class _PlayerPageState extends State<PlayerPage> {
                                 type: ArtworkType.AUDIO,
                                 size: 10000,
                                 artworkWidth: double.infinity,
+                                artworkBorder: BorderRadius.circular(0),
                                 nullArtworkWidget: Container(
                                   width: double.infinity,
                                   decoration: BoxDecoration(
-                                    color: Colors.grey.withOpacity(0.1),
-                                    borderRadius: BorderRadius.circular(50),
+                                    color: Colors.grey.withValues(alpha: 0.1),
+                                    borderRadius: BorderRadius.circular(0),
                                   ),
                                   child: Icon(
                                     Icons.music_note_outlined,
@@ -179,233 +314,94 @@ class _PlayerPageState extends State<PlayerPage> {
                             ],
                           ),
                         ),
+                        const SizedBox(height: 16),
+                        // title and artist
+                        StreamBuilder<SequenceState?>(
+                          stream: player.sequenceState,
+                          builder: (context, snapshot) {
+                            if (!snapshot.hasData) {
+                              return const SizedBox(height: 70);
+                            }
+                            final sequence = snapshot.data;
 
-                        const SizedBox(width: 32),
+                            MediaItem? mediaItem =
+                                sequence!.sequence[sequence.currentIndex].tag;
 
-                        // info
-                        Expanded(
-                          flex: 3,
-                          child: Column(
-                            children: [
-                              // title and artist
-                              StreamBuilder<SequenceState?>(
-                                stream: player.sequenceState,
-                                builder: (context, snapshot) {
-                                  if (!snapshot.hasData) {
-                                    return const SizedBox.shrink();
-                                  }
-                                  final sequence = snapshot.data;
-
-                                  MediaItem? mediaItem = sequence!
-                                      .sequence[sequence.currentIndex].tag;
-
-                                  return Column(
-                                    children: [
-                                      SizedBox(
-                                        height: 30,
-                                        child: AutoSizeText(
-                                          mediaItem!.title,
-                                          maxLines: 1,
-                                          style: const TextStyle(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.white,
-                                          ),
-                                          minFontSize: 20,
-                                          overflowReplacement: Marquee(
-                                            text: mediaItem.title,
-                                            blankSpace: 100,
-                                            startAfter:
-                                                const Duration(seconds: 3),
-                                            pauseAfterRound:
-                                                const Duration(seconds: 3),
-                                            style: const TextStyle(
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 30,
-                                        child: AutoSizeText(
-                                          mediaItem.artist ?? 'Unknown',
-                                          maxLines: 1,
-                                          style: const TextStyle(
-                                            fontSize: 16,
-                                            color: Colors.white,
-                                          ),
-                                          minFontSize: 16,
-                                          overflowReplacement: Marquee(
-                                            text: mediaItem.artist ?? 'Unknown',
-                                            blankSpace: 100,
-                                            startAfter:
-                                                const Duration(seconds: 3),
-                                            pauseAfterRound:
-                                                const Duration(seconds: 3),
-                                            style: const TextStyle(
-                                              fontSize: 16,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  );
-                                },
-                              ),
-                              const Spacer(),
-                              // seek bar
-                              SeekBar(player: player),
-                              const Spacer(),
-                              // shuffle, previous, play/pause, next, repeat
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
+                            return Center(
+                              child: Column(
                                 children: [
-                                  ShuffleButton(),
-                                  PreviousButton(),
-                                  PlayPauseButton(),
-                                  NextButton(),
-                                  RepeatButton(),
+                                  SizedBox(
+                                    height: 40,
+                                    child: AutoSizeText(
+                                      mediaItem!.title,
+                                      maxLines: 1,
+                                      minFontSize: 24,
+                                      style: const TextStyle(
+                                        fontSize: 24,
+                                        color: Colors.white,
+                                      ),
+                                      overflowReplacement: Marquee(
+                                        text: mediaItem.title,
+                                        blankSpace: 100,
+                                        startAfter: const Duration(seconds: 3),
+                                        pauseAfterRound: const Duration(
+                                          seconds: 3,
+                                        ),
+                                        style: const TextStyle(
+                                          fontSize: 24,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 30,
+                                    child: AutoSizeText(
+                                      mediaItem.artist ?? 'Unknown',
+                                      maxLines: 1,
+                                      minFontSize: 18,
+                                      style: TextStyle(
+                                        color: Colors.grey.shade400,
+                                        fontSize: 18,
+                                      ),
+                                      overflowReplacement: Marquee(
+                                        text: mediaItem.artist ?? 'Unknown',
+                                        blankSpace: 100,
+                                        startAfter: const Duration(seconds: 3),
+                                        pauseAfterRound: const Duration(
+                                          seconds: 3,
+                                        ),
+                                        style: TextStyle(
+                                          color: Colors.grey.shade400,
+                                          fontSize: 18,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                                 ],
                               ),
-                            ],
-                          ),
+                            );
+                          },
+                        ),
+                        const SizedBox(height: 64),
+                        // seek bar
+                        SeekBar(player: player),
+                        const SizedBox(height: 16),
+                        // shuffle, previous, play/pause, next, repeat
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            ShuffleButton(),
+                            PreviousButton(),
+                            PlayPauseButton(),
+                            NextButton(),
+                            RepeatButton(),
+                          ],
                         ),
                       ],
                     );
-                  }
-
-                  // small screen
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // artwork
-                      SizedBox(
-                        width: double.infinity,
-                        height: MediaQuery.of(context).size.width - 64,
-                        child: Stack(
-                          fit: StackFit.expand,
-                          children: [
-                            QueryArtworkWidget(
-                              keepOldArtwork: true,
-                              id: int.parse(mediaItem.id),
-                              type: ArtworkType.AUDIO,
-                              size: 10000,
-                              artworkWidth: double.infinity,
-                              nullArtworkWidget: Container(
-                                width: double.infinity,
-                                decoration: BoxDecoration(
-                                  color: Colors.grey.withOpacity(0.1),
-                                  borderRadius: BorderRadius.circular(50),
-                                ),
-                                child: Icon(
-                                  Icons.music_note_outlined,
-                                  size: MediaQuery.of(context).size.height / 10,
-                                ),
-                              ),
-                            ),
-                            Align(
-                              alignment: Alignment.bottomRight,
-                              child: BlocBuilder<SongBloc, SongState>(
-                                builder: (context, state) {
-                                  return AnimatedFavoriteButton(
-                                    isFavorite: sl<SongRepository>()
-                                        .isFavorite(mediaItem.id),
-                                    mediaItem: mediaItem,
-                                  );
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      // title and artist
-                      StreamBuilder<SequenceState?>(
-                        stream: player.sequenceState,
-                        builder: (context, snapshot) {
-                          if (!snapshot.hasData) {
-                            return const SizedBox.shrink();
-                          }
-                          final sequence = snapshot.data;
-
-                          MediaItem? mediaItem =
-                              sequence!.sequence[sequence.currentIndex].tag;
-
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(
-                                height: 30,
-                                child: AutoSizeText(
-                                  mediaItem!.title,
-                                  maxLines: 1,
-                                  minFontSize: 20,
-                                  style: const TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                  ),
-                                  overflowReplacement: Marquee(
-                                    text: mediaItem.title,
-                                    blankSpace: 100,
-                                    startAfter: const Duration(seconds: 3),
-                                    pauseAfterRound: const Duration(seconds: 3),
-                                    style: const TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 30,
-                                child: AutoSizeText(
-                                  mediaItem.artist ?? 'Unknown',
-                                  maxLines: 1,
-                                  minFontSize: 15,
-                                  style: const TextStyle(
-                                    fontSize: 15,
-                                    color: Colors.white,
-                                  ),
-                                  overflowReplacement: Marquee(
-                                    text: mediaItem.artist ?? 'Unknown',
-                                    blankSpace: 100,
-                                    startAfter: const Duration(seconds: 3),
-                                    pauseAfterRound: const Duration(seconds: 3),
-                                    style: const TextStyle(
-                                      fontSize: 15,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          );
-                        },
-                      ),
-                      const SizedBox(height: 64),
-                      // seek bar
-                      SeekBar(player: player),
-                      const SizedBox(height: 16),
-                      // shuffle, previous, play/pause, next, repeat
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          ShuffleButton(),
-                          PreviousButton(),
-                          PlayPauseButton(),
-                          NextButton(),
-                          RepeatButton(),
-                        ],
-                      ),
-                    ],
-                  );
-                }),
+                  },
+                ),
               ),
             ],
           );

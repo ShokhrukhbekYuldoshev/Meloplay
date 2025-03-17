@@ -40,9 +40,7 @@ class _PlaylistsViewState extends State<PlaylistsView>
         icon: Icons.favorite_border_outlined,
         color: Colors.red,
         onTap: () {
-          Navigator.of(context).pushNamed(
-            AppRouter.favoritesRoute,
-          );
+          Navigator.of(context).pushNamed(AppRouter.favoritesRoute);
         },
       ),
       const SizedBox(width: 16),
@@ -52,9 +50,7 @@ class _PlaylistsViewState extends State<PlaylistsView>
         icon: Icons.history_outlined,
         color: Colors.yellow,
         onTap: () {
-          Navigator.of(context).pushNamed(
-            AppRouter.recentsRoute,
-          );
+          Navigator.of(context).pushNamed(AppRouter.recentsRoute);
         },
       ),
       const SizedBox(width: 16),
@@ -75,9 +71,7 @@ class _PlaylistsViewState extends State<PlaylistsView>
             onTap: () {
               showDialog(
                 context: context,
-                builder: (context) => AddPlaylistDialog(
-                  playlists: playlists,
-                ),
+                builder: (context) => AddPlaylistDialog(playlists: playlists),
               );
             },
             leading: const Icon(Icons.add),
@@ -115,10 +109,9 @@ class _PlaylistsViewState extends State<PlaylistsView>
                         // delete playlist
                         showDialog(
                           context: context,
-                          builder: (context) => _buildDeletePlaylistDialog(
-                            playlist,
-                            context,
-                          ),
+                          builder:
+                              (context) =>
+                                  _buildDeletePlaylistDialog(playlist, context),
                         );
                       },
                       leading: const Icon(Icons.music_note),
@@ -188,7 +181,7 @@ class PlaylistCard extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16),
-            color: Colors.grey.withOpacity(0.2),
+            color: Colors.grey.withValues(alpha: 0.2),
           ),
           child: Column(
             children: [
@@ -209,18 +202,12 @@ class PlaylistCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(width: 4),
-                  Icon(
-                    icon,
-                    color: color,
-                    size: 22,
-                  ),
+                  Icon(icon, color: color, size: 22),
                   const SizedBox(width: 4),
                   Expanded(
                     child: Text(
                       label,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w500,
-                      ),
+                      style: const TextStyle(fontWeight: FontWeight.w500),
                     ),
                   ),
                   const SizedBox(width: 4),
@@ -252,9 +239,7 @@ class _AddPlaylistDialogState extends State<AddPlaylistDialog> {
       title: const Text('Add playlist'),
       content: TextField(
         controller: _controller,
-        decoration: const InputDecoration(
-          hintText: 'Playlist name',
-        ),
+        decoration: const InputDecoration(hintText: 'Playlist name'),
       ),
       actions: [
         TextButton(

@@ -31,23 +31,18 @@ class PlayPauseButton extends StatelessWidget {
               context.read<PlayerBloc>().add(PlayerPlay());
             }
           },
-          icon: playing
-              ? SvgPicture.asset(
-                  Assets.pauseSvg,
-                  colorFilter: ColorFilter.mode(
-                    color,
-                    BlendMode.srcIn,
+          icon:
+              playing
+                  ? SvgPicture.asset(
+                    Assets.pauseSvg,
+                    colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
+                    width: width,
+                  )
+                  : SvgPicture.asset(
+                    Assets.playSvg,
+                    colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
+                    width: width,
                   ),
-                  width: width,
-                )
-              : SvgPicture.asset(
-                  Assets.playSvg,
-                  colorFilter: ColorFilter.mode(
-                    color,
-                    BlendMode.srcIn,
-                  ),
-                  width: width,
-                ),
           tooltip: 'Play/Pause',
         );
       },

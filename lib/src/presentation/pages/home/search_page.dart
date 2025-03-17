@@ -48,23 +48,17 @@ class _SearchPageState extends State<SearchPage> {
         ],
       ),
       body: Ink(
-        decoration: BoxDecoration(
-          gradient: Themes.getTheme().linearGradient,
-        ),
+        decoration: BoxDecoration(gradient: Themes.getTheme().linearGradient),
         child: BlocBuilder<SearchBloc, SearchState>(
           builder: (context, state) {
             if (searchController.text.isEmpty) {
               return Container();
             }
             if (state is SearchError) {
-              return Center(
-                child: Text(state.message),
-              );
+              return Center(child: Text(state.message));
             }
             if (state is SearchLoading) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
+              return const Center(child: CircularProgressIndicator());
             }
 
             return Container(
@@ -80,9 +74,7 @@ class _SearchPageState extends State<SearchPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                            ),
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -118,9 +110,7 @@ class _SearchPageState extends State<SearchPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                            ),
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -168,9 +158,7 @@ class _SearchPageState extends State<SearchPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                            ),
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -198,11 +186,9 @@ class _SearchPageState extends State<SearchPage> {
                                 height: 50,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(25),
-                                  color: Colors.grey.withOpacity(0.1),
+                                  color: Colors.grey.withValues(alpha: 0.1),
                                 ),
-                                child: const Icon(
-                                  Icons.person_outlined,
-                                ),
+                                child: const Icon(Icons.person_outlined),
                               ),
                               title: Text(artist.artist),
                               subtitle: Text(
@@ -226,9 +212,7 @@ class _SearchPageState extends State<SearchPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                            ),
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -256,11 +240,9 @@ class _SearchPageState extends State<SearchPage> {
                                 height: 50,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(25),
-                                  color: Colors.grey.withOpacity(0.1),
+                                  color: Colors.grey.withValues(alpha: 0.1),
                                 ),
-                                child: const Icon(
-                                  Icons.library_music_outlined,
-                                ),
+                                child: const Icon(Icons.library_music_outlined),
                               ),
                               title: Text(genre.genre),
                               onTap: () {

@@ -2,16 +2,15 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<!-- url_launcher -->
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
-		<string>https</string>
+			<string>https</string>
 	</array>
 	<key>NSAppleMusicUsageDescription</key>
 	<string>$(PROJECT_NAME) requires access to media library</string>
 	<key>UIBackgroundModes</key>
 	<array>
-		<string>audio</string>
+			<string>audio</string>
 	</array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>

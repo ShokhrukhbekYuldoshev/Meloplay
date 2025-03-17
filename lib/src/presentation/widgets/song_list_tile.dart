@@ -55,15 +55,14 @@ class _SongListTileState extends State<SongListTile> {
             // else load songs
             if (currentMediaItem?.id == mediaItem.id) {
               if (context.mounted) {
-                Navigator.of(context).pushNamed(
-                  AppRouter.playerRoute,
-                  arguments: mediaItem,
-                );
+                Navigator.of(
+                  context,
+                ).pushNamed(AppRouter.playerRoute, arguments: mediaItem);
               }
             } else {
               context.read<PlayerBloc>().add(
-                    PlayerLoadSongs(widget.songs, mediaItem),
-                  );
+                PlayerLoadSongs(widget.songs, mediaItem),
+              );
             }
           },
           leading: _buildLeading(currentMediaItem),
@@ -94,11 +93,9 @@ class _SongListTileState extends State<SongListTile> {
             height: 50,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              color: Colors.grey.withOpacity(0.1),
+              color: Colors.grey.withValues(alpha: 0.1),
             ),
-            child: const Icon(
-              Icons.music_note_outlined,
-            ),
+            child: const Icon(Icons.music_note_outlined),
           ),
         ),
         if (currentMediaItem != null &&
@@ -114,7 +111,7 @@ class _SongListTileState extends State<SongListTile> {
                     Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        color: Colors.black.withOpacity(0.6),
+                        color: Colors.black.withValues(alpha: 0.6),
                       ),
                     ),
                     Align(
@@ -148,10 +145,11 @@ class _SongListTileState extends State<SongListTile> {
       overflow: TextOverflow.ellipsis,
       style: TextStyle(
         fontWeight: FontWeight.bold,
-        color: currentMediaItem != null &&
-                currentMediaItem.id == widget.song.id.toString()
-            ? Theme.of(context).colorScheme.primary
-            : null,
+        color:
+            currentMediaItem != null &&
+                    currentMediaItem.id == widget.song.id.toString()
+                ? Theme.of(context).colorScheme.primary
+                : null,
       ),
     );
   }
@@ -164,7 +162,9 @@ class _SongListTileState extends State<SongListTile> {
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
       style: TextStyle(
-        color: Theme.of(context).textTheme.bodyMedium!.color!.withOpacity(0.8),
+        color: Theme.of(
+          context,
+        ).textTheme.bodyMedium!.color!.withValues(alpha: 0.8),
       ),
     );
   }
@@ -183,9 +183,7 @@ class _SongListTileState extends State<SongListTile> {
   Future<dynamic> _buildModalBottomSheet(BuildContext context) {
     return showModalBottomSheet(
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(25),
-        ),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
       ),
       context: context,
       builder: (context) {
@@ -194,9 +192,7 @@ class _SongListTileState extends State<SongListTile> {
             ListTile(
               // border radius same as bottom sheet
               shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.vertical(
-                  top: Radius.circular(25),
-                ),
+                borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
               ),
               leading: const Icon(Icons.playlist_add_outlined),
               title: const Text('Add to queue'),
@@ -222,7 +218,8 @@ class _SongListTileState extends State<SongListTile> {
                     return AlertDialog(
                       title: const Text('Delete Song'),
                       content: const Text(
-                          'Are you sure you want to delete this song?'),
+                        'Are you sure you want to delete this song?',
+                      ),
                       actions: <Widget>[
                         TextButton(
                           onPressed: () {
@@ -240,21 +237,21 @@ class _SongListTileState extends State<SongListTile> {
                               try {
                                 // ask for permission to manage external storage if not granted
                                 if (!await Permission
-                                    .manageExternalStorage.isGranted) {
-                                  final status = await Permission
-                                      .manageExternalStorage
-                                      .request();
+                                    .manageExternalStorage
+                                    .isGranted) {
+                                  final status =
+                                      await Permission.manageExternalStorage
+                                          .request();
 
                                   if (status.isGranted) {
                                     debugPrint('Permission granted');
                                   } else {
                                     if (context.mounted) {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
                                         const SnackBar(
-                                          content: Text(
-                                            'Permission denied',
-                                          ),
+                                          content: Text('Permission denied'),
                                           backgroundColor: Colors.red,
                                         ),
                                       );
@@ -265,11 +262,13 @@ class _SongListTileState extends State<SongListTile> {
                                 debugPrint('Deleted ${widget.song.title}');
                               } catch (e) {
                                 debugPrint(
-                                    'Failed to delete ${widget.song.title}');
+                                  'Failed to delete ${widget.song.title}',
+                                );
                               }
                             } else {
                               debugPrint(
-                                  'File does not exist ${widget.song.title}');
+                                'File does not exist ${widget.song.title}',
+                              );
                             }
 
                             // TODO: Remove the song from the list

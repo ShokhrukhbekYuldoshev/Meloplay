@@ -53,204 +53,192 @@ class _SongsViewState extends State<SongsView>
             isLoading = false;
           });
 
-          Fluttertoast.showToast(
-            msg: '${state.songs.length} songs found',
-          );
+          Fluttertoast.showToast(msg: '${state.songs.length} songs found');
         }
       },
-      child: isLoading
-          ? const Center(
-              child: CircularProgressIndicator(),
-            )
-          : RefreshIndicator(
-              onRefresh: () async {
-                context.read<HomeBloc>().add(GetSongsEvent());
-              },
-              child: CustomScrollView(
-                controller: _scrollController,
-                slivers: [
-                  // margin
-                  const SliverToBoxAdapter(
-                    child: SizedBox(height: 16),
-                  ),
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          // number of songs
-                          Text(
-                            '${songs.length} Songs',
-                            style: Theme.of(context).textTheme.bodyLarge,
-                          ),
-                          // sort button
-                          IconButton(
-                            onPressed: () {
-                              showModalBottomSheet(
-                                context: context,
-                                isScrollControlled: true,
-                                builder: (context) => const SortBottomSheet(),
-                              );
-                            },
-                            icon: const Icon(Icons.swap_vert),
-                          ),
-                        ],
+      child:
+          isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : RefreshIndicator(
+                onRefresh: () async {
+                  context.read<HomeBloc>().add(GetSongsEvent());
+                },
+                child: CustomScrollView(
+                  controller: _scrollController,
+                  slivers: [
+                    // margin
+                    const SliverToBoxAdapter(child: SizedBox(height: 16)),
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            // number of songs
+                            Text(
+                              '${songs.length} Songs',
+                              style: Theme.of(context).textTheme.bodyLarge,
+                            ),
+                            // sort button
+                            IconButton(
+                              onPressed: () {
+                                showModalBottomSheet(
+                                  context: context,
+                                  isScrollControlled: true,
+                                  builder: (context) => const SortBottomSheet(),
+                                );
+                              },
+                              icon: const Icon(Icons.swap_vert),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Container(
-                              height: 40,
-                              decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.1),
-                                borderRadius: BorderRadius.circular(32),
-                              ),
-                              child: InkWell(
-                                borderRadius: BorderRadius.circular(32),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    SvgPicture.asset(
-                                      Assets.shuffleSvg,
-                                      width: 20,
-                                      colorFilter: ColorFilter.mode(
-                                        Theme.of(context)
-                                            .textTheme
-                                            .bodyMedium!
-                                            .color!,
-                                        BlendMode.srcIn,
-                                      ),
-                                    ),
-                                    const SizedBox(width: 8),
-                                    Text(
-                                      'Shuffle',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleMedium,
-                                    ),
-                                  ],
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Container(
+                                height: 40,
+                                decoration: BoxDecoration(
+                                  color: Colors.white.withValues(alpha: 0.1),
+                                  borderRadius: BorderRadius.circular(32),
                                 ),
-                                onTap: () {
-                                  // enable shuffle
-                                  context.read<PlayerBloc>().add(
-                                        PlayerSetShuffleModeEnabled(true),
-                                      );
-
-                                  // get random song
-                                  final randomSong =
-                                      songs[Random().nextInt(songs.length)];
-
-                                  // play random song
-                                  context.read<PlayerBloc>().add(
-                                        PlayerLoadSongs(
-                                          songs,
-                                          sl<MusicPlayer>()
-                                              .getMediaItemFromSong(randomSong),
+                                child: InkWell(
+                                  borderRadius: BorderRadius.circular(32),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      SvgPicture.asset(
+                                        Assets.shuffleSvg,
+                                        width: 20,
+                                        colorFilter: ColorFilter.mode(
+                                          Theme.of(
+                                            context,
+                                          ).textTheme.bodyMedium!.color!,
+                                          BlendMode.srcIn,
                                         ),
-                                      );
-                                },
+                                      ),
+                                      const SizedBox(width: 8),
+                                      Text(
+                                        'Shuffle',
+                                        style:
+                                            Theme.of(
+                                              context,
+                                            ).textTheme.titleMedium,
+                                      ),
+                                    ],
+                                  ),
+                                  onTap: () {
+                                    // enable shuffle
+                                    context.read<PlayerBloc>().add(
+                                      PlayerSetShuffleModeEnabled(true),
+                                    );
+
+                                    // get random song
+                                    final randomSong =
+                                        songs[Random().nextInt(songs.length)];
+
+                                    // play random song
+                                    context.read<PlayerBloc>().add(
+                                      PlayerLoadSongs(
+                                        songs,
+                                        sl<MusicPlayer>().getMediaItemFromSong(
+                                          randomSong,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
                               ),
                             ),
-                          ),
-                          const SizedBox(width: 16),
-                          Expanded(
-                            child: Container(
-                              height: 40,
-                              decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.1),
-                                borderRadius: BorderRadius.circular(32),
-                              ),
-                              child: InkWell(
-                                borderRadius: BorderRadius.circular(32),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    SvgPicture.asset(
-                                      Assets.playSvg,
-                                      width: 20,
-                                      colorFilter: ColorFilter.mode(
-                                        Theme.of(context)
-                                            .textTheme
-                                            .bodyMedium!
-                                            .color!,
-                                        BlendMode.srcIn,
-                                      ),
-                                    ),
-                                    const SizedBox(width: 8),
-                                    Text(
-                                      'Play',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleMedium,
-                                    ),
-                                  ],
+                            const SizedBox(width: 16),
+                            Expanded(
+                              child: Container(
+                                height: 40,
+                                decoration: BoxDecoration(
+                                  color: Colors.white.withValues(alpha: 0.1),
+                                  borderRadius: BorderRadius.circular(32),
                                 ),
-                                onTap: () {
-                                  // disable shuffle
-                                  context.read<PlayerBloc>().add(
-                                        PlayerSetShuffleModeEnabled(false),
-                                      );
-
-                                  // play first song
-                                  context.read<PlayerBloc>().add(
-                                        PlayerLoadSongs(
-                                          songs,
-                                          sl<MusicPlayer>()
-                                              .getMediaItemFromSong(songs[0]),
+                                child: InkWell(
+                                  borderRadius: BorderRadius.circular(32),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      SvgPicture.asset(
+                                        Assets.playSvg,
+                                        width: 20,
+                                        colorFilter: ColorFilter.mode(
+                                          Theme.of(
+                                            context,
+                                          ).textTheme.bodyMedium!.color!,
+                                          BlendMode.srcIn,
                                         ),
-                                      );
-                                },
+                                      ),
+                                      const SizedBox(width: 8),
+                                      Text(
+                                        'Play',
+                                        style:
+                                            Theme.of(
+                                              context,
+                                            ).textTheme.titleMedium,
+                                      ),
+                                    ],
+                                  ),
+                                  onTap: () {
+                                    // disable shuffle
+                                    context.read<PlayerBloc>().add(
+                                      PlayerSetShuffleModeEnabled(false),
+                                    );
+
+                                    // play first song
+                                    context.read<PlayerBloc>().add(
+                                      PlayerLoadSongs(
+                                        songs,
+                                        sl<MusicPlayer>().getMediaItemFromSong(
+                                          songs[0],
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  const SliverToBoxAdapter(
-                    child: SizedBox(height: 16),
-                  ),
-                  AnimationLimiter(
-                    child: SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                        (context, index) {
+                    const SliverToBoxAdapter(child: SizedBox(height: 16)),
+                    AnimationLimiter(
+                      child: SliverList(
+                        delegate: SliverChildBuilderDelegate((context, index) {
                           final song = songs[index];
                           return AnimationConfiguration.staggeredList(
                             position: index,
                             duration: const Duration(milliseconds: 500),
                             child: FlipAnimation(
-                              child: SongListTile(
-                                song: song,
-                                songs: songs,
-                              ),
+                              child: SongListTile(song: song, songs: songs),
                             ),
                           );
-                        },
-                        childCount: songs.length,
+                        }, childCount: songs.length),
                       ),
                     ),
-                  ),
-                  // bottom padding
-                  const SliverToBoxAdapter(
-                    child: SizedBox(height: 100),
-                  ),
-                ],
+                    // bottom padding
+                    const SliverToBoxAdapter(child: SizedBox(height: 100)),
+                  ],
+                ),
               ),
-            ),
     );
   }
 
   void scrollToTop() {
     _scrollController.animateTo(
       0.0, // Scroll to the top
-      duration:
-          const Duration(milliseconds: 500), // Duration of the scroll animation
+      duration: const Duration(
+        milliseconds: 500,
+      ), // Duration of the scroll animation
       curve: Curves.easeInOut, // Animation curve
     );
   }
@@ -264,14 +252,12 @@ class SortBottomSheet extends StatefulWidget {
 }
 
 class _SortBottomSheetState extends State<SortBottomSheet> {
-  int currentSortType = Hive.box(HiveBox.boxName).get(
-    HiveBox.songSortTypeKey,
-    defaultValue: SongSortType.TITLE.index,
-  );
-  int currentOrderType = Hive.box(HiveBox.boxName).get(
-    HiveBox.songOrderTypeKey,
-    defaultValue: OrderType.ASC_OR_SMALLER.index,
-  );
+  int currentSortType = Hive.box(
+    HiveBox.boxName,
+  ).get(HiveBox.songSortTypeKey, defaultValue: SongSortType.TITLE.index);
+  int currentOrderType = Hive.box(
+    HiveBox.boxName,
+  ).get(HiveBox.songOrderTypeKey, defaultValue: OrderType.ASC_OR_SMALLER.index);
 
   @override
   Widget build(BuildContext context) {
@@ -285,23 +271,15 @@ class _SortBottomSheetState extends State<SortBottomSheet> {
             padding: EdgeInsets.symmetric(horizontal: 16),
             child: Text(
               'Sort by',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
-              ),
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
             ),
           ),
           for (final songSortType in SongSortType.values)
             RadioListTile<int>(
-              visualDensity: const VisualDensity(
-                horizontal: 0,
-                vertical: -4,
-              ),
+              visualDensity: const VisualDensity(horizontal: 0, vertical: -4),
               value: songSortType.index,
               groupValue: currentSortType,
-              title: Text(
-                songSortType.name.capitalize().replaceAll('_', ' '),
-              ),
+              title: Text(songSortType.name.capitalize().replaceAll('_', ' ')),
               onChanged: (value) {
                 setState(() {
                   currentSortType = value!;
@@ -313,23 +291,15 @@ class _SortBottomSheetState extends State<SortBottomSheet> {
             padding: EdgeInsets.symmetric(horizontal: 16),
             child: Text(
               'Order by',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
-              ),
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
             ),
           ),
           for (final orderType in OrderType.values)
             RadioListTile<int>(
-              visualDensity: const VisualDensity(
-                horizontal: 0,
-                vertical: -4,
-              ),
+              visualDensity: const VisualDensity(horizontal: 0, vertical: -4),
               value: orderType.index,
               groupValue: currentOrderType,
-              title: Text(
-                orderType.name.capitalize().replaceAll('_', ' '),
-              ),
+              title: Text(orderType.name.capitalize().replaceAll('_', ' ')),
               onChanged: (value) {
                 setState(() {
                   currentOrderType = value!;
@@ -356,11 +326,8 @@ class _SortBottomSheetState extends State<SortBottomSheet> {
                     onPressed: () {
                       Navigator.of(context).pop();
                       context.read<HomeBloc>().add(
-                            SortSongsEvent(
-                              currentSortType,
-                              currentOrderType,
-                            ),
-                          );
+                        SortSongsEvent(currentSortType, currentOrderType),
+                      );
                     },
                     child: const Text('Apply'),
                   ),
