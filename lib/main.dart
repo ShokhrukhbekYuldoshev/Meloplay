@@ -40,33 +40,15 @@ Future<void> main() async {
   runApp(
     MultiBlocProvider(
       providers: [
-        BlocProvider(
-          create: (context) => sl<HomeBloc>(),
-        ),
-        BlocProvider(
-          create: (context) => sl<ThemeBloc>(),
-        ),
-        BlocProvider(
-          create: (context) => sl<SongBloc>(),
-        ),
-        BlocProvider(
-          create: (context) => sl<FavoritesBloc>(),
-        ),
-        BlocProvider(
-          create: (context) => sl<PlayerBloc>(),
-        ),
-        BlocProvider(
-          create: (context) => sl<RecentsBloc>(),
-        ),
-        BlocProvider(
-          create: (context) => sl<SearchBloc>(),
-        ),
-        BlocProvider(
-          create: (context) => sl<ScanCubit>(),
-        ),
-        BlocProvider(
-          create: (context) => sl<PlaylistsCubit>(),
-        ),
+        BlocProvider(create: (context) => sl<HomeBloc>()),
+        BlocProvider(create: (context) => sl<ThemeBloc>()),
+        BlocProvider(create: (context) => sl<SongBloc>()),
+        BlocProvider(create: (context) => sl<FavoritesBloc>()),
+        BlocProvider(create: (context) => sl<PlayerBloc>()),
+        BlocProvider(create: (context) => sl<RecentsBloc>()),
+        BlocProvider(create: (context) => sl<SearchBloc>()),
+        BlocProvider(create: (context) => sl<ScanCubit>()),
+        BlocProvider(create: (context) => sl<PlaylistsCubit>()),
       ],
       child: const MyApp(),
     ),
