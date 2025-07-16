@@ -73,7 +73,7 @@ class _PlayerPageState extends State<PlayerPage> {
             return const SizedBox.shrink();
           }
           final sequence = snapshot.data;
-          MediaItem? mediaItem = sequence!.sequence[sequence.currentIndex].tag;
+          MediaItem? mediaItem = sequence!.currentSource?.tag as MediaItem?;
           return Stack(
             children: [
               QueryArtworkWidget(
@@ -180,9 +180,8 @@ class _PlayerPageState extends State<PlayerPage> {
                                     final sequence = snapshot.data;
 
                                     MediaItem? mediaItem =
-                                        sequence!
-                                            .sequence[sequence.currentIndex]
-                                            .tag;
+                                        sequence!.currentSource?.tag
+                                            as MediaItem?;
 
                                     return Column(
                                       children: [
@@ -325,7 +324,7 @@ class _PlayerPageState extends State<PlayerPage> {
                             final sequence = snapshot.data;
 
                             MediaItem? mediaItem =
-                                sequence!.sequence[sequence.currentIndex].tag;
+                                sequence!.currentSource?.tag as MediaItem?;
 
                             return Center(
                               child: Column(

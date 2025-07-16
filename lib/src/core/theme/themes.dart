@@ -29,7 +29,7 @@ class Themes {
     'Gray',
   ];
 
-  static get themes => _themes;
+  static List<ThemeColor> get themes => _themes;
   static List<String> get themeNames => _themeNames;
 
   static ThemeColor getThemeFromKey(String key) {
@@ -95,210 +95,180 @@ abstract class ThemeColor {
 
 class PurpleTheme extends ThemeColor {
   PurpleTheme()
-      : super(
-          themeName: 'Purple',
-          primaryColor: const Color(0xff0e0725),
-          secondaryColor: const Color(0xff5c03bc),
-          colorScheme: ColorScheme.fromSwatch(
-            primarySwatch: Colors.purple,
-            brightness: Brightness.dark,
-          ),
-          linearGradient: const LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Color(0xff0e0725),
-              Color(0xff5c03bc),
-            ],
-          ),
-        );
+    : super(
+        themeName: 'Purple',
+        primaryColor: const Color(0xff0e0725),
+        secondaryColor: const Color(0xff5c03bc),
+        colorScheme: ColorScheme.fromSwatch(
+          primarySwatch: Colors.purple,
+          brightness: Brightness.dark,
+        ),
+        linearGradient: const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [Color(0xff0e0725), Color(0xff5c03bc)],
+        ),
+      );
 }
 
 class BlueTheme extends ThemeColor {
   BlueTheme()
-      : super(
-          themeName: 'Blue',
-          primaryColor: const Color(0xff000328),
-          secondaryColor: const Color(0xFF00458e),
-          colorScheme: ColorScheme.fromSwatch(
-            primarySwatch: Colors.blue,
-            brightness: Brightness.dark,
-          ),
-          linearGradient: const LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Color(0xff000328),
-              Color(0xFF00458e),
-            ],
-          ),
-        );
+    : super(
+        themeName: 'Blue',
+        primaryColor: const Color(0xff000328),
+        secondaryColor: const Color(0xFF00458e),
+        colorScheme: ColorScheme.fromSwatch(
+          primarySwatch: Colors.blue,
+          brightness: Brightness.dark,
+        ),
+        linearGradient: const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [Color(0xff000328), Color(0xFF00458e)],
+        ),
+      );
 }
 
 class GreenTheme extends ThemeColor {
   GreenTheme()
-      : super(
-          themeName: 'Green',
-          primaryColor: const Color(0xff0c0c0c),
-          secondaryColor: const Color(0xFF0f971c),
-          colorScheme: ColorScheme.fromSwatch(
-            primarySwatch: Colors.green,
-            brightness: Brightness.dark,
-          ),
-          linearGradient: const LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Color(0xff0c0c0c),
-              Color(0xFF0f971c),
-            ],
-          ),
-        );
+    : super(
+        themeName: 'Green',
+        primaryColor: const Color(0xff0c0c0c),
+        secondaryColor: const Color(0xFF0f971c),
+        colorScheme: ColorScheme.fromSwatch(
+          primarySwatch: Colors.green,
+          brightness: Brightness.dark,
+        ),
+        linearGradient: const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [Color(0xff0c0c0c), Color(0xFF0f971c)],
+        ),
+      );
 }
 
 class OrangeTheme extends ThemeColor {
   OrangeTheme()
-      : super(
-          themeName: 'Orange',
-          primaryColor: const Color(0xff471a0c),
-          secondaryColor: const Color(0xFF8A4816),
-          colorScheme: ColorScheme.fromSwatch(
-            primarySwatch: Colors.orange,
-            brightness: Brightness.dark,
-          ),
-          linearGradient: const LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Color(0xff471a0c),
-              Color(0xFF8A4816),
-            ],
-          ),
-        );
+    : super(
+        themeName: 'Orange',
+        primaryColor: const Color(0xff471a0c),
+        secondaryColor: const Color(0xFF8A4816),
+        colorScheme: ColorScheme.fromSwatch(
+          primarySwatch: Colors.orange,
+          brightness: Brightness.dark,
+        ),
+        linearGradient: const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [Color(0xff471a0c), Color(0xFF8A4816)],
+        ),
+      );
 }
 
 class YellowTheme extends ThemeColor {
   YellowTheme()
-      : super(
-          themeName: 'Yellow',
-          primaryColor: const Color(0xff161616),
-          secondaryColor: const Color(0xFFb79c05),
-          colorScheme: ColorScheme.fromSwatch(
-            primarySwatch: Colors.yellow,
-            brightness: Brightness.dark,
-          ),
-          linearGradient: const LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Color(0xff161616),
-              Color(0xFFb79c05),
-            ],
-          ),
-        );
+    : super(
+        themeName: 'Yellow',
+        primaryColor: const Color(0xff161616),
+        secondaryColor: const Color(0xFFb79c05),
+        colorScheme: ColorScheme.fromSwatch(
+          primarySwatch: Colors.yellow,
+          brightness: Brightness.dark,
+        ),
+        linearGradient: const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [Color(0xff161616), Color(0xFFb79c05)],
+        ),
+      );
 }
 
 class TealTheme extends ThemeColor {
   TealTheme()
-      : super(
-          themeName: 'Teal',
-          primaryColor: const Color(0xff0c4741),
-          secondaryColor: const Color(0xFF168A7A),
-          colorScheme: ColorScheme.fromSwatch(
-            primarySwatch: Colors.teal,
-            brightness: Brightness.dark,
-          ),
-          linearGradient: const LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Color(0xff0c4741),
-              Color(0xFF168A7A),
-            ],
-          ),
-        );
+    : super(
+        themeName: 'Teal',
+        primaryColor: const Color(0xff0c4741),
+        secondaryColor: const Color(0xFF168A7A),
+        colorScheme: ColorScheme.fromSwatch(
+          primarySwatch: Colors.teal,
+          brightness: Brightness.dark,
+        ),
+        linearGradient: const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [Color(0xff0c4741), Color(0xFF168A7A)],
+        ),
+      );
 }
 
 class RedTheme extends ThemeColor {
   RedTheme()
-      : super(
-          themeName: 'Red',
-          primaryColor: const Color(0xff1b0a07),
-          secondaryColor: const Color(0xFF7f0012),
-          colorScheme: ColorScheme.fromSwatch(
-            primarySwatch: Colors.red,
-            brightness: Brightness.dark,
-          ),
-          linearGradient: const LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Color(0xff1b0a07),
-              Color(0xFF7f0012),
-            ],
-          ),
-        );
+    : super(
+        themeName: 'Red',
+        primaryColor: const Color(0xff1b0a07),
+        secondaryColor: const Color(0xFF7f0012),
+        colorScheme: ColorScheme.fromSwatch(
+          primarySwatch: Colors.red,
+          brightness: Brightness.dark,
+        ),
+        linearGradient: const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [Color(0xff1b0a07), Color(0xFF7f0012)],
+        ),
+      );
 }
 
 class BlackTheme extends ThemeColor {
   BlackTheme()
-      : super(
-          themeName: 'Black',
-          primaryColor: const Color(0xff000000),
-          secondaryColor: const Color(0xFF1B1B1B),
-          colorScheme: ColorScheme.fromSwatch(
-            primarySwatch: Colors.grey,
-            brightness: Brightness.dark,
-          ),
-          linearGradient: const LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Color(0xff000000),
-              Color(0xFF1B1B1B),
-            ],
-          ),
-        );
+    : super(
+        themeName: 'Black',
+        primaryColor: const Color(0xff000000),
+        secondaryColor: const Color(0xFF1B1B1B),
+        colorScheme: ColorScheme.fromSwatch(
+          primarySwatch: Colors.grey,
+          brightness: Brightness.dark,
+        ),
+        linearGradient: const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [Color(0xff000000), Color(0xFF1B1B1B)],
+        ),
+      );
 }
 
 class WhiteTheme extends ThemeColor {
   WhiteTheme()
-      : super(
-          themeName: 'White',
-          primaryColor: const Color(0XFFD3CCE3),
-          secondaryColor: const Color(0xFFE9E4F0),
-          colorScheme: ColorScheme.fromSwatch(
-            primarySwatch: Colors.grey,
-            brightness: Brightness.light,
-          ),
-          linearGradient: const LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Color(0XFFD3CCE3),
-              Color(0xFFE9E4F0),
-            ],
-          ),
-        );
+    : super(
+        themeName: 'White',
+        primaryColor: const Color(0XFFD3CCE3),
+        secondaryColor: const Color(0xFFE9E4F0),
+        colorScheme: ColorScheme.fromSwatch(
+          primarySwatch: Colors.grey,
+          brightness: Brightness.light,
+        ),
+        linearGradient: const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [Color(0XFFD3CCE3), Color(0xFFE9E4F0)],
+        ),
+      );
 }
 
 class GrayTheme extends ThemeColor {
   GrayTheme()
-      : super(
-          themeName: 'Gray',
-          primaryColor: const Color(0xff232526),
-          secondaryColor: const Color(0xFF414345),
-          colorScheme: ColorScheme.fromSwatch(
-            primarySwatch: Colors.grey,
-            brightness: Brightness.dark,
-          ),
-          linearGradient: const LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Color(0xff232526),
-              Color(0xFF414345),
-            ],
-          ),
-        );
+    : super(
+        themeName: 'Gray',
+        primaryColor: const Color(0xff232526),
+        secondaryColor: const Color(0xFF414345),
+        colorScheme: ColorScheme.fromSwatch(
+          primarySwatch: Colors.grey,
+          brightness: Brightness.dark,
+        ),
+        linearGradient: const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [Color(0xff232526), Color(0xFF414345)],
+        ),
+      );
 }

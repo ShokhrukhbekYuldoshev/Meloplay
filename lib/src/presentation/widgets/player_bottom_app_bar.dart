@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:just_audio/just_audio.dart';
@@ -12,10 +10,7 @@ import 'package:meloplay/src/core/router/app_router.dart';
 import 'package:meloplay/src/core/theme/themes.dart';
 import 'package:meloplay/src/data/repositories/player_repository.dart';
 import 'package:meloplay/src/data/repositories/recents_repository.dart';
-import 'package:meloplay/src/presentation/widgets/buttons/next_button.dart';
 import 'package:meloplay/src/presentation/widgets/buttons/play_pause_button.dart';
-import 'package:meloplay/src/presentation/widgets/buttons/previous_button.dart';
-import 'package:meloplay/src/presentation/widgets/seek_bar.dart';
 import 'package:meloplay/src/presentation/widgets/spinning_disc_animation.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
@@ -29,7 +24,6 @@ class PlayerBottomAppBar extends StatefulWidget {
 class _PlayerBottomAppBarState extends State<PlayerBottomAppBar> {
   final player = sl<MusicPlayer>();
   bool isPlaying = false;
-  bool isExpanded = false;
 
   List<SongModel> playlist = [];
 
@@ -65,8 +59,7 @@ class _PlayerBottomAppBarState extends State<PlayerBottomAppBar> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(left: 16, right: 16, bottom: 32),
-
+      margin: const EdgeInsets.only(bottom: 8),
       child: BlocBuilder<ThemeBloc, ThemeState>(
         builder: (context, state) {
           return StreamBuilder<SequenceState?>(
@@ -81,38 +74,31 @@ class _PlayerBottomAppBarState extends State<PlayerBottomAppBar> {
               }
 
               var sequence = snapshot.data;
-              MediaItem mediaItem =
-                  sequence?.sequence[sequence.currentIndex].tag;
+              MediaItem? mediaItem = sequence!.currentSource?.tag as MediaItem?;
 
               return GestureDetector(
                 behavior: HitTestBehavior.opaque,
                 onTap: () async {
                   Navigator.of(context).pushNamed(AppRouter.playerRoute);
                 },
-                // slide up to show player
+                // slide up to player page
                 onVerticalDragUpdate: (details) {
-                  bool previousIsExpanded = isExpanded;
-                  if (details.delta.dy > 0) {
-                    isExpanded = false;
-                  } else {
-                    isExpanded = true;
-                  }
-                  if (previousIsExpanded != isExpanded) {
-                    setState(() {});
+                  if (details.delta.dy < 0) {
+                    Navigator.of(context).pushNamed(AppRouter.playerRoute);
                   }
                 },
-                child: ClipRRect(
-                  borderRadius: const BorderRadius.all(Radius.circular(32)),
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 150),
-                    height: isExpanded ? 216 : 60,
-                    color: Themes.getTheme().primaryColor,
-                    child:
-                        isExpanded
-                            ? _buildExpanded(sequence!, mediaItem)
-                            : _buildCollapsed(sequence!, mediaItem),
-                  ),
-                ),
+                child: mediaItem == null
+                    ? const SizedBox()
+                    : ClipRRect(
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(50),
+                        ),
+                        child: Container(
+                          height: 60,
+                          color: Themes.getTheme().primaryColor,
+                          child: _buildBottomAppBar(sequence, mediaItem),
+                        ),
+                      ),
               );
             },
           );
@@ -121,100 +107,14 @@ class _PlayerBottomAppBarState extends State<PlayerBottomAppBar> {
     );
   }
 
-  _buildExpanded(SequenceState sequence, MediaItem mediaItem) {
-    return Stack(
-      children: [
-        QueryArtworkWidget(
-          keepOldArtwork: true,
-          artworkHeight: double.infinity,
-          artworkWidth: double.infinity,
-          id: int.parse(mediaItem.id),
-          type: ArtworkType.AUDIO,
-          size: 10000,
-          nullArtworkWidget: Container(
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: Colors.grey.withValues(alpha: 0.1),
-            ),
-            child: const Icon(Icons.music_note_outlined, size: 100),
-          ),
-        ),
-        BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
-          child: Container(
-            width: double.infinity,
-            height: double.infinity,
-            decoration: BoxDecoration(
-              color: Colors.black.withValues(alpha: 0.5),
-            ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-          child: SingleChildScrollView(
-            physics: const NeverScrollableScrollPhysics(),
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    // disc
-                    SpinningDisc(id: int.parse(mediaItem.id)),
-                    const SizedBox(width: 16),
-                    // song info
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            mediaItem.title,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            mediaItem.artist ?? 'Unknown',
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(color: Colors.grey),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: 16),
-                  ],
-                ),
-                const SizedBox(height: 20),
-                SeekBar(player: player),
-                const SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    PreviousButton(),
-                    const SizedBox(width: 20),
-                    PlayPauseButton(),
-                    const SizedBox(width: 20),
-                    NextButton(),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  _buildCollapsed(SequenceState sequence, MediaItem mediaItem) {
+  Row _buildBottomAppBar(SequenceState sequence, MediaItem mediaItem) {
     return Row(
       children: [
         const SizedBox(width: 20),
         // song info with swiping
-        Expanded(child: SwipeSong(sequence: sequence, mediaItem: mediaItem)),
+        Expanded(
+          child: SwipeSong(sequence: sequence, mediaItem: mediaItem),
+        ),
         PlayPauseButton(
           width: 20,
           color: Theme.of(context).textTheme.bodyMedium!.color!,

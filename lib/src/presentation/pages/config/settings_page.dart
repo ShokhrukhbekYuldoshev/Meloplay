@@ -4,6 +4,7 @@ import 'package:meloplay/src/bloc/theme/theme_bloc.dart';
 import 'package:meloplay/src/core/router/app_router.dart';
 import 'package:meloplay/src/core/theme/themes.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -43,17 +44,10 @@ class _SettingsPageState extends State<SettingsPage> {
           appBar: AppBar(
             backgroundColor: Themes.getTheme().primaryColor,
             elevation: 0,
-            title: const Text(
-              'Settings',
-            ),
+            title: const Text('Settings'),
           ),
           body: Ink(
-            padding: const EdgeInsets.fromLTRB(
-              0,
-              16,
-              0,
-              16,
-            ),
+            padding: const EdgeInsets.fromLTRB(0, 16, 0, 16),
             decoration: BoxDecoration(
               gradient: Themes.getTheme().linearGradient,
             ),
@@ -81,8 +75,24 @@ class _SettingsPageState extends State<SettingsPage> {
                 ListTile(
                   leading: const Icon(Icons.color_lens_outlined),
                   title: const Text('Themes'),
+                  subtitle: const Text('Select a theme'),
                   onTap: () async {
                     Navigator.of(context).pushNamed(AppRouter.themesRoute);
+                  },
+                ),
+                // git repo
+                ListTile(
+                  leading: const Icon(Icons.code_outlined),
+                  title: const Text('GitHub'),
+                  subtitle: const Text(
+                    'https://github.com/ShokhrukhbekYuldoshev/Meloplay',
+                  ),
+                  onTap: () async {
+                    await launchUrl(
+                      Uri.parse(
+                        'https://github.com/ShokhrukhbekYuldoshev/Meloplay',
+                      ),
+                    );
                   },
                 ),
                 // package info
@@ -99,9 +109,7 @@ class _SettingsPageState extends State<SettingsPage> {
     return ListTile(
       leading: const Icon(Icons.info_outline),
       title: const Text('Version'),
-      subtitle: Text(
-        _packageInfo.version,
-      ),
+      subtitle: Text(_packageInfo.version),
       onTap: () async {
         // show package info
         showDialog(
@@ -112,18 +120,10 @@ class _SettingsPageState extends State<SettingsPage> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'Name: ${_packageInfo.appName}',
-                ),
-                Text(
-                  'Package: ${_packageInfo.packageName}',
-                ),
-                Text(
-                  'Version: ${_packageInfo.version}',
-                ),
-                Text(
-                  'Build number: ${_packageInfo.buildNumber}',
-                ),
+                Text('Name: ${_packageInfo.appName}'),
+                Text('Package: ${_packageInfo.packageName}'),
+                Text('Version: ${_packageInfo.version}'),
+                Text('Build number: ${_packageInfo.buildNumber}'),
               ],
             ),
             actions: [

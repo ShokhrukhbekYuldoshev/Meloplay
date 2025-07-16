@@ -42,10 +42,7 @@ class PlaylistsCubit extends Cubit<PlaylistsState> {
 
   Future<void> addToPlaylist(int playlistId, SongModel song) async {
     emit(PlaylistsLoading());
-    await _audioQuery.queryAudiosFrom(
-      AudiosFromType.PLAYLIST,
-      playlistId,
-    );
+    await _audioQuery.queryAudiosFrom(AudiosFromType.PLAYLIST, playlistId);
 
     await _audioQuery.addToPlaylist(playlistId, song.id);
     await queryPlaylistSongs(playlistId);

@@ -36,9 +36,7 @@ class _PlaylistDetailsPageState extends State<PlaylistDetailsPage> {
         backgroundColor: Themes.getTheme().primaryColor,
       ),
       body: Ink(
-        decoration: BoxDecoration(
-          gradient: Themes.getTheme().linearGradient,
-        ),
+        decoration: BoxDecoration(gradient: Themes.getTheme().linearGradient),
         child: BlocListener<PlaylistsCubit, PlaylistsState>(
           listener: (context, state) {
             if (state is PlaylistsSongsLoaded) {
@@ -48,17 +46,12 @@ class _PlaylistDetailsPageState extends State<PlaylistDetailsPage> {
             }
           },
           child: _songs.isEmpty
-              ? const Center(
-                  child: Text('No songs added to this playlist'),
-                )
+              ? const Center(child: Text('No songs added to this playlist'))
               : ListView.builder(
                   itemCount: _songs.length,
                   itemBuilder: (context, index) {
                     final song = _songs[index];
-                    return SongListTile(
-                      song: song,
-                      songs: _songs,
-                    );
+                    return SongListTile(song: song, songs: _songs);
                   },
                 ),
         ),
@@ -67,10 +60,7 @@ class _PlaylistDetailsPageState extends State<PlaylistDetailsPage> {
         onPressed: () {
           Navigator.of(context).pushNamed(
             AppRouter.addSongToPlaylistRoute,
-            arguments: {
-              'playlist': widget.playlist,
-              'songs': _songs,
-            },
+            arguments: {'playlist': widget.playlist, 'songs': _songs},
           );
         },
         child: const Icon(Icons.add),
@@ -110,9 +100,7 @@ class _AddSongToPlaylistState extends State<AddSongToPlaylist> {
         backgroundColor: Themes.getTheme().primaryColor,
       ),
       body: Ink(
-        decoration: BoxDecoration(
-          gradient: Themes.getTheme().linearGradient,
-        ),
+        decoration: BoxDecoration(gradient: Themes.getTheme().linearGradient),
         child: BlocListener<HomeBloc, HomeState>(
           listener: (context, state) {
             if (state is SongsLoaded) {
@@ -133,9 +121,9 @@ class _AddSongToPlaylistState extends State<AddSongToPlaylist> {
                   if (value!) {
                     widget.songs.add(song);
                     context.read<PlaylistsCubit>().addToPlaylist(
-                          widget.playlist.id,
-                          song,
-                        );
+                      widget.playlist.id,
+                      song,
+                    );
                   } else {
                     // TODO: Remove song from playlist
                     // widget.songs.remove(song);

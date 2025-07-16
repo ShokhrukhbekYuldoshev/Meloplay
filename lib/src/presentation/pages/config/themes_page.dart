@@ -86,11 +86,11 @@ class _ThemesPageState extends State<ThemesPage> {
                   style: TextStyle(
                     color:
                         Themes.getThemeFromKey(
-                                  themeName,
-                                ).colorScheme.brightness ==
-                                Brightness.dark
-                            ? Colors.white
-                            : Colors.black,
+                              themeName,
+                            ).colorScheme.brightness ==
+                            Brightness.dark
+                        ? Colors.white
+                        : Colors.black,
                     fontWeight: FontWeight.bold,
                   ),
                 ),

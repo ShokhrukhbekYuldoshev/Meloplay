@@ -34,9 +34,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
         title: const Text('Favorites'),
       ),
       body: Ink(
-        decoration: BoxDecoration(
-          gradient: Themes.getTheme().linearGradient,
-        ),
+        decoration: BoxDecoration(gradient: Themes.getTheme().linearGradient),
         child: BlocListener<SongBloc, SongState>(
           listener: (context, state) {
             if (state is ToggleFavoriteSuccess) {
@@ -46,15 +44,11 @@ class _FavoritesPageState extends State<FavoritesPage> {
           child: BlocBuilder<FavoritesBloc, FavoritesState>(
             builder: (context, state) {
               if (state is FavoritesLoading) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
+                return const Center(child: CircularProgressIndicator());
               } else if (state is FavoritesLoaded) {
                 return _buildBody(state);
               } else if (state is FavoritesError) {
-                return Center(
-                  child: Text(state.message),
-                );
+                return Center(child: Text(state.message));
               } else {
                 return const SizedBox();
               }
@@ -65,11 +59,9 @@ class _FavoritesPageState extends State<FavoritesPage> {
     );
   }
 
-  Widget _buildBody(state) {
+  Widget _buildBody(FavoritesLoaded state) {
     if (state.favoriteSongs.isEmpty) {
-      return const Center(
-        child: Text('No favorites yet'),
-      );
+      return const Center(child: Text('No favorites yet'));
     }
     return ListView.builder(
       padding: const EdgeInsets.only(bottom: 100),

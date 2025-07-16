@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
@@ -9,10 +10,7 @@ import 'package:on_audio_query/on_audio_query.dart';
 
 abstract class MusicPlayer {
   Future<void> init();
-  Future<void> load(
-    MediaItem mediaItem,
-    List<SongModel> playlist,
-  );
+  Future<void> load(MediaItem mediaItem, List<SongModel> playlist);
   MediaItem getMediaItemFromSong(SongModel song);
   Future<void> savePlaylist();
   Future<List<SongModel>> loadPlaylist();
@@ -45,7 +43,6 @@ abstract class MusicPlayer {
 class JustAudioPlayer implements MusicPlayer {
   final AudioPlayer _player = AudioPlayer();
   List<SongModel> currentPlaylist = [];
-  late ConcatenatingAudioSource _queue;
 
   var box = Hive.box(HiveBox.boxName);
 
@@ -73,9 +70,7 @@ class JustAudioPlayer implements MusicPlayer {
 
     // set shuffle mode
     if (box.get(HiveBox.shuffleModeKey) != null) {
-      _player.setShuffleModeEnabled(
-        box.get(HiveBox.shuffleModeKey),
-      );
+      _player.setShuffleModeEnabled(box.get(HiveBox.shuffleModeKey));
     }
   }
 
@@ -85,57 +80,49 @@ class JustAudioPlayer implements MusicPlayer {
     List<SongModel> playlist, {
     bool play = true,
   }) async {
-    List<AudioSource> sources = [];
-
-    for (var song in playlist) {
-      var artUri = 'content://media/external/audio/albumart/';
-
-      if (song.albumId != null) {
-        artUri += song.albumId.toString();
-      }
-
-      sources.add(
-        AudioSource.uri(
-          Uri.parse(song.uri!),
-          tag: MediaItem(
-            id: song.id.toString(),
-            title: song.title,
-            album: song.album,
-            artUri: Platform.isAndroid ? Uri.parse(artUri) : null,
-            artist: song.artist,
-            duration: Duration(milliseconds: song.duration!),
-            genre: song.genre,
+    try {
+      // Create audio sources efficiently
+      final sources = await Future.wait(
+        playlist.map(
+          (song) async => AudioSource.uri(
+            Uri.parse(song.uri!),
+            tag: MediaItem(
+              id: song.id.toString(),
+              title: song.title,
+              album: song.album,
+              artUri: Platform.isAndroid
+                  ? Uri.parse(
+                      'content://media/external/audio/albumart/${song.albumId}',
+                    )
+                  : null,
+              artist: song.artist,
+              duration: Duration(milliseconds: song.duration!),
+            ),
           ),
         ),
       );
-    }
 
-    int initialIndex = 0;
+      // Find initial index more efficiently
+      final initialIndex = playlist.indexWhere(
+        (song) => song.id.toString() == mediaItem.id,
+      );
 
-    for (int i = 0; i < playlist.length; i++) {
-      if (playlist[i].id.toString() == mediaItem.id) {
-        initialIndex = i;
-        break;
+      await _player.setAudioSources(
+        sources,
+        initialIndex: initialIndex,
+      ); // Load items just in time
+
+      currentPlaylist = playlist;
+      await savePlaylist();
+
+      if (play) {
+        await _player.play();
       }
-    }
-
-    // set queue
-    _queue = ConcatenatingAudioSource(
-      children: sources,
-    );
-
-    // set initial index
-    await _player.setAudioSource(initialIndex: initialIndex, _queue);
-
-    // set current playlist
-    currentPlaylist = playlist;
-
-    // save current playlist
-    await savePlaylist();
-
-    if (play) {
-      // play the song
-      await _player.play();
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error loading playlist: $e');
+      }
+      rethrow;
     }
   }
 
@@ -163,11 +150,7 @@ class JustAudioPlayer implements MusicPlayer {
     List<SongModel> playlist,
     SongModel lastPlayedSong,
   ) async {
-    await load(
-      getMediaItemFromSong(lastPlayedSong),
-      playlist,
-      play: false,
-    );
+    await load(getMediaItemFromSong(lastPlayedSong), playlist, play: false);
   }
 
   @override
@@ -193,10 +176,7 @@ class JustAudioPlayer implements MusicPlayer {
   @override
   Future<void> seek(Duration position, {int? index}) async {
     if (index != null) {
-      await _player.seek(
-        position,
-        index: index,
-      );
+      await _player.seek(position, index: index);
     } else {
       await _player.seek(position);
     }

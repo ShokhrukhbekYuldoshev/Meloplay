@@ -43,7 +43,8 @@ class _SongListTileState extends State<SongListTile> {
         MediaItem? currentMediaItem;
         if (snapshot.hasData) {
           var sequence = snapshot.data;
-          currentMediaItem = sequence?.sequence[sequence.currentIndex].tag;
+
+          currentMediaItem = sequence!.currentSource?.tag as MediaItem?;
         }
 
         return ListTile(
@@ -147,9 +148,9 @@ class _SongListTileState extends State<SongListTile> {
         fontWeight: FontWeight.bold,
         color:
             currentMediaItem != null &&
-                    currentMediaItem.id == widget.song.id.toString()
-                ? Theme.of(context).colorScheme.primary
-                : null,
+                currentMediaItem.id == widget.song.id.toString()
+            ? Theme.of(context).colorScheme.primary
+            : null,
       ),
     );
   }
@@ -239,9 +240,9 @@ class _SongListTileState extends State<SongListTile> {
                                 if (!await Permission
                                     .manageExternalStorage
                                     .isGranted) {
-                                  final status =
-                                      await Permission.manageExternalStorage
-                                          .request();
+                                  final status = await Permission
+                                      .manageExternalStorage
+                                      .request();
 
                                   if (status.isGranted) {
                                     debugPrint('Permission granted');
