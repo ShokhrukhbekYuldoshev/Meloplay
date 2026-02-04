@@ -186,7 +186,7 @@ Distributed under the Attribution-NonCommercial-ShareAlike 4.0 International Lic
 
 ## 📧 Contact
 
-- [Email](mailto:shokhrukhbekdev@gmail.com)
+- [Email](mailto:shokh.xyz@gmail.com)
 - [GitHub](https://github.com/ShokhrukhbekYuldoshev)
 
 ## 🌟 Show your support
