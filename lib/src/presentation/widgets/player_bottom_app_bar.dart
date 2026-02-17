@@ -11,7 +11,7 @@ import 'package:meloplay/src/core/theme/themes.dart';
 import 'package:meloplay/src/data/repositories/player_repository.dart';
 import 'package:meloplay/src/data/repositories/recents_repository.dart';
 import 'package:meloplay/src/presentation/widgets/buttons/play_pause_button.dart';
-import 'package:meloplay/src/presentation/widgets/spinning_disc_animation.dart';
+import 'package:meloplay/src/presentation/widgets/spinning_disc.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 class PlayerBottomAppBar extends StatefulWidget {

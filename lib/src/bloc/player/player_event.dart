@@ -1,57 +1,83 @@
 part of 'player_bloc.dart';
 
-@immutable
-sealed class PlayerEvent {}
+abstract class PlayerEvent extends Equatable {
+  const PlayerEvent();
+
+  @override
+  List<Object?> get props => [];
+}
+
+class PlayerInit extends PlayerEvent {}
+
+class PlayerLoadPlaylist extends PlayerEvent {
+  final MediaItem mediaItem;
+  final List<SongModel> playlist;
+
+  const PlayerLoadPlaylist({required this.mediaItem, required this.playlist});
+
+  @override
+  List<Object?> get props => [mediaItem, playlist];
+}
 
 class PlayerPlay extends PlayerEvent {}
 
-class PlayerLoadSongs extends PlayerEvent {
-  final List<SongModel> playlist;
-  final MediaItem mediaItem;
-
-  PlayerLoadSongs(
-    this.playlist,
-    this.mediaItem,
-  );
-}
-
 class PlayerPause extends PlayerEvent {}
-
-class PlayerStop extends PlayerEvent {}
 
 class PlayerSeek extends PlayerEvent {
   final Duration position;
   final int? index;
 
-  PlayerSeek(this.position, {this.index});
+  const PlayerSeek(this.position, {this.index});
+
+  @override
+  List<Object?> get props => [position, index];
 }
 
 class PlayerNext extends PlayerEvent {}
 
 class PlayerPrevious extends PlayerEvent {}
 
-class PlayerShuffle extends PlayerEvent {}
+class PlayerSetShuffle extends PlayerEvent {
+  final bool enabled;
 
-class PlayerSetVolume extends PlayerEvent {
-  final double volume;
+  const PlayerSetShuffle(this.enabled);
 
-  PlayerSetVolume(this.volume);
-}
-
-class PlayerSetSpeed extends PlayerEvent {
-  final double speed;
-
-  PlayerSetSpeed(this.speed);
+  @override
+  List<Object?> get props => [enabled];
 }
 
 class PlayerSetLoopMode extends PlayerEvent {
   final LoopMode loopMode;
 
-  PlayerSetLoopMode(this.loopMode);
+  const PlayerSetLoopMode(this.loopMode);
+
+  @override
+  List<Object?> get props => [loopMode];
 }
 
-class PlayerSetShuffleModeEnabled extends PlayerEvent {
-  final bool shuffleModeEnabled;
+class PlayerPositionChanged extends PlayerEvent {
+  final Duration position;
 
-  PlayerSetShuffleModeEnabled(this.shuffleModeEnabled);
+  const PlayerPositionChanged(this.position);
+
+  @override
+  List<Object?> get props => [position];
+}
+
+class PlayerIndexChanged extends PlayerEvent {
+  final int? index;
+
+  const PlayerIndexChanged(this.index);
+
+  @override
+  List<Object?> get props => [index];
+}
+
+class PlayerPlayingChanged extends PlayerEvent {
+  final bool playing;
+
+  const PlayerPlayingChanged(this.playing);
+
+  @override
+  List<Object?> get props => [playing];
 }

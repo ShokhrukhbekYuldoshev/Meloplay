@@ -48,9 +48,7 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
           body: Ink(
             padding: const EdgeInsets.fromLTRB(0, 16, 0, 16),
-            decoration: BoxDecoration(
-              gradient: Themes.getTheme().linearGradient,
-            ),
+            decoration: BoxDecoration(gradient: Themes.getTheme().gradient),
             child: ListView(
               children: [
                 // scan music (ignores songs which don't satisfy the requirements)

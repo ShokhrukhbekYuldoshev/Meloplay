@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:meloplay/src/core/router/bottom_to_top_page_route.dart';
 import 'package:meloplay/src/presentation/pages/config/scan_page.dart';
 import 'package:meloplay/src/presentation/pages/config/settings_page.dart';
+import 'package:meloplay/src/presentation/pages/playlists/add_songs_to_playlist.dart';
 import 'package:meloplay/src/presentation/pages/playlists/playlist_details_page.dart';
 import 'package:meloplay/src/presentation/pages/player/queue_page.dart';
 import 'package:meloplay/src/presentation/pages/home/search_page.dart';
@@ -30,7 +31,7 @@ class AppRouter {
   static const String queueRoute = '/queue';
   static const String searchRoute = '/search';
   static const String scanRoute = '/scan';
-  static const String addSongToPlaylistRoute = '/addSongToPlaylist';
+  static const String addSongsToPlaylistRoute = '/addSongsToPlaylist';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -43,7 +44,7 @@ class AppRouter {
       case recentsRoute:
         return MaterialPageRoute<dynamic>(builder: (_) => const RecentsPage());
       case playerRoute:
-        return BottomToTopPageRoute(child: const PlayerPage());
+        return SharedAxisPageRoute(child: const PlayerPage());
       case artistRoute:
         return MaterialPageRoute<dynamic>(
           builder: (_) => ArtistPage(artist: settings.arguments as ArtistModel),
@@ -72,10 +73,9 @@ class AppRouter {
         return MaterialPageRoute<dynamic>(builder: (_) => const QueuePage());
       case searchRoute:
         return MaterialPageRoute<dynamic>(builder: (_) => const SearchPage());
-      case addSongToPlaylistRoute:
+      case addSongsToPlaylistRoute:
         return MaterialPageRoute<dynamic>(
-          builder: (_) => AddSongToPlaylist(
-            songs: (settings.arguments as Map)['songs'] as List<SongModel>,
+          builder: (_) => AddSongsToPlaylist(
             playlist: (settings.arguments as Map)['playlist'] as PlaylistModel,
           ),
         );

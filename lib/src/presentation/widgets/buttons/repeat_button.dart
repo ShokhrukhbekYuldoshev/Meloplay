@@ -17,33 +17,18 @@ class RepeatButton extends StatelessWidget {
         return IconButton(
           onPressed: () {
             if (snapshot.data == LoopMode.off) {
-              context.read<PlayerBloc>().add(
-                    PlayerSetLoopMode(LoopMode.all),
-                  );
+              context.read<PlayerBloc>().add(PlayerSetLoopMode(LoopMode.all));
             } else if (snapshot.data == LoopMode.all) {
-              context.read<PlayerBloc>().add(
-                    PlayerSetLoopMode(LoopMode.one),
-                  );
+              context.read<PlayerBloc>().add(PlayerSetLoopMode(LoopMode.one));
             } else {
-              context.read<PlayerBloc>().add(
-                    PlayerSetLoopMode(LoopMode.off),
-                  );
+              context.read<PlayerBloc>().add(PlayerSetLoopMode(LoopMode.off));
             }
           },
           icon: snapshot.data == LoopMode.off
-              ? const Icon(
-                  Icons.repeat_outlined,
-                  color: Colors.grey,
-                )
+              ? const Icon(Icons.repeat_outlined, color: Colors.grey)
               : snapshot.data == LoopMode.all
-                  ? const Icon(
-                      Icons.repeat_outlined,
-                      color: Colors.white,
-                    )
-                  : const Icon(
-                      Icons.repeat_one_outlined,
-                      color: Colors.white,
-                    ),
+              ? const Icon(Icons.repeat_outlined, color: Colors.white)
+              : const Icon(Icons.repeat_one_outlined, color: Colors.white),
           iconSize: 30,
           tooltip: 'Repeat',
         );

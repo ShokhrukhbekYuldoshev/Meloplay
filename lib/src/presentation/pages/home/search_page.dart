@@ -48,7 +48,7 @@ class _SearchPageState extends State<SearchPage> {
         ],
       ),
       body: Ink(
-        decoration: BoxDecoration(gradient: Themes.getTheme().linearGradient),
+        decoration: BoxDecoration(gradient: Themes.getTheme().gradient),
         child: BlocBuilder<SearchBloc, SearchState>(
           builder: (context, state) {
             if (searchController.text.isEmpty) {
@@ -134,6 +134,7 @@ class _SearchPageState extends State<SearchPage> {
                           for (var album in state.searchResult.albums)
                             ListTile(
                               leading: QueryArtworkWidget(
+                                keepOldArtwork: true,
                                 id: album.id,
                                 type: ArtworkType.ALBUM,
                                 nullArtworkWidget: const Icon(Icons.album),

@@ -51,7 +51,7 @@ class _ArtistPageState extends State<ArtistPage> {
       bottomNavigationBar: const PlayerBottomAppBar(),
       extendBody: true,
       body: Ink(
-        decoration: BoxDecoration(gradient: Themes.getTheme().linearGradient),
+        decoration: BoxDecoration(gradient: Themes.getTheme().gradient),
         child: CustomScrollView(
           slivers: [
             SliverAppBar(

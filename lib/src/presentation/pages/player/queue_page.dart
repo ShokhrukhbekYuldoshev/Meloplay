@@ -23,9 +23,7 @@ class _QueuePageState extends State<QueuePage> {
         title: const Text('Queue'),
       ),
       body: Ink(
-        decoration: BoxDecoration(
-          gradient: Themes.getTheme().linearGradient,
-        ),
+        decoration: BoxDecoration(gradient: Themes.getTheme().gradient),
         child: _buildBody(),
       ),
     );

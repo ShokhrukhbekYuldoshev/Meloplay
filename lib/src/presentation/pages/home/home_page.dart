@@ -66,48 +66,47 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   Ink _buildBody(BuildContext context) {
     return Ink(
-      decoration: BoxDecoration(gradient: Themes.getTheme().linearGradient),
-      child:
-          _hasPermission
-              ? Column(
-                children: [
-                  TabBar(
-                    dividerColor: Theme.of(
-                      context,
-                    ).colorScheme.onPrimary.withValues(alpha: 0.3),
-                    tabAlignment: TabAlignment.start,
-                    isScrollable: true,
+      decoration: BoxDecoration(gradient: Themes.getTheme().gradient),
+      child: _hasPermission
+          ? Column(
+              children: [
+                TabBar(
+                  dividerColor: Theme.of(
+                    context,
+                  ).colorScheme.onPrimary.withValues(alpha: 0.3),
+                  tabAlignment: TabAlignment.start,
+                  isScrollable: true,
+                  controller: _tabController,
+                  tabs: tabs.map((e) => Tab(text: e)).toList(),
+                ),
+                Expanded(
+                  child: TabBarView(
                     controller: _tabController,
-                    tabs: tabs.map((e) => Tab(text: e)).toList(),
+                    children: const [
+                      SongsView(),
+                      PlaylistsView(),
+                      ArtistsView(),
+                      AlbumsView(),
+                      GenresView(),
+                    ],
                   ),
-                  Expanded(
-                    child: TabBarView(
-                      controller: _tabController,
-                      children: const [
-                        SongsView(),
-                        PlaylistsView(),
-                        ArtistsView(),
-                        AlbumsView(),
-                        GenresView(),
-                      ],
-                    ),
-                  ),
-                ],
-              )
-              : Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Center(child: Text('No permission to access library')),
-                  const SizedBox(height: 16),
-                  TextButton(
-                    onPressed: () async {
-                      // permission request
-                      await Permission.storage.request();
-                    },
-                    child: const Text('Retry'),
-                  ),
-                ],
-              ),
+                ),
+              ],
+            )
+          : Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Center(child: Text('No permission to access library')),
+                const SizedBox(height: 16),
+                TextButton(
+                  onPressed: () async {
+                    // permission request
+                    await Permission.storage.request();
+                  },
+                  child: const Text('Retry'),
+                ),
+              ],
+            ),
     );
   }
 

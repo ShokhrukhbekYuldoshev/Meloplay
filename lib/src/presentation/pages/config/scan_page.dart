@@ -17,17 +17,15 @@ class ScanPage extends StatefulWidget {
 
 class _ScanPageState extends State<ScanPage> {
   // in seconds
-  int durationValue = Hive.box(HiveBox.boxName).get(
-    HiveBox.minSongDurationKey,
-    defaultValue: 0,
-  );
+  int durationValue = Hive.box(
+    HiveBox.boxName,
+  ).get(HiveBox.minSongDurationKey, defaultValue: 0);
   List<int> durationGroupValue = [0, 15, 30, 60];
 
   // in KB
-  int sizeValue = Hive.box(HiveBox.boxName).get(
-    HiveBox.minSongSizeKey,
-    defaultValue: 0,
-  );
+  int sizeValue = Hive.box(
+    HiveBox.boxName,
+  ).get(HiveBox.minSongSizeKey, defaultValue: 0);
   List<int> sizeGroupValue = [0, 50, 100, 200, 500];
 
   @override
@@ -37,22 +35,14 @@ class _ScanPageState extends State<ScanPage> {
       appBar: AppBar(
         backgroundColor: Themes.getTheme().primaryColor,
         elevation: 0,
-        title: const Text(
-          'Scan',
-        ),
+        title: const Text('Scan'),
       ),
       body: Ink(
-        decoration: BoxDecoration(
-          gradient: Themes.getTheme().linearGradient,
-        ),
+        decoration: BoxDecoration(gradient: Themes.getTheme().gradient),
         child: ListView(
           children: [
             // scanning animation
-            Lottie.asset(
-              Assets.scanningAnimation,
-              width: 200,
-              height: 200,
-            ),
+            Lottie.asset(Assets.scanningAnimation, width: 200, height: 200),
             const SizedBox(height: 16),
             // ignore duration less than value
             Padding(

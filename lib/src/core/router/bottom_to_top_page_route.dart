@@ -1,40 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:animations/animations.dart';
 
-class BottomToTopPageRoute<T> extends PageRoute<T> {
+class SharedAxisPageRoute<T> extends PageRouteBuilder<T> {
   final Widget child;
-  final Duration duration;
-  final Curve curve;
 
-  BottomToTopPageRoute({
-    required this.child,
-    this.duration = const Duration(milliseconds: 300),
-    this.curve = Curves.easeInOut,
-  }) : super();
-
-  @override
-  Color? get barrierColor => null;
-
-  @override
-  String get barrierLabel => '';
-
-  @override
-  Widget buildPage(
-    BuildContext context,
-    Animation<double> animation,
-    Animation<double> secondaryAnimation,
-  ) {
-    return SlideTransition(
-      position: Tween<Offset>(
-        begin: const Offset(0, 1),
-        end: Offset.zero,
-      ).animate(CurvedAnimation(parent: animation, curve: curve)),
-      child: child,
-    );
-  }
-
-  @override
-  bool get maintainState => true;
-
-  @override
-  Duration get transitionDuration => duration;
+  SharedAxisPageRoute({required this.child})
+    : super(
+        transitionDuration: const Duration(milliseconds: 400),
+        pageBuilder: (context, animation, secondaryAnimation) => child,
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return SharedAxisTransition(
+            animation: animation,
+            secondaryAnimation: secondaryAnimation,
+            transitionType: SharedAxisTransitionType.vertical,
+            child: child,
+          );
+        },
+      );
 }

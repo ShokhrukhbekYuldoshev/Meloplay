@@ -1,13 +1,12 @@
-# 🎵 Meloplay
+# Meloplay
 
 Meloplay is a local music player app that plays music from your device built with Flutter.
 
-## 📱 Platforms
+## Platforms
 
-- Android
-- iOS (not tested)
+- Android only
 
-## ✨ Features
+## Features
 
 - [x] Play music from your device
 - [x] Background audio
@@ -34,7 +33,7 @@ Meloplay is a local music player app that plays music from your device built wit
 - [x] Themes (multiple themes)
 - [ ] Localization
 
-## 📸 Screenshots
+## Screenshots
 
 <!-- Variables -->
 
@@ -76,30 +75,29 @@ Meloplay is a local music player app that plays music from your device built wit
 | :---------------: | :-------------------: | :-----------: |
 | ![Search][search] | ![Settings][settings] | ![Scan][scan] |
 
-## 📚 Dependencies
+## Dependencies
 
-| Name                                                                                  | Version        | Description                                                                                                                                                              |
-| ------------------------------------------------------------------------------------- | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| [auto_size_text](https://pub.dev/packages/auto_size_text)                             | ^3.0.0         | Flutter widget that automatically resizes text to fit perfectly within its bounds.                                                                                       |
-| [bloc](https://pub.dev/packages/bloc)                                                 | ^9.0.0         | A predictable state management library                                                                                                                                   |
-| [flutter_bloc](https://pub.dev/packages/flutter_bloc)                                 | ^9.1.0         | Flutter Widgets that make it easy to implement BLoC design patterns                                                                                                      |
-| [flutter_cache_manager](https://pub.dev/packages/flutter_cache_manager)               | ^3.4.1         | A Flutter plugin for caching images and other resources.                                                                                                                 |
-| [flutter_staggered_animations](https://pub.dev/packages/flutter_staggered_animations) | ^1.1.1         | A plugin for adding staggered animations to your Flutter apps                                                                                                            |
-| [flutter_svg](https://pub.dev/packages/flutter_svg)                                   | ^2.0.17        | Flutter plugin for displaying SVG images.                                                                                                                                |
-| [fluttertoast](https://pub.dev/packages/fluttertoast)                                 | ^8.2.12        | Flutter plugin for displaying toast messages.                                                                                                                            |
-| [get_it](https://pub.dev/packages/get_it)                                             | ^8.0.3         | Simple direct Service Locator that allows to decouple the interface from a concrete implementation and to access the concrete implementation from everywhere in your App |
-| [hive](https://pub.dev/packages/hive)                                                 | ^2.2.3         | A lightweight and blazing fast key-value database                                                                                                                        |
-| [hive_flutter](https://pub.dev/packages/hive_flutter)                                 | ^1.1.0         | Hive database implementation for Flutter                                                                                                                                 |
-| [just_audio](https://pub.dev/packages/just_audio)                                     | ^0.10.4        | A feature-rich audio player for Flutter                                                                                                                                  |
-| [just_audio_background](https://pub.dev/packages/just_audio_background)               | ^0.0.1-beta.15 | A plugin for playing audio in the background on Android and iOS.                                                                                                         |
-| [lottie](https://pub.dev/packages/lottie)                                             | ^3.3.1         | Lottie is a mobile library for Android and iOS that parses Lottie and JSON-based animations and renders them natively on mobile.                                         |
-| [marquee](https://pub.dev/packages/marquee)                                           | ^2.3.0         | A Flutter widget that scrolls text infinitely.                                                                                                                           |
-| [on_audio_query](https://pub.dev/packages/on_audio_query)                             | ^2.9.0         | A Flutter plugin to query songs on Android and iOS                                                                                                                       |
-| [package_info_plus](https://pub.dev/packages/packages_info_plus)                      | ^8.3.0         | Flutter plugin for querying information about the application package, such as CFBundleVersion on iOS or versionCode on Android.                                         |
-| [permission_handler](https://pub.dev/packages/permission_handler)                     | ^12.0.1        | A Flutter plugin for permission handling. This plugin provides a cross-platform (iOS, Android) API to request and check permissions.                                     |
-| [rxdart](https://pub.dev/packages/rxdart)                                             | ^0.28.0        | RxDart is an implementation of the popular reactiveX api for asynchronous programming, leveraging the native Dart Streams API.                                           |
-| [share_plus](https://pub.dev/packages/share_plus)                                     | ^11.0.0        | Flutter plugin for sharing content via the platform share UI, using the ACTION_SEND intent on Android and UIActivityViewController on iOS.                               |
-| [url_launcher](https://pub.dev/packages/url_launcher)                                 | ^6.3.1         | A Flutter plugin for launching a URL in the mobile platform.                                                                                                             |
+| Name                                                                                  | Description                                                                        |
+| ------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| [auto_size_text](https://pub.dev/packages/auto_size_text)                             | Flutter widget that automatically resizes text to fit perfectly within its bounds. |
+| [bloc](https://pub.dev/packages/bloc)                                                 | A predictable state management library.                                            |
+| [flutter_bloc](https://pub.dev/packages/flutter_bloc)                                 | Flutter widgets that make it easy to implement BLoC design patterns.               |
+| [flutter_cache_manager](https://pub.dev/packages/flutter_cache_manager)               | A Flutter plugin for caching images and other resources.                           |
+| [flutter_staggered_animations](https://pub.dev/packages/flutter_staggered_animations) | A plugin for adding staggered animations to your Flutter apps.                     |
+| [flutter_svg](https://pub.dev/packages/flutter_svg)                                   | Flutter plugin for displaying SVG images.                                          |
+| [fluttertoast](https://pub.dev/packages/fluttertoast)                                 | Flutter plugin for displaying toast messages.                                      |
+| [get_it](https://pub.dev/packages/get_it)                                             | Simple Service Locator for dependency injection.                                   |
+| [hive](https://pub.dev/packages/hive)                                                 | A lightweight and blazing fast key-value database.                                 |
+| [hive_flutter](https://pub.dev/packages/hive_flutter)                                 | Hive database implementation for Flutter.                                          |
+| [just_audio](https://pub.dev/packages/just_audio)                                     | A feature-rich audio player for Flutter.                                           |
+| [just_audio_background](https://pub.dev/packages/just_audio_background)               | Plugin for playing audio in the background on Android and iOS.                     |
+| [lottie](https://pub.dev/packages/lottie)                                             | Library for rendering JSON-based Lottie animations natively.                       |
+| [marquee](https://pub.dev/packages/marquee)                                           | A Flutter widget that scrolls text infinitely.                                     |
+| [on_audio_query](https://pub.dev/packages/on_audio_query)                             | A Flutter plugin to query songs on Android and iOS.                                |
+| [package_info_plus](https://pub.dev/packages/package_info_plus)                       | Plugin for querying information about the application package.                     |
+| [permission_handler](https://pub.dev/packages/permission_handler)                     | Cross-platform permission handling plugin.                                         |
+| [share_plus](https://pub.dev/packages/share_plus)                                     | Plugin for sharing content via the platform share UI.                              |
+| [url_launcher](https://pub.dev/packages/url_launcher)                                 | Plugin for launching URLs on mobile platforms.                                     |
 
 ## 📦 Installation
 
@@ -130,65 +128,76 @@ Meloplay is a local music player app that plays music from your device built wit
 
 ## ❗ Permissions
 
-### Android
+Inside `AndroidManifest.xml` we have the following permissions:
 
 ```xml
+<!-- ADD xmlns:tools="http://schemas.android.com/tools" to the "manifest" element -->
+<manifest xmlns:tools="http://schemas.android.com/tools" ...>
+    <!-- url_launcher -->
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="https" />
+        </intent>
+    </queries>
 
-<!-- url_launcher -->
-<queries>
-    <intent>
-        <action android:name="android.intent.action.VIEW" />
-        <data android:scheme="https" />
-    </intent>
-</queries>
+    <!-- Android 12 and below -->
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
 
-<!-- !DANGER! Delete, update songs/playlists -->
-<uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
+    <!-- Android 13+ -->
+    <uses-permission
+        android:name="android.permission.READ_MEDIA_AUDIO" />
 
-<!-- Android 12 or below  -->
-<uses-permission
-    android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-    android:maxSdkVersion="29"
-/>
-<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <!-- ADD THESE TWO PERMISSIONS -->
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <!-- ALSO ADD THIS PERMISSION IF TARGETING SDK 34 -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK"/>
 
-<!-- Android 13 or greater  -->
-<uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
+    <application ...>
 
-<!-- Audio service -->
-<uses-permission android:name="android.permission.WAKE_LOCK" />
-<uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    ...
+
+    <!-- EDIT THE android:name ATTRIBUTE IN YOUR EXISTING "ACTIVITY" ELEMENT -->
+    <activity android:name="com.ryanheise.audioservice.AudioServiceActivity" ...>
+      ...
+    </activity>
+
+    <!-- ADD THIS "SERVICE" element -->
+    <service android:name="com.ryanheise.audioservice.AudioService"
+        android:foregroundServiceType="mediaPlayback"
+        android:exported="true" tools:ignore="Instantiatable">
+      <intent-filter>
+        <action android:name="android.media.browse.MediaBrowserService" />
+      </intent-filter>
+    </service>
+
+    <!-- ADD THIS "RECEIVER" element -->
+    <receiver android:name="com.ryanheise.audioservice.MediaButtonReceiver"
+        android:exported="true" tools:ignore="Instantiatable">
+      <intent-filter>
+        <action android:name="android.intent.action.MEDIA_BUTTON" />
+      </intent-filter>
+    </receiver>
+  </application>
+</manifest>
 ```
 
-### iOS
-
-```xml
-<!-- url_launcher -->
-<key>LSApplicationQueriesSchemes</key>
-<array>
-    <string>https</string>
-</array>
-<key>NSAppleMusicUsageDescription</key>
-<string>$(PROJECT_NAME) requires access to media library</string>
-<key>UIBackgroundModes</key>
-<array>
-    <string>audio</string>
-</array>
-```
-
-## 🤝 Contributing
+## Contributing
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
-## 📝 License
+## License
 
 Distributed under the Attribution-NonCommercial-ShareAlike 4.0 International License. See [LICENSE](LICENSE) for more information.
 
-## 📧 Contact
+## Contact
 
 - [Email](mailto:shokh.xyz@gmail.com)
 - [GitHub](https://github.com/ShokhrukhbekYuldoshev)
 
-## 🌟 Show your support
+## Show your support
 
-Give a ⭐️ if you like this project!
+Give a star if you like this project!

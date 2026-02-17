@@ -1,38 +1,40 @@
 part of 'home_bloc.dart';
 
 @immutable
-sealed class HomeState {}
+class HomeState {
+  final bool isLoading;
 
-final class HomeInitial extends HomeState {}
-
-final class HomeLoading extends HomeState {}
-
-final class SongsLoaded extends HomeState {
   final List<SongModel> songs;
-
-  SongsLoaded(this.songs);
-}
-
-final class ArtistsLoaded extends HomeState {
   final List<ArtistModel> artists;
-
-  ArtistsLoaded(this.artists);
-}
-
-final class AlbumsLoaded extends HomeState {
   final List<AlbumModel> albums;
-
-  AlbumsLoaded(this.albums);
-}
-
-final class GenresLoaded extends HomeState {
   final List<GenreModel> genres;
 
-  GenresLoaded(this.genres);
-}
+  final String? error;
 
-final class HomeError extends HomeState {
-  final String message;
+  const HomeState({
+    this.isLoading = false,
+    this.songs = const [],
+    this.artists = const [],
+    this.albums = const [],
+    this.genres = const [],
+    this.error,
+  });
 
-  HomeError(this.message);
+  HomeState copyWith({
+    bool? isLoading,
+    List<SongModel>? songs,
+    List<ArtistModel>? artists,
+    List<AlbumModel>? albums,
+    List<GenreModel>? genres,
+    String? error,
+  }) {
+    return HomeState(
+      isLoading: isLoading ?? this.isLoading,
+      songs: songs ?? this.songs,
+      artists: artists ?? this.artists,
+      albums: albums ?? this.albums,
+      genres: genres ?? this.genres,
+      error: error,
+    );
+  }
 }

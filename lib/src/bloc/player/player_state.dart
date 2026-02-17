@@ -1,60 +1,62 @@
 part of 'player_bloc.dart';
 
-@immutable
-sealed class PlayerState {}
-
-final class PlayerInitial extends PlayerState {}
-
-final class PlayerPlaying extends PlayerState {}
-
-final class PlayerPaused extends PlayerState {}
-
-final class PlayerStopped extends PlayerState {}
-
-final class PlayerSongsLoaded extends PlayerState {}
-
-final class PlayerSeeked extends PlayerState {
-  final Duration position;
-
-  PlayerSeeked(this.position);
-}
-
-final class PlayerError extends PlayerState {
-  final String message;
-
-  PlayerError(this.message);
-}
-
-final class PlayerLoading extends PlayerState {}
-
-final class PlayerNexted extends PlayerState {}
-
-final class PlayerPrevioussed extends PlayerState {}
-
-final class PlayerShuffled extends PlayerState {}
-
-final class PlayerLooped extends PlayerState {}
-
-final class PlayerVolumeSet extends PlayerState {
-  final double volume;
-
-  PlayerVolumeSet(this.volume);
-}
-
-final class PlayerSpeedSet extends PlayerState {
-  final double speed;
-
-  PlayerSpeedSet(this.speed);
-}
-
-final class PlayerLoopModeSet extends PlayerState {
+class PlayerState extends Equatable {
+  final List<SongModel> playlist;
+  final MediaItem? currentSong;
+  final int currentIndex;
+  final bool isPlaying;
+  final bool isShuffleEnabled;
   final LoopMode loopMode;
+  final Duration position;
+  final Duration duration;
+  final bool isLoading;
 
-  PlayerLoopModeSet(this.loopMode);
-}
+  const PlayerState({
+    this.playlist = const [],
+    this.currentSong,
+    this.currentIndex = 0,
+    this.isPlaying = false,
+    this.isShuffleEnabled = false,
+    this.loopMode = LoopMode.off,
+    this.position = Duration.zero,
+    this.duration = Duration.zero,
+    this.isLoading = false,
+  });
 
-final class PlayerShuffleModeEnabledSet extends PlayerState {
-  final bool shuffleModeEnabled;
+  PlayerState copyWith({
+    List<SongModel>? playlist,
+    MediaItem? currentSong,
+    int? currentIndex,
+    bool? isPlaying,
+    bool? isShuffleEnabled,
+    LoopMode? loopMode,
+    Duration? position,
+    Duration? duration,
+    bool? isLoading,
+  }) {
+    return PlayerState(
+      playlist: playlist ?? this.playlist,
+      currentSong: currentSong ?? this.currentSong,
+      currentIndex: currentIndex ?? this.currentIndex,
+      isPlaying: isPlaying ?? this.isPlaying,
+      isShuffleEnabled: isShuffleEnabled ?? this.isShuffleEnabled,
+      loopMode: loopMode ?? this.loopMode,
+      position: position ?? this.position,
+      duration: duration ?? this.duration,
+      isLoading: isLoading ?? this.isLoading,
+    );
+  }
 
-  PlayerShuffleModeEnabledSet(this.shuffleModeEnabled);
+  @override
+  List<Object?> get props => [
+    playlist,
+    currentSong,
+    currentIndex,
+    isPlaying,
+    isShuffleEnabled,
+    loopMode,
+    position,
+    duration,
+    isLoading,
+  ];
 }

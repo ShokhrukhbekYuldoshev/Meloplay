@@ -31,9 +31,7 @@ class _ThemesPageState extends State<ThemesPage> {
           ),
           body: Ink(
             padding: const EdgeInsets.fromLTRB(32, 16, 32, 16),
-            decoration: BoxDecoration(
-              gradient: Themes.getTheme().linearGradient,
-            ),
+            decoration: BoxDecoration(gradient: Themes.getTheme().gradient),
             child: GridView.builder(
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 3,
@@ -43,7 +41,7 @@ class _ThemesPageState extends State<ThemesPage> {
               itemCount: themeNames.length,
               itemBuilder: (context, index) {
                 final themeName = themeNames[index];
-                return _buildThemeButton(themeName);
+                return _buildThemeButton(context, themeName, state.theme);
               },
             ),
           ),
@@ -52,22 +50,29 @@ class _ThemesPageState extends State<ThemesPage> {
     );
   }
 
-  Widget _buildThemeButton(String themeName) {
+  Widget _buildThemeButton(
+    BuildContext context,
+    String themeName,
+    String selectedTheme,
+  ) {
+    final theme = Themes.themes.firstWhere((t) => t.themeName == themeName);
+
+    final isSelected = selectedTheme == themeName;
+
+    final isDark = theme.colorScheme.brightness == Brightness.dark;
+
     return Stack(
       children: [
         Ink(
           width: double.infinity,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16),
-            gradient: Themes.getThemeFromKey(themeName).linearGradient,
+            gradient: theme.gradient,
             boxShadow: [
               BoxShadow(
-                color: Themes.getThemeFromKey(
-                  themeName,
-                ).colorScheme.primary.withValues(alpha: 0.5),
-                blurRadius: 8,
-                spreadRadius: -5,
-                offset: const Offset(0, 0),
+                color: theme.secondaryColor.withOpacity(0.4),
+                blurRadius: 12,
+                spreadRadius: -4,
               ),
             ],
           ),
@@ -78,19 +83,11 @@ class _ThemesPageState extends State<ThemesPage> {
             },
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Align(
-                alignment: Alignment.center,
+              child: Center(
                 child: Text(
                   themeName,
-                  textAlign: TextAlign.center,
                   style: TextStyle(
-                    color:
-                        Themes.getThemeFromKey(
-                              themeName,
-                            ).colorScheme.brightness ==
-                            Brightness.dark
-                        ? Colors.white
-                        : Colors.black,
+                    color: isDark ? Colors.white : Colors.black,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -98,17 +95,27 @@ class _ThemesPageState extends State<ThemesPage> {
             ),
           ),
         ),
-        if (Themes.getThemeName() == themeName)
-          Align(
-            alignment: Alignment.bottomRight,
-            child: Container(
-              width: 32,
-              height: 32,
-              decoration: const BoxDecoration(
+
+        /// Selected Indicator
+        if (isSelected)
+          Positioned(
+            bottom: 8,
+            right: 8,
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 250),
+              width: 28,
+              height: 28,
+              decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.deepPurple,
+                color: theme.secondaryColor,
+                boxShadow: [
+                  BoxShadow(
+                    color: theme.secondaryColor.withOpacity(0.5),
+                    blurRadius: 10,
+                  ),
+                ],
               ),
-              child: const Icon(Icons.check, color: Colors.white),
+              child: const Icon(Icons.check, size: 18, color: Colors.white),
             ),
           ),
       ],

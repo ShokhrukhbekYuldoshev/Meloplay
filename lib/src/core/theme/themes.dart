@@ -3,77 +3,35 @@ import 'package:hive/hive.dart';
 import 'package:meloplay/src/data/services/hive_box.dart';
 
 class Themes {
-  static final List<ThemeColor> _themes = [
-    PurpleTheme(),
-    BlueTheme(),
-    GreenTheme(),
-    OrangeTheme(),
-    YellowTheme(),
-    TealTheme(),
-    RedTheme(),
-    BlackTheme(),
-    WhiteTheme(),
-    GrayTheme(),
-  ];
+  static final Map<String, ThemeColor> _themes = {
+    PurpleTheme.name: PurpleTheme(),
+    BlueTheme.name: BlueTheme(),
+    GreenTheme.name: GreenTheme(),
+    OrangeTheme.name: OrangeTheme(),
+    YellowTheme.name: YellowTheme(),
+    TealTheme.name: TealTheme(),
+    RedTheme.name: RedTheme(),
+    BlackTheme.name: BlackTheme(),
+    WhiteTheme.name: WhiteTheme(),
+    GrayTheme.name: GrayTheme(),
+  };
 
-  static final List<String> _themeNames = [
-    'Purple',
-    'Blue',
-    'Green',
-    'Orange',
-    'Yellow',
-    'Teal',
-    'Red',
-    'Black',
-    'White',
-    'Gray',
-  ];
+  static Box<dynamic> get _box => Hive.box(HiveBox.boxName);
 
-  static List<ThemeColor> get themes => _themes;
-  static List<String> get themeNames => _themeNames;
+  static List<ThemeColor> get themes => _themes.values.toList();
+  static List<String> get themeNames => _themes.keys.toList();
 
-  static ThemeColor getThemeFromKey(String key) {
-    switch (key) {
-      case 'Purple':
-        return _themes[0];
-      case 'Blue':
-        return _themes[1];
-      case 'Green':
-        return _themes[2];
-      case 'Orange':
-        return _themes[3];
-      case 'Yellow':
-        return _themes[4];
-      case 'Teal':
-        return _themes[5];
-      case 'Red':
-        return _themes[6];
-      case 'Black':
-        return _themes[7];
-      case 'White':
-        return _themes[8];
-      case 'Gray':
-        return _themes[9];
-      default:
-        return _themes[0];
-    }
+  static ThemeColor getTheme() {
+    final name = _box.get(HiveBox.themeKey, defaultValue: PurpleTheme.name);
+    return _themes[name] ?? PurpleTheme();
   }
 
   static Future<void> setTheme(String themeName) async {
-    final Box<dynamic> box = Hive.box(HiveBox.boxName);
-    await box.put(HiveBox.themeKey, themeName);
+    await _box.put(HiveBox.themeKey, themeName);
   }
 
   static String getThemeName() {
-    final Box<dynamic> box = Hive.box(HiveBox.boxName);
-    final String? themeName = box.get(HiveBox.themeKey) as String?;
-    return themeName ?? 'Purple';
-  }
-
-  static ThemeColor getTheme() {
-    final Box<dynamic> box = Hive.box(HiveBox.boxName);
-    final String? themeName = box.get(HiveBox.themeKey) as String?;
-    return getThemeFromKey(themeName ?? 'Purple');
+    return _box.get(HiveBox.themeKey, defaultValue: PurpleTheme.name);
   }
 }
 
@@ -81,194 +39,161 @@ abstract class ThemeColor {
   final String themeName;
   final Color primaryColor;
   final Color secondaryColor;
-  final ColorScheme colorScheme;
-  final LinearGradient linearGradient;
 
   const ThemeColor({
     required this.themeName,
     required this.primaryColor,
     required this.secondaryColor,
-    required this.colorScheme,
-    required this.linearGradient,
   });
+
+  ColorScheme get colorScheme =>
+      ColorScheme.fromSeed(seedColor: secondaryColor, brightness: brightness);
+
+  LinearGradient get gradient => LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [primaryColor, secondaryColor],
+  );
+
+  Brightness get brightness;
 }
 
 class PurpleTheme extends ThemeColor {
+  static const String name = 'Purple';
+
   PurpleTheme()
     : super(
-        themeName: 'Purple',
-        primaryColor: const Color(0xff0e0725),
-        secondaryColor: const Color(0xff5c03bc),
-        colorScheme: ColorScheme.fromSwatch(
-          primarySwatch: Colors.purple,
-          brightness: Brightness.dark,
-        ),
-        linearGradient: const LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [Color(0xff0e0725), Color(0xff5c03bc)],
-        ),
+        themeName: name,
+        primaryColor: const Color(0xFF0F0C29),
+        secondaryColor: const Color(0xFF6A11CB),
       );
+
+  @override
+  Brightness get brightness => Brightness.dark;
 }
 
 class BlueTheme extends ThemeColor {
+  static const String name = 'Blue';
+
   BlueTheme()
     : super(
-        themeName: 'Blue',
-        primaryColor: const Color(0xff000328),
-        secondaryColor: const Color(0xFF00458e),
-        colorScheme: ColorScheme.fromSwatch(
-          primarySwatch: Colors.blue,
-          brightness: Brightness.dark,
-        ),
-        linearGradient: const LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [Color(0xff000328), Color(0xFF00458e)],
-        ),
+        themeName: name,
+        primaryColor: const Color(0xFF0F2027),
+        secondaryColor: const Color(0xFF00C6FF),
       );
+
+  @override
+  Brightness get brightness => Brightness.dark;
 }
 
 class GreenTheme extends ThemeColor {
+  static const String name = 'Green';
+
   GreenTheme()
     : super(
-        themeName: 'Green',
-        primaryColor: const Color(0xff0c0c0c),
-        secondaryColor: const Color(0xFF0f971c),
-        colorScheme: ColorScheme.fromSwatch(
-          primarySwatch: Colors.green,
-          brightness: Brightness.dark,
-        ),
-        linearGradient: const LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [Color(0xff0c0c0c), Color(0xFF0f971c)],
-        ),
+        themeName: name,
+        primaryColor: const Color(0xFF0F2027),
+        secondaryColor: const Color(0xFF1DB954),
       );
+
+  @override
+  Brightness get brightness => Brightness.dark;
 }
 
 class OrangeTheme extends ThemeColor {
+  static const String name = 'Orange';
+
   OrangeTheme()
     : super(
-        themeName: 'Orange',
-        primaryColor: const Color(0xff471a0c),
-        secondaryColor: const Color(0xFF8A4816),
-        colorScheme: ColorScheme.fromSwatch(
-          primarySwatch: Colors.orange,
-          brightness: Brightness.dark,
-        ),
-        linearGradient: const LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [Color(0xff471a0c), Color(0xFF8A4816)],
-        ),
+        themeName: name,
+        primaryColor: const Color(0xFF1A1A1A),
+        secondaryColor: const Color(0xFFFF8C42),
       );
+
+  @override
+  Brightness get brightness => Brightness.dark;
 }
 
 class YellowTheme extends ThemeColor {
+  static const String name = 'Yellow';
+
   YellowTheme()
     : super(
-        themeName: 'Yellow',
-        primaryColor: const Color(0xff161616),
-        secondaryColor: const Color(0xFFb79c05),
-        colorScheme: ColorScheme.fromSwatch(
-          primarySwatch: Colors.yellow,
-          brightness: Brightness.dark,
-        ),
-        linearGradient: const LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [Color(0xff161616), Color(0xFFb79c05)],
-        ),
+        themeName: name,
+        primaryColor: const Color(0xFF1C1C1C),
+        secondaryColor: const Color(0xFFFFC107),
       );
+
+  @override
+  Brightness get brightness => Brightness.dark;
 }
 
 class TealTheme extends ThemeColor {
+  static const String name = 'Teal';
+
   TealTheme()
     : super(
-        themeName: 'Teal',
-        primaryColor: const Color(0xff0c4741),
-        secondaryColor: const Color(0xFF168A7A),
-        colorScheme: ColorScheme.fromSwatch(
-          primarySwatch: Colors.teal,
-          brightness: Brightness.dark,
-        ),
-        linearGradient: const LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [Color(0xff0c4741), Color(0xFF168A7A)],
-        ),
+        themeName: name,
+        primaryColor: const Color(0xFF0F2027),
+        secondaryColor: const Color(0xFF00BFA6),
       );
+
+  @override
+  Brightness get brightness => Brightness.dark;
 }
 
 class RedTheme extends ThemeColor {
+  static const String name = 'Red';
+
   RedTheme()
     : super(
-        themeName: 'Red',
-        primaryColor: const Color(0xff1b0a07),
-        secondaryColor: const Color(0xFF7f0012),
-        colorScheme: ColorScheme.fromSwatch(
-          primarySwatch: Colors.red,
-          brightness: Brightness.dark,
-        ),
-        linearGradient: const LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [Color(0xff1b0a07), Color(0xFF7f0012)],
-        ),
+        themeName: name,
+        primaryColor: const Color(0xFF1A0000),
+        secondaryColor: const Color(0xFFE10600),
       );
+
+  @override
+  Brightness get brightness => Brightness.dark;
 }
 
 class BlackTheme extends ThemeColor {
+  static const String name = 'Black';
+
   BlackTheme()
     : super(
-        themeName: 'Black',
-        primaryColor: const Color(0xff000000),
-        secondaryColor: const Color(0xFF1B1B1B),
-        colorScheme: ColorScheme.fromSwatch(
-          primarySwatch: Colors.grey,
-          brightness: Brightness.dark,
-        ),
-        linearGradient: const LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [Color(0xff000000), Color(0xFF1B1B1B)],
-        ),
+        themeName: name,
+        primaryColor: const Color(0xFF000000),
+        secondaryColor: const Color(0xFF121212),
       );
+
+  @override
+  Brightness get brightness => Brightness.dark;
 }
 
 class WhiteTheme extends ThemeColor {
+  static const String name = 'White';
+
   WhiteTheme()
     : super(
-        themeName: 'White',
-        primaryColor: const Color(0XFFD3CCE3),
-        secondaryColor: const Color(0xFFE9E4F0),
-        colorScheme: ColorScheme.fromSwatch(
-          primarySwatch: Colors.grey,
-          brightness: Brightness.light,
-        ),
-        linearGradient: const LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [Color(0XFFD3CCE3), Color(0xFFE9E4F0)],
-        ),
+        themeName: name,
+        primaryColor: const Color(0xFFF5F7FA),
+        secondaryColor: const Color(0xFFE4E7EB),
       );
+
+  @override
+  Brightness get brightness => Brightness.light;
 }
 
 class GrayTheme extends ThemeColor {
+  static const String name = 'Gray';
+
   GrayTheme()
     : super(
-        themeName: 'Gray',
-        primaryColor: const Color(0xff232526),
+        themeName: name,
+        primaryColor: const Color(0xFF232526),
         secondaryColor: const Color(0xFF414345),
-        colorScheme: ColorScheme.fromSwatch(
-          primarySwatch: Colors.grey,
-          brightness: Brightness.dark,
-        ),
-        linearGradient: const LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [Color(0xff232526), Color(0xFF414345)],
-        ),
       );
+
+  @override
+  Brightness get brightness => Brightness.dark;
 }

@@ -1,113 +1,128 @@
-import 'package:bloc/bloc.dart';
-import 'package:flutter/foundation.dart';
+import 'dart:async';
+import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
-import 'package:on_audio_query/on_audio_query.dart';
-
 import 'package:meloplay/src/data/repositories/player_repository.dart';
+import 'package:on_audio_query/on_audio_query.dart';
 
 part 'player_event.dart';
 part 'player_state.dart';
 
 class PlayerBloc extends Bloc<PlayerEvent, PlayerState> {
-  PlayerBloc({required MusicPlayer repository}) : super(PlayerInitial()) {
-    on<PlayerLoadSongs>((event, emit) async {
-      try {
-        emit(PlayerLoading());
-        await repository.load(event.mediaItem, event.playlist);
-        emit(PlayerSongsLoaded());
-      } catch (e) {
-        emit(PlayerError(e.toString()));
-      }
-    });
-    on<PlayerPlay>((event, emit) async {
-      try {
-        await repository.play();
-        emit(PlayerPlaying());
-      } catch (e) {
-        emit(PlayerError(e.toString()));
+  final MusicPlayer _player;
+
+  StreamSubscription? _positionSub;
+  StreamSubscription? _indexSub;
+  StreamSubscription? _playingSub;
+  StreamSubscription? _durationSub;
+  StreamSubscription? _shuffleSub;
+  StreamSubscription? _loopSub;
+
+  PlayerBloc(this._player) : super(const PlayerState()) {
+    on<PlayerInit>(_onInit);
+    on<PlayerLoadPlaylist>(_onLoadPlaylist);
+    on<PlayerPlay>((e, emit) => _player.play());
+    on<PlayerPause>((e, emit) => _player.pause());
+    on<PlayerSeek>(_onSeek);
+    on<PlayerNext>((e, emit) => _player.seekToNext());
+    on<PlayerPrevious>((e, emit) => _player.seekToPrevious());
+    on<PlayerSetShuffle>(_onSetShuffle);
+    on<PlayerSetLoopMode>(_onSetLoopMode);
+    on<PlayerPositionChanged>(
+      (e, emit) => emit(state.copyWith(position: e.position)),
+    );
+    on<PlayerIndexChanged>(_onIndexChanged);
+    on<PlayerPlayingChanged>(
+      (e, emit) => emit(state.copyWith(isPlaying: e.playing)),
+    );
+  }
+
+  Future<void> _onInit(PlayerInit event, Emitter<PlayerState> emit) async {
+    await _player.init();
+
+    _positionSub = _player.position.listen(
+      (pos) => add(PlayerPositionChanged(pos)),
+    );
+
+    _indexSub = _player.currentIndex.listen((i) => add(PlayerIndexChanged(i)));
+
+    _playingSub = _player.playing.listen((p) => add(PlayerPlayingChanged(p)));
+
+    _durationSub = _player.duration.listen((d) {
+      if (d != null) {
+        emit(state.copyWith(duration: d));
       }
     });
 
-    on<PlayerPause>((event, emit) async {
-      try {
-        await repository.pause();
-        emit(PlayerPaused());
-      } catch (e) {
-        emit(PlayerError(e.toString()));
-      }
-    });
+    _shuffleSub = _player.shuffleModeEnabled.listen(
+      (enabled) => emit(state.copyWith(isShuffleEnabled: enabled)),
+    );
 
-    on<PlayerStop>((event, emit) async {
-      try {
-        await repository.stop();
-        emit(PlayerStopped());
-      } catch (e) {
-        emit(PlayerError(e.toString()));
-      }
-    });
+    _loopSub = _player.loopMode.listen(
+      (mode) => emit(state.copyWith(loopMode: mode)),
+    );
+  }
 
-    on<PlayerSeek>((event, emit) async {
-      try {
-        await repository.seek(event.position, index: event.index);
-        emit(PlayerSeeked(event.position));
-      } catch (e) {
-        emit(PlayerError(e.toString()));
-      }
-    });
+  Future<void> _onLoadPlaylist(
+    PlayerLoadPlaylist event,
+    Emitter<PlayerState> emit,
+  ) async {
+    emit(state.copyWith(isLoading: true));
 
-    on<PlayerNext>((event, emit) async {
-      try {
-        await repository.seekToNext();
-        emit(PlayerNexted());
-      } catch (e) {
-        emit(PlayerError(e.toString()));
-      }
-    });
+    await _player.load(event.mediaItem, event.playlist);
 
-    on<PlayerPrevious>((event, emit) async {
-      try {
-        await repository.seekToPrevious();
-        emit(PlayerPrevioussed());
-      } catch (e) {
-        emit(PlayerError(e.toString()));
-      }
-    });
+    emit(
+      state.copyWith(
+        playlist: event.playlist,
+        currentSong: event.mediaItem,
+        currentIndex: event.playlist.indexWhere(
+          (s) => s.id.toString() == event.mediaItem.id,
+        ),
+        isLoading: false,
+      ),
+    );
+  }
 
-    on<PlayerSetVolume>((event, emit) async {
-      try {
-        await repository.setVolume(event.volume);
-        emit(PlayerVolumeSet(event.volume));
-      } catch (e) {
-        emit(PlayerError(e.toString()));
-      }
-    });
+  Future<void> _onSeek(PlayerSeek event, Emitter<PlayerState> emit) async {
+    await _player.seek(event.position, index: event.index);
+  }
 
-    on<PlayerSetSpeed>((event, emit) async {
-      try {
-        await repository.setSpeed(event.speed);
-        emit(PlayerSpeedSet(event.speed));
-      } catch (e) {
-        emit(PlayerError(e.toString()));
-      }
-    });
+  Future<void> _onSetShuffle(
+    PlayerSetShuffle event,
+    Emitter<PlayerState> emit,
+  ) async {
+    await _player.setShuffleModeEnabled(event.enabled);
+  }
 
-    on<PlayerSetLoopMode>((event, emit) async {
-      try {
-        await repository.setLoopMode(event.loopMode);
-        emit(PlayerLoopModeSet(event.loopMode));
-      } catch (e) {
-        emit(PlayerError(e.toString()));
-      }
-    });
+  Future<void> _onSetLoopMode(
+    PlayerSetLoopMode event,
+    Emitter<PlayerState> emit,
+  ) async {
+    await _player.setLoopMode(event.loopMode);
+  }
 
-    on<PlayerSetShuffleModeEnabled>((event, emit) async {
-      try {
-        await repository.setShuffleModeEnabled(event.shuffleModeEnabled);
-        emit(PlayerShuffleModeEnabledSet(event.shuffleModeEnabled));
-      } catch (e) {
-        emit(PlayerError(e.toString()));
-      }
-    });
+  void _onIndexChanged(PlayerIndexChanged event, Emitter<PlayerState> emit) {
+    if (event.index == null || state.playlist.isEmpty) return;
+
+    final song = state.playlist[event.index!];
+
+    emit(
+      state.copyWith(
+        currentIndex: event.index!,
+        currentSong: _player.getMediaItemFromSong(song),
+      ),
+    );
+  }
+
+  @override
+  Future<void> close() {
+    _positionSub?.cancel();
+    _indexSub?.cancel();
+    _playingSub?.cancel();
+    _durationSub?.cancel();
+    _shuffleSub?.cancel();
+    _loopSub?.cancel();
+    return super.close();
   }
 }

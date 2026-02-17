@@ -8,66 +8,101 @@ part 'home_event.dart';
 part 'home_state.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
-  HomeBloc({required HomeRepository repository}) : super(HomeInitial()) {
+  final HomeRepository repository;
+
+  HomeBloc({required this.repository}) : super(const HomeState()) {
+    /// =========================
+    /// GET SONGS
+    /// =========================
     on<GetSongsEvent>((event, emit) async {
-      emit(HomeLoading());
+      // Prevent unnecessary reload
+      if (state.songs.isNotEmpty) return;
+
+      emit(state.copyWith(isLoading: true));
+
       try {
         final songs = await repository.getSongs();
-        emit(
-          SongsLoaded(songs),
-        );
+
+        emit(state.copyWith(isLoading: false, songs: songs));
       } catch (e, s) {
         debugPrintStack(label: e.toString(), stackTrace: s);
-        emit(HomeError(e.toString()));
+
+        emit(state.copyWith(isLoading: false, error: e.toString()));
       }
     });
-    on<GetArtistsEvent>((event, emit) async {
-      emit(HomeLoading());
-      try {
-        final artists = await repository.getArtists();
-        emit(
-          ArtistsLoaded(artists),
-        );
-      } catch (e, s) {
-        debugPrintStack(label: e.toString(), stackTrace: s);
-        emit(HomeError(e.toString()));
-      }
-    });
-    on<GetAlbumsEvent>((event, emit) async {
-      emit(HomeLoading());
-      try {
-        final albums = await repository.getAlbums();
-        emit(
-          AlbumsLoaded(albums),
-        );
-      } catch (e, s) {
-        debugPrintStack(label: e.toString(), stackTrace: s);
-        emit(HomeError(e.toString()));
-      }
-    });
-    on<GetGenresEvent>((event, emit) async {
-      emit(HomeLoading());
-      try {
-        final genres = await repository.getGenres();
-        emit(
-          GenresLoaded(genres),
-        );
-      } catch (e, s) {
-        debugPrintStack(label: e.toString(), stackTrace: s);
-        emit(HomeError(e.toString()));
-      }
-    });
+
+    /// =========================
+    /// SORT SONGS
+    /// =========================
     on<SortSongsEvent>((event, emit) async {
-      emit(HomeLoading());
+      emit(state.copyWith(isLoading: true));
+
       try {
         await repository.sortSongs(event.songSortType, event.orderType);
         final songs = await repository.getSongs();
-        emit(
-          SongsLoaded(songs),
-        );
+
+        emit(state.copyWith(isLoading: false, songs: songs));
       } catch (e, s) {
         debugPrintStack(label: e.toString(), stackTrace: s);
-        emit(HomeError(e.toString()));
+
+        emit(state.copyWith(isLoading: false, error: e.toString()));
+      }
+    });
+
+    /// =========================
+    /// GET ARTISTS
+    /// =========================
+    on<GetArtistsEvent>((event, emit) async {
+      if (state.artists.isNotEmpty) return;
+
+      emit(state.copyWith(isLoading: true));
+
+      try {
+        final artists = await repository.getArtists();
+
+        emit(state.copyWith(isLoading: false, artists: artists));
+      } catch (e, s) {
+        debugPrintStack(label: e.toString(), stackTrace: s);
+
+        emit(state.copyWith(isLoading: false, error: e.toString()));
+      }
+    });
+
+    /// =========================
+    /// GET ALBUMS
+    /// =========================
+    on<GetAlbumsEvent>((event, emit) async {
+      if (state.albums.isNotEmpty) return;
+
+      emit(state.copyWith(isLoading: true));
+
+      try {
+        final albums = await repository.getAlbums();
+
+        emit(state.copyWith(isLoading: false, albums: albums));
+      } catch (e, s) {
+        debugPrintStack(label: e.toString(), stackTrace: s);
+
+        emit(state.copyWith(isLoading: false, error: e.toString()));
+      }
+    });
+
+    /// =========================
+    /// GET GENRES
+    /// =========================
+    on<GetGenresEvent>((event, emit) async {
+      if (state.genres.isNotEmpty) return;
+
+      emit(state.copyWith(isLoading: true));
+
+      try {
+        final genres = await repository.getGenres();
+
+        emit(state.copyWith(isLoading: false, genres: genres));
+      } catch (e, s) {
+        debugPrintStack(label: e.toString(), stackTrace: s);
+
+        emit(state.copyWith(isLoading: false, error: e.toString()));
       }
     });
   }

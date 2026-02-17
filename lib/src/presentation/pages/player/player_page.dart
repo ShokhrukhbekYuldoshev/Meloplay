@@ -16,7 +16,7 @@ import 'package:meloplay/src/bloc/song/song_bloc.dart';
 import 'package:meloplay/src/core/di/service_locator.dart';
 import 'package:meloplay/src/data/repositories/player_repository.dart';
 import 'package:meloplay/src/data/repositories/song_repository.dart';
-import 'package:meloplay/src/presentation/widgets/animated_favorite_button.dart';
+import 'package:meloplay/src/presentation/widgets/buttons/animated_favorite_button.dart';
 import 'package:meloplay/src/presentation/widgets/seek_bar.dart';
 
 class PlayerPage extends StatefulWidget {

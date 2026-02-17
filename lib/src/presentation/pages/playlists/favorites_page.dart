@@ -34,7 +34,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
         title: const Text('Favorites'),
       ),
       body: Ink(
-        decoration: BoxDecoration(gradient: Themes.getTheme().linearGradient),
+        decoration: BoxDecoration(gradient: Themes.getTheme().gradient),
         child: BlocListener<SongBloc, SongState>(
           listener: (context, state) {
             if (state is ToggleFavoriteSuccess) {

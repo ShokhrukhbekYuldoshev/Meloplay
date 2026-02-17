@@ -52,7 +52,7 @@ class _AlbumPageState extends State<AlbumPage> {
       bottomNavigationBar: const PlayerBottomAppBar(),
       extendBody: true,
       body: Ink(
-        decoration: BoxDecoration(gradient: Themes.getTheme().linearGradient),
+        decoration: BoxDecoration(gradient: Themes.getTheme().gradient),
         child: CustomScrollView(
           slivers: [
             SliverAppBar(
@@ -98,6 +98,7 @@ class _AlbumPageState extends State<AlbumPage> {
                   },
                 ),
                 background: QueryArtworkWidget(
+                  keepOldArtwork: true,
                   artworkBlendMode: BlendMode.darken,
                   artworkColor: Colors.black.withValues(alpha: 0.5),
                   id: widget.album.id,

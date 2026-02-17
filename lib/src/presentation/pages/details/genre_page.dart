@@ -48,14 +48,10 @@ class _GenrePageState extends State<GenrePage> {
       extendBody: true,
       appBar: AppBar(
         backgroundColor: Themes.getTheme().primaryColor,
-        title: Text(
-          widget.genre.genre,
-        ),
+        title: Text(widget.genre.genre),
       ),
       body: Ink(
-        decoration: BoxDecoration(
-          gradient: Themes.getTheme().linearGradient,
-        ),
+        decoration: BoxDecoration(gradient: Themes.getTheme().gradient),
         child: Column(
           children: [
             Expanded(
@@ -65,10 +61,7 @@ class _GenrePageState extends State<GenrePage> {
                 itemBuilder: (context, index) {
                   final SongModel song = _songs[index];
 
-                  return SongListTile(
-                    song: song,
-                    songs: _songs,
-                  );
+                  return SongListTile(song: song, songs: _songs);
                 },
               ),
             ),

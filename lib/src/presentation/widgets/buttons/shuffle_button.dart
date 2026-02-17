@@ -18,25 +18,17 @@ class ShuffleButton extends StatelessWidget {
         return IconButton(
           onPressed: () async {
             context.read<PlayerBloc>().add(
-                  PlayerSetShuffleModeEnabled(
-                    !(snapshot.data ?? false),
-                  ),
-                );
+              PlayerSetShuffle(!(snapshot.data ?? false)),
+            );
           },
           icon: snapshot.data == false
               ? SvgPicture.asset(
                   Assets.shuffleSvg,
-                  colorFilter: ColorFilter.mode(
-                    Colors.grey,
-                    BlendMode.srcIn,
-                  ),
+                  colorFilter: ColorFilter.mode(Colors.grey, BlendMode.srcIn),
                 )
               : SvgPicture.asset(
                   Assets.shuffleSvg,
-                  colorFilter: ColorFilter.mode(
-                    Colors.white,
-                    BlendMode.srcIn,
-                  ),
+                  colorFilter: ColorFilter.mode(Colors.white, BlendMode.srcIn),
                 ),
           tooltip: 'Shuffle',
         );

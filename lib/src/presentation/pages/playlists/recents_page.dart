@@ -40,9 +40,7 @@ class _RecentsPageState extends State<RecentsPage> {
       body: Ink(
         height: double.infinity,
         width: double.infinity,
-        decoration: BoxDecoration(
-          gradient: Themes.getTheme().linearGradient,
-        ),
+        decoration: BoxDecoration(gradient: Themes.getTheme().gradient),
         child: StreamBuilder<SequenceState?>(
           stream: player.sequenceState,
           builder: (context, snapshot) {
@@ -68,18 +66,13 @@ class _RecentsPageState extends State<RecentsPage> {
 
   Widget _buildBody(RecentsLoaded state) {
     if (state.songs.isEmpty) {
-      return const Center(
-        child: Text('No songs found'),
-      );
+      return const Center(child: Text('No songs found'));
     }
     return ListView.builder(
       padding: const EdgeInsets.only(bottom: 100),
       itemCount: state.songs.length,
       itemBuilder: (context, index) {
-        return SongListTile(
-          song: state.songs[index],
-          songs: state.songs,
-        );
+        return SongListTile(song: state.songs[index], songs: state.songs);
       },
     );
   }

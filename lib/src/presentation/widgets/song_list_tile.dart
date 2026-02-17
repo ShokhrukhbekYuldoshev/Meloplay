@@ -62,7 +62,10 @@ class _SongListTileState extends State<SongListTile> {
               }
             } else {
               context.read<PlayerBloc>().add(
-                PlayerLoadSongs(widget.songs, mediaItem),
+                PlayerLoadPlaylist(
+                  mediaItem: mediaItem,
+                  playlist: widget.songs,
+                ),
               );
             }
           },
