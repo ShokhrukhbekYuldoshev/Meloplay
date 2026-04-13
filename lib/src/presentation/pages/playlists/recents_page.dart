@@ -5,7 +5,7 @@ import 'package:just_audio/just_audio.dart';
 import 'package:meloplay/src/bloc/recents/recents_bloc.dart';
 import 'package:meloplay/src/core/di/service_locator.dart';
 import 'package:meloplay/src/core/theme/themes.dart';
-import 'package:meloplay/src/data/repositories/player_repository.dart';
+import 'package:meloplay/src/data/services/music_player.dart';
 import 'package:meloplay/src/presentation/widgets/player_bottom_app_bar.dart';
 import 'package:meloplay/src/presentation/widgets/song_list_tile.dart';
 

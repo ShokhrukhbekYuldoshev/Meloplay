@@ -12,7 +12,7 @@ import 'package:meloplay/src/core/di/service_locator.dart';
 import 'package:meloplay/src/core/helpers/show_player_sheet.dart';
 import 'package:meloplay/src/core/router/app_router.dart';
 import 'package:meloplay/src/core/theme/themes.dart';
-import 'package:meloplay/src/data/repositories/player_repository.dart';
+import 'package:meloplay/src/data/services/music_player.dart';
 import 'package:meloplay/src/data/repositories/recents_repository.dart';
 import 'package:meloplay/src/presentation/widgets/buttons/play_pause_button.dart';
 import 'package:meloplay/src/presentation/widgets/spinning_disc.dart';

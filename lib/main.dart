@@ -15,7 +15,7 @@ import 'package:meloplay/src/bloc/search/search_bloc.dart';
 import 'package:meloplay/src/bloc/song/song_bloc.dart';
 import 'package:meloplay/src/bloc/theme/theme_bloc.dart';
 import 'package:meloplay/src/core/di/service_locator.dart';
-import 'package:meloplay/src/data/repositories/player_repository.dart';
+import 'package:meloplay/src/data/services/music_player.dart';
 import 'package:meloplay/src/data/services/hive_box.dart';
 
 Future<void> main() async {

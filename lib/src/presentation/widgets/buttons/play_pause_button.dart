@@ -4,7 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:meloplay/src/bloc/player/player_bloc.dart';
 import 'package:meloplay/src/core/constants/assets.dart';
 import 'package:meloplay/src/core/di/service_locator.dart';
-import 'package:meloplay/src/data/repositories/player_repository.dart';
+import 'package:meloplay/src/data/services/music_player.dart';
 
 class PlayPauseButton extends StatelessWidget {
   const PlayPauseButton({

@@ -14,7 +14,7 @@ import 'package:meloplay/src/bloc/theme/theme_bloc.dart';
 
 import 'package:meloplay/src/data/repositories/favorites_repository.dart';
 import 'package:meloplay/src/data/repositories/home_repository.dart';
-import 'package:meloplay/src/data/repositories/player_repository.dart';
+import 'package:meloplay/src/data/services/music_player.dart';
 import 'package:meloplay/src/data/repositories/recents_repository.dart';
 import 'package:meloplay/src/data/repositories/search_repository.dart';
 import 'package:meloplay/src/data/repositories/song_repository.dart';

@@ -37,43 +37,29 @@ Meloplay is a local music player app that plays music from your device built wit
 
 <!-- Variables -->
 
-[splash]: screenshots/splash.jpg "Splash"
 [songs]: screenshots/songs.jpg "Songs"
 [player]: screenshots/player.jpg "Player"
 [playlists]: screenshots/playlists.jpg "Playlists"
 [artists]: screenshots/artists.jpg "Artists"
 [albums]: screenshots/albums.jpg "Albums"
 [genres]: screenshots/genres.jpg "Genres"
-[drawer]: screenshots/drawer.jpg "Drawer"
-[themes]: screenshots/themes.jpg "Themes"
-[artist]: screenshots/artist.jpg "Artist"
-[album]: screenshots/album.jpg "Album"
-[genre]: screenshots/genre.jpg "Genre"
-[search]: screenshots/search.jpg "Search"
 [settings]: screenshots/settings.jpg "Settings"
 [scan]: screenshots/scan.jpg "Scan"
+[themes]: screenshots/themes.jpg "Themes"
 
 <!-- Table -->
 
-|      Splash       |      Songs      |      Player       |
-| :---------------: | :-------------: | :---------------: |
-| ![Splash][splash] | ![Songs][songs] | ![Player][player] |
+| Songs           | Player            | Playlists               |
+| --------------- | ----------------- | ----------------------- |
+| ![Songs][songs] | ![Player][player] | ![Playlists][playlists] |
 
-|        Playlists        |       Artists       |      Albums       |
-| :---------------------: | :-----------------: | :---------------: |
-| ![Playlists][playlists] | ![Artists][artists] | ![Albums][albums] |
+| Artists             | Albums            | Genres            |
+| ------------------- | ----------------- | ----------------- |
+| ![Artists][artists] | ![Albums][albums] | ![Genres][genres] |
 
-|      Genres       |      Drawer       |      Themes       |
-| :---------------: | :---------------: | :---------------: |
-| ![Genres][genres] | ![Drawer][drawer] | ![Themes][themes] |
-
-|      Artist       |      Album      |      Genre      |
-| :---------------: | :-------------: | :-------------: |
-| ![Artist][artist] | ![Album][album] | ![Genre][genre] |
-
-|      Search       |       Settings        |     Scan      |
-| :---------------: | :-------------------: | :-----------: |
-| ![Search][search] | ![Settings][settings] | ![Scan][scan] |
+| Settings              | Scan          | Themes            |
+| --------------------- | ------------- | ----------------- |
+| ![Settings][settings] | ![Scan][scan] | ![Themes][themes] |
 
 ## Dependencies
 
@@ -98,6 +84,8 @@ Meloplay is a local music player app that plays music from your device built wit
 | [permission_handler](https://pub.dev/packages/permission_handler)                     | Cross-platform permission handling plugin.                                         |
 | [share_plus](https://pub.dev/packages/share_plus)                                     | Plugin for sharing content via the platform share UI.                              |
 | [url_launcher](https://pub.dev/packages/url_launcher)                                 | Plugin for launching URLs on mobile platforms.                                     |
+| [liquid_glass_renderer](https://pub.dev/packages/liquid_glass_renderer)               | A Flutter plugin for rendering liquid glass effects.                               |
+| [device_info_plus](https://pub.dev/packages/device_info_plus)                         | Plugin for getting device information.                                             |
 
 ## 📦 Installation
 

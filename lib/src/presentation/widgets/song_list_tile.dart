@@ -15,7 +15,7 @@ import 'package:meloplay/src/core/constants/assets.dart';
 import 'package:meloplay/src/core/di/service_locator.dart';
 import 'package:meloplay/src/core/helpers/helpers.dart';
 import 'package:meloplay/src/core/helpers/show_player_sheet.dart';
-import 'package:meloplay/src/data/repositories/player_repository.dart';
+import 'package:meloplay/src/data/services/music_player.dart';
 
 class SongListTile extends StatefulWidget {
   final SongModel song;
