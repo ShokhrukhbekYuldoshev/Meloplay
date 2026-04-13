@@ -37,22 +37,58 @@ class _ArtistsViewState extends State<ArtistsView>
       builder: (context, state) {
         /// FIRST TIME LOADING
         if (state.isLoading && state.artists.isEmpty) {
-          return const Center(child: CircularProgressIndicator());
+          return const Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CircularProgressIndicator(),
+                SizedBox(height: 16),
+                Text('Loading artists...'),
+              ],
+            ),
+          );
         }
 
         /// EMPTY STATE
         if (state.artists.isEmpty) {
-          return const Center(child: Text('No artists found'));
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.person_outline_rounded,
+                  size: 80,
+                  color: Colors.white.withValues(alpha: 0.3),
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  'No artists found',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.white.withValues(alpha: 0.7),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'Add music to your device to see artists',
+                  style: TextStyle(color: Colors.white.withValues(alpha: 0.5)),
+                ),
+              ],
+            ),
+          );
         }
 
         /// GRID VIEW
         return AnimationLimiter(
           child: GridView.builder(
+            physics: const BouncingScrollPhysics(),
             padding: const EdgeInsets.fromLTRB(16, 16, 16, 100),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
               crossAxisSpacing: 16,
               mainAxisSpacing: 16,
+              childAspectRatio: 0.85,
             ),
             itemCount: state.artists.length,
             itemBuilder: (context, index) {
@@ -62,49 +98,108 @@ class _ArtistsViewState extends State<ArtistsView>
                 position: index,
                 duration: const Duration(milliseconds: 500),
                 columnCount: 2,
-                child: FlipAnimation(
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.of(
-                        context,
-                      ).pushNamed(AppRouter.artistRoute, arguments: artist);
-                    },
-                    child: Column(
-                      children: [
-                        QueryArtworkWidget(
-                          keepOldArtwork: true,
-                          id: artist.id,
-                          type: ArtworkType.ARTIST,
-                          artworkHeight: 96,
-                          artworkWidth: 96,
-                          size: 10000,
-                          artworkBorder: BorderRadius.circular(25),
-                          nullArtworkWidget: Container(
-                            width: 96,
-                            height: 96,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(25),
-                              color: Colors.grey.withValues(alpha: 0.1),
-                            ),
-                            child: const Icon(Icons.person_outlined),
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          artist.artist,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                  ),
+                child: ScaleAnimation(
+                  child: FadeInAnimation(child: _buildArtistCard(artist)),
                 ),
               );
             },
           ),
         );
       },
+    );
+  }
+
+  Widget _buildArtistCard(ArtistModel artist) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(
+          context,
+        ).pushNamed(AppRouter.artistRoute, arguments: artist);
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Colors.white.withValues(alpha: 0.08),
+              Colors.white.withValues(alpha: 0.03),
+            ],
+          ),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Artist Image
+            Hero(
+              tag: 'artist_${artist.id}',
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(25),
+                child: QueryArtworkWidget(
+                  keepOldArtwork: true,
+                  id: artist.id,
+                  type: ArtworkType.ARTIST,
+                  artworkHeight: 120,
+                  artworkWidth: 120,
+                  size: 500,
+                  artworkBorder: BorderRadius.circular(25),
+                  nullArtworkWidget: Container(
+                    width: 120,
+                    height: 120,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(25),
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          Theme.of(
+                            context,
+                          ).colorScheme.primary.withValues(alpha: 0.3),
+                          Theme.of(
+                            context,
+                          ).colorScheme.primary.withValues(alpha: 0.1),
+                        ],
+                      ),
+                    ),
+                    child: Icon(
+                      Icons.person_outline_rounded,
+                      size: 50,
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.primary.withValues(alpha: 0.5),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 12),
+            // Artist Name
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: Text(
+                artist.artist,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 14,
+                ),
+              ),
+            ),
+            const SizedBox(height: 4),
+            // Song count
+            Text(
+              '${artist.numberOfTracks} ${artist.numberOfTracks == 1 ? 'song' : 'songs'}',
+              style: TextStyle(
+                fontSize: 11,
+                color: Colors.white.withValues(alpha: 0.5),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

@@ -16,7 +16,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     /// =========================
     on<GetSongsEvent>((event, emit) async {
       // Prevent unnecessary reload
-      if (state.songs.isNotEmpty) return;
+      // if (state.songs.isNotEmpty) return;
 
       emit(state.copyWith(isLoading: true));
 

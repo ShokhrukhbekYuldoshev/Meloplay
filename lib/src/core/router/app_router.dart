@@ -1,27 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:meloplay/src/core/router/bottom_to_top_page_route.dart';
-import 'package:meloplay/src/presentation/pages/config/scan_page.dart';
-import 'package:meloplay/src/presentation/pages/config/settings_page.dart';
-import 'package:meloplay/src/presentation/pages/playlists/add_songs_to_playlist.dart';
-import 'package:meloplay/src/presentation/pages/playlists/playlist_details_page.dart';
-import 'package:meloplay/src/presentation/pages/player/queue_page.dart';
-import 'package:meloplay/src/presentation/pages/home/search_page.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
+import 'package:meloplay/src/data/models/playlist_model.dart';
+import 'package:meloplay/src/presentation/pages/config/scan_page.dart';
+import 'package:meloplay/src/presentation/pages/config/settings_page.dart';
+import 'package:meloplay/src/presentation/pages/config/themes_page.dart';
 import 'package:meloplay/src/presentation/pages/details/album_page.dart';
 import 'package:meloplay/src/presentation/pages/details/artist_page.dart';
-import 'package:meloplay/src/presentation/pages/playlists/favorites_page.dart';
 import 'package:meloplay/src/presentation/pages/details/genre_page.dart';
 import 'package:meloplay/src/presentation/pages/home/home_page.dart';
-import 'package:meloplay/src/presentation/pages/player/player_page.dart';
+import 'package:meloplay/src/presentation/pages/home/search_page.dart';
+import 'package:meloplay/src/presentation/pages/player/queue_page.dart';
+import 'package:meloplay/src/presentation/pages/playlists/manage_playlist.dart';
+import 'package:meloplay/src/presentation/pages/playlists/favorites_page.dart';
+import 'package:meloplay/src/presentation/pages/playlists/playlist_details_page.dart';
 import 'package:meloplay/src/presentation/pages/playlists/recents_page.dart';
-import 'package:meloplay/src/presentation/pages/config/themes_page.dart';
 
 class AppRouter {
   static const String homeRoute = '/';
   static const String favoritesRoute = '/favorites';
   static const String recentsRoute = '/recents';
-  static const String playerRoute = '/player';
   static const String artistRoute = '/artist';
   static const String albumRoute = '/album';
   static const String genreRoute = '/genre';
@@ -31,7 +29,7 @@ class AppRouter {
   static const String queueRoute = '/queue';
   static const String searchRoute = '/search';
   static const String scanRoute = '/scan';
-  static const String addSongsToPlaylistRoute = '/addSongsToPlaylist';
+  static const String managePlaylistRoute = '/managePlaylist';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -43,8 +41,7 @@ class AppRouter {
         );
       case recentsRoute:
         return MaterialPageRoute<dynamic>(builder: (_) => const RecentsPage());
-      case playerRoute:
-        return SharedAxisPageRoute(child: const PlayerPage());
+
       case artistRoute:
         return MaterialPageRoute<dynamic>(
           builder: (_) => ArtistPage(artist: settings.arguments as ArtistModel),
@@ -65,18 +62,17 @@ class AppRouter {
         return MaterialPageRoute<dynamic>(builder: (_) => const ScanPage());
       case playlistDetailsRoute:
         return MaterialPageRoute<dynamic>(
-          builder: (_) => PlaylistDetailsPage(
-            playlist: settings.arguments as PlaylistModel,
-          ),
+          builder: (_) =>
+              PlaylistDetailsPage(playlist: settings.arguments as Playlist),
         );
       case queueRoute:
         return MaterialPageRoute<dynamic>(builder: (_) => const QueuePage());
       case searchRoute:
         return MaterialPageRoute<dynamic>(builder: (_) => const SearchPage());
-      case addSongsToPlaylistRoute:
+      case managePlaylistRoute:
         return MaterialPageRoute<dynamic>(
-          builder: (_) => AddSongsToPlaylist(
-            playlist: (settings.arguments as Map)['playlist'] as PlaylistModel,
+          builder: (_) => ManagePlaylist(
+            playlist: (settings.arguments as Map)['playlist'] as Playlist,
           ),
         );
       default:

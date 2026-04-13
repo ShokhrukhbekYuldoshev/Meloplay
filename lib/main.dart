@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:meloplay/src/data/services/playlist_db_service.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'package:meloplay/src/app.dart';
@@ -20,6 +21,9 @@ import 'package:meloplay/src/data/services/hive_box.dart';
 Future<void> main() async {
   // initialize flutter engine
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize Playlist DB Service first
+  await PlaylistDBService().init();
 
   // initialize dependency injection
   init();

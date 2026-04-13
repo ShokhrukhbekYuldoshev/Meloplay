@@ -5,6 +5,10 @@ class AppThemeData {
   static ThemeData getTheme() {
     final theme = Themes.getTheme();
     return ThemeData(
+      appBarTheme: AppBarTheme(
+        elevation: 0,
+        surfaceTintColor: Colors.transparent,
+      ),
       colorScheme: theme.colorScheme,
       useMaterial3: true,
       actionIconTheme: ActionIconThemeData(

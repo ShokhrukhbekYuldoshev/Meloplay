@@ -19,4 +19,8 @@ class HiveBox {
 
   static const String shuffleModeKey = 'shuffleMode';
   static const String loopModeKey = 'loopMode';
+
+  static const String playlistsBox = 'playlists_box';
+  static const String playlistSongsBox = 'playlist_songs_box';
+  static const String counterKey = 'playlist_counter';
 }

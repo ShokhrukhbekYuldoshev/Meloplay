@@ -1,20 +1,38 @@
 part of 'playlists_cubit.dart';
 
 @immutable
-sealed class PlaylistsState {}
+abstract class PlaylistsState {}
 
-final class PlaylistsInitial extends PlaylistsState {}
+class PlaylistsInitial extends PlaylistsState {}
 
-final class PlaylistsLoading extends PlaylistsState {}
+class PlaylistsLoading extends PlaylistsState {}
 
-final class PlaylistsLoaded extends PlaylistsState {
-  final List<PlaylistModel> playlists;
+class PlaylistsLoaded extends PlaylistsState {
+  final List<Playlist> playlists;
+
   PlaylistsLoaded(this.playlists);
 }
 
-final class PlaylistsSongsLoading extends PlaylistsState {}
-
-final class PlaylistsSongsLoaded extends PlaylistsState {
+class PlaylistsSongsLoaded extends PlaylistsState {
   final List<SongModel> songs;
+
   PlaylistsSongsLoaded(this.songs);
+}
+
+class PlaylistsError extends PlaylistsState {
+  final String message;
+
+  PlaylistsError({required this.message});
+}
+
+class PlaylistDeleted extends PlaylistsState {
+  final int playlistId;
+
+  PlaylistDeleted({required this.playlistId});
+}
+
+class PlaylistUpdated extends PlaylistsState {
+  final int playlistId;
+
+  PlaylistUpdated({required this.playlistId});
 }

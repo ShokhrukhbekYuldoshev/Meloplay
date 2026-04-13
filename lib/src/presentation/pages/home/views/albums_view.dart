@@ -37,22 +37,58 @@ class _AlbumsViewState extends State<AlbumsView>
       builder: (context, state) {
         /// FIRST TIME LOADING
         if (state.isLoading && state.albums.isEmpty) {
-          return const Center(child: CircularProgressIndicator());
+          return const Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CircularProgressIndicator(),
+                SizedBox(height: 16),
+                Text('Loading albums...'),
+              ],
+            ),
+          );
         }
 
         /// EMPTY STATE
         if (state.albums.isEmpty) {
-          return const Center(child: Text('No albums found'));
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.album_outlined,
+                  size: 80,
+                  color: Colors.white.withValues(alpha: 0.3),
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  'No albums found',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.white.withValues(alpha: 0.7),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'Add music to your device to see albums',
+                  style: TextStyle(color: Colors.white.withValues(alpha: 0.5)),
+                ),
+              ],
+            ),
+          );
         }
 
         /// GRID VIEW
         return AnimationLimiter(
           child: GridView.builder(
+            physics: const BouncingScrollPhysics(),
             padding: const EdgeInsets.fromLTRB(16, 16, 16, 100),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
               crossAxisSpacing: 16,
               mainAxisSpacing: 16,
+              childAspectRatio: 0.85,
             ),
             itemCount: state.albums.length,
             itemBuilder: (context, index) {
@@ -62,54 +98,114 @@ class _AlbumsViewState extends State<AlbumsView>
                 position: index,
                 duration: const Duration(milliseconds: 500),
                 columnCount: 2,
-                child: FlipAnimation(
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.of(
-                        context,
-                      ).pushNamed(AppRouter.albumRoute, arguments: album);
-                    },
-                    child: Column(
-                      children: [
-                        QueryArtworkWidget(
-                          keepOldArtwork: true,
-                          id: album.id,
-                          type: ArtworkType.ALBUM,
-                          artworkHeight: 96,
-                          artworkWidth: 96,
-                          size: 10000,
-                          artworkBorder: BorderRadius.circular(100),
-                          nullArtworkWidget: Container(
-                            width: 96,
-                            height: 96,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(100),
-                              color: Colors.grey.withValues(alpha: 0.1),
-                            ),
-                            child: const Icon(Icons.music_note_outlined),
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          album.album,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          album.artist ?? '',
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
-                    ),
-                  ),
+                child: ScaleAnimation(
+                  child: FadeInAnimation(child: _buildAlbumCard(album)),
                 ),
               );
             },
           ),
         );
       },
+    );
+  }
+
+  Widget _buildAlbumCard(AlbumModel album) {
+    final artistName = album.artist ?? 'Unknown Artist';
+
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context).pushNamed(AppRouter.albumRoute, arguments: album);
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Colors.white.withValues(alpha: 0.08),
+              Colors.white.withValues(alpha: 0.03),
+            ],
+          ),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Album Artwork
+            Hero(
+              tag: 'album_${album.id}',
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: QueryArtworkWidget(
+                  keepOldArtwork: true,
+                  id: album.id,
+                  type: ArtworkType.ALBUM,
+                  artworkHeight: 140,
+                  artworkWidth: 140,
+                  size: 500,
+                  artworkBorder: BorderRadius.circular(12),
+                  nullArtworkWidget: Container(
+                    width: 140,
+                    height: 140,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          Theme.of(
+                            context,
+                          ).colorScheme.primary.withValues(alpha: 0.3),
+                          Theme.of(
+                            context,
+                          ).colorScheme.primary.withValues(alpha: 0.1),
+                        ],
+                      ),
+                    ),
+                    child: Icon(
+                      Icons.album,
+                      size: 50,
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.primary.withValues(alpha: 0.5),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 12),
+            // Album Name
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: Text(
+                album.album,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 13,
+                ),
+              ),
+            ),
+            const SizedBox(height: 4),
+            // Artist Name
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: Text(
+                artistName,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 11,
+                  color: Colors.white.withValues(alpha: 0.6),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

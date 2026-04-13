@@ -13,6 +13,7 @@ class HomeState {
 
   const HomeState({
     this.isLoading = false,
+
     this.songs = const [],
     this.artists = const [],
     this.albums = const [],

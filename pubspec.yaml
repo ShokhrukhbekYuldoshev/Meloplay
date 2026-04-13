@@ -1,39 +1,40 @@
 name: meloplay
 description: "Meloplay is a local music player app that plays music from your device."
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
-version: 1.4.0
+version: 1.4.1
 
 environment:
-  sdk: ">=3.11.0 <4.0.0"
+  sdk: ">=3.11.4 <4.0.0"
 
 dependencies:
-  animations: ^2.1.1
+  animations: ^2.1.2
   auto_size_text: ^3.0.0
-  bloc: ^9.0.0 # state management
+  bloc: ^9.2.0 # state management
   equatable: ^2.0.8
   flutter:
     sdk: flutter # flutter sdk
-  flutter_bloc: ^9.1.0 # state management
+  flutter_bloc: ^9.1.1 # state management
   flutter_cache_manager: ^3.4.1
   flutter_staggered_animations: ^1.1.1 # animation
-  flutter_svg: ^2.2.3
+  flutter_svg: ^2.2.4
   fluttertoast: ^9.0.0
-  get_it: ^9.2.0 # dependency injection
+  get_it: ^9.2.1 # dependency injection
   hive: ^2.2.3 # local database
   hive_flutter: ^1.1.0 # local database
-  just_audio: ^0.10.4 # audio player
+  just_audio: ^0.10.5 # audio player
   just_audio_background: ^0.0.1-beta.17 # audio player background
-  lottie: ^3.3.1
+  liquid_glass_renderer: ^0.2.0-dev.4
+  lottie: ^3.3.3
   marquee: ^2.3.0
   on_audio_query:
     git:
       url: https://github.com/rozpo/on_audio_query
       path: packages/on_audio_query
       ref: main
-  package_info_plus: ^9.0.0 # get app info
+  package_info_plus: ^10.0.0 # get app info
   permission_handler: ^12.0.1 # get permission
-  share_plus: ^12.0.1 # share song
-  url_launcher: ^6.3.1 # open url
+  share_plus: ^13.0.0 # share song
+  url_launcher: ^6.3.2 # open url
 
 dev_dependencies:
   flutter_test:
