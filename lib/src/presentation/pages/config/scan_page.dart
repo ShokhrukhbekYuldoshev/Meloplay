@@ -277,18 +277,20 @@ class _ScanPageState extends State<ScanPage> {
     required String label,
     required Function(int) onChanged,
   }) {
-    return RadioListTile<int>(
-      value: value,
+    return RadioGroup<int>(
       groupValue: groupValue,
       onChanged: (newValue) {
         if (newValue != null) {
           onChanged(newValue);
         }
       },
-      title: Text(label),
-      activeColor: Theme.of(context).colorScheme.primary,
-      contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: RadioListTile<int>(
+        value: value,
+        title: Text(label),
+        activeColor: Theme.of(context).colorScheme.primary,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      ),
     );
   }
 

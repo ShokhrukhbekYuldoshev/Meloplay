@@ -322,6 +322,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
   void _showVersionDialog() {
     showDialog(
+      fullscreenDialog: true,
       context: context,
       builder: (context) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
@@ -352,6 +353,12 @@ class _SettingsPageState extends State<SettingsPage> {
               subtitle: Text(
                 '${_packageInfo.version} (${_packageInfo.buildNumber})',
               ),
+            ),
+            ListTile(
+              contentPadding: EdgeInsets.zero,
+              leading: const Icon(Icons.person, size: 20),
+              title: const Text('Developer'),
+              subtitle: Text('Shokhrukhbek Yuldoshev'),
             ),
             ListTile(
               contentPadding: EdgeInsets.zero,

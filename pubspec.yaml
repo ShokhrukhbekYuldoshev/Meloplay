@@ -8,8 +8,10 @@ environment:
 
 dependencies:
   animations: ^2.1.2
+  audio_service: ^0.18.18
   auto_size_text: ^3.0.0
   bloc: ^9.2.0 # state management
+  device_info_plus: ^13.0.0
   equatable: ^2.0.8
   flutter:
     sdk: flutter # flutter sdk

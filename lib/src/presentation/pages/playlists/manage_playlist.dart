@@ -6,6 +6,7 @@ import 'package:meloplay/src/bloc/home/home_bloc.dart';
 import 'package:meloplay/src/bloc/playlists/playlists_cubit.dart';
 import 'package:meloplay/src/core/theme/themes.dart';
 import 'package:meloplay/src/data/models/playlist_model.dart';
+import 'package:meloplay/src/presentation/widgets/song_list_tile.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 class ManagePlaylist extends StatefulWidget {
@@ -115,7 +116,23 @@ class _ManagePlaylistState extends State<ManagePlaylist> {
                           padding: const EdgeInsets.only(bottom: 100),
                           itemBuilder: (context, index) {
                             final song = filteredSongs[index];
-                            return _buildSongTile(song);
+                            return SongListTile(
+                              song: song,
+                              isSelected: _selectedSongIds.contains(song.id),
+                              key: ValueKey(song.id),
+                              isSelectionMode: true,
+                              onSelectionChanged: (selected) {
+                                setState(() {
+                                  if (selected == true) {
+                                    _selectedSongIds.add(song.id);
+                                  } else {
+                                    _selectedSongIds.remove(song.id);
+                                  }
+                                });
+                              },
+                              songs: filteredSongs,
+                              showAlbumArt: true,
+                            );
                           },
                         );
                       },
@@ -184,53 +201,6 @@ class _ManagePlaylistState extends State<ManagePlaylist> {
           const SizedBox(width: 12),
           Text('Will add: $toAdd • Will remove: $toRemove'),
         ],
-      ),
-    );
-  }
-
-  Widget _buildSongTile(SongModel song) {
-    final isSelected = _selectedSongIds.contains(song.id);
-    final isExisting = _existingSongIds.contains(song.id);
-
-    Color? tileColor;
-    if (isSelected && !isExisting) {
-      tileColor = Theme.of(context).colorScheme.primary.withValues(alpha: 0.1);
-    } else if (!isSelected && isExisting) {
-      tileColor = Colors.red.withValues(alpha: 0.1);
-    }
-
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-      decoration: BoxDecoration(
-        color: tileColor ?? Colors.white.withValues(alpha: 0.05),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: CheckboxListTile(
-        value: isSelected,
-        onChanged: (value) => setState(() {
-          if (value == true) {
-            _selectedSongIds.add(song.id);
-          } else {
-            _selectedSongIds.remove(song.id);
-          }
-        }),
-        title: Text(song.title),
-        subtitle: Text(song.artist ?? 'Unknown'),
-        secondary: ClipRRect(
-          borderRadius: BorderRadius.circular(8),
-          child: QueryArtworkWidget(
-            id: song.id,
-            type: ArtworkType.AUDIO,
-            size: 50,
-            nullArtworkWidget: Container(
-              width: 50,
-              height: 50,
-              color: Colors.grey,
-              child: const Icon(Icons.music_note),
-            ),
-          ),
-        ),
-        controlAffinity: ListTileControlAffinity.trailing,
       ),
     );
   }

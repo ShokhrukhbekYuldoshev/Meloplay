@@ -1,8 +1,5 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
@@ -27,16 +24,14 @@ class _SongsViewState extends State<SongsView>
 
   final _scrollController = ScrollController();
 
+  // Cache for expensive calculations
+  String? _cachedStatsText;
+  int _cachedSongCount = -1;
+
   @override
   void initState() {
     super.initState();
-
-    final bloc = context.read<HomeBloc>();
-
-    // Only load once
-    if (bloc.state.songs.isEmpty && !bloc.state.isLoading) {
-      bloc.add(GetSongsEvent());
-    }
+    _loadSongs();
   }
 
   @override
@@ -45,11 +40,24 @@ class _SongsViewState extends State<SongsView>
     super.dispose();
   }
 
+  void _loadSongs() {
+    final bloc = context.read<HomeBloc>();
+    if (bloc.state.songs.isEmpty && !bloc.state.isLoading) {
+      bloc.add(GetSongsEvent());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
 
     return BlocBuilder<HomeBloc, HomeState>(
+      buildWhen: (previous, current) {
+        // Only rebuild when relevant data changes
+        return previous.songs != current.songs ||
+            previous.isLoading != current.isLoading ||
+            previous.error != current.error;
+      },
       builder: (context, state) {
         /// FIRST TIME LOADING
         if (state.isLoading && state.songs.isEmpty) {
@@ -77,8 +85,8 @@ class _SongsViewState extends State<SongsView>
           },
           child: CustomScrollView(
             controller: _scrollController,
+            physics: const BouncingScrollPhysics(),
             slivers: [
-              // Top spacing
               const SliverToBoxAdapter(child: SizedBox(height: 16)),
 
               /// HEADER WITH STATS AND SORT
@@ -115,24 +123,16 @@ class _SongsViewState extends State<SongsView>
 
               const SliverToBoxAdapter(child: SizedBox(height: 20)),
 
-              /// SONG LIST
-              AnimationLimiter(
-                child: SliverList(
-                  delegate: SliverChildBuilderDelegate((context, index) {
+              /// SONG LIST - Optimized with const and keys
+              SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
                     final song = state.songs[index];
-
-                    return AnimationConfiguration.staggeredList(
-                      position: index,
-                      duration: const Duration(milliseconds: 400),
-                      delay: const Duration(milliseconds: 50),
-                      child: SlideAnimation(
-                        verticalOffset: 50,
-                        child: FadeInAnimation(
-                          child: SongListTile(song: song, songs: state.songs),
-                        ),
-                      ),
-                    );
-                  }, childCount: state.songs.length),
+                    return _buildSongTile(song, state.songs, index);
+                  },
+                  childCount: state.songs.length,
+                  addAutomaticKeepAlives: true,
+                  addRepaintBoundaries: true,
                 ),
               ),
 
@@ -145,9 +145,12 @@ class _SongsViewState extends State<SongsView>
     );
   }
 
-  // ===========================
-  // EMPTY STATE
-  // ===========================
+  // Optimized song tile builder with caching
+  Widget _buildSongTile(SongModel song, List<SongModel> songs, int index) {
+    return RepaintBoundary(
+      child: SongListTile(song: song, songs: songs),
+    );
+  }
 
   Widget _buildEmptyState(BuildContext context) {
     return Center(
@@ -193,56 +196,47 @@ class _SongsViewState extends State<SongsView>
     );
   }
 
-  // ===========================
-  // STATS TEXT
-  // ===========================
-
   Widget _buildStatsText(HomeState state) {
-    final duration = state.songs.fold<Duration>(
-      Duration.zero,
-      (sum, song) => sum + Duration(milliseconds: song.duration ?? 0),
-    );
-
-    final hours = duration.inHours;
-    final minutes = duration.inMinutes.remainder(60);
-
-    String durationText = '';
-    if (hours > 0) {
-      durationText = '$hours hr $minutes min';
-    } else {
-      durationText = '$minutes min';
+    // Cache expensive calculations
+    if (_cachedSongCount != state.songs.length) {
+      _cachedSongCount = state.songs.length;
+      _cachedStatsText = _calculateStatsText(state);
     }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '${_formatNumber(state.songs.length)} Songs',
+          '${state.songs.length} ${state.songs.length == 1 ? 'song' : 'songs'}',
           style: Theme.of(
             context,
-          ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600),
+          ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 2),
         Text(
-          durationText,
+          (_cachedStatsText ?? ''),
           style: Theme.of(context).textTheme.bodySmall?.copyWith(
-            color: Colors.white.withValues(alpha: 0.6),
+            color: Colors.white.withValues(alpha: 0.7),
           ),
         ),
       ],
     );
   }
 
-  String _formatNumber(int number) {
-    if (number >= 1000) {
-      return '${(number / 1000).toStringAsFixed(1)}K';
-    }
-    return number.toString();
-  }
+  String _calculateStatsText(HomeState state) {
+    final totalDuration = state.songs.fold<Duration>(
+      Duration.zero,
+      (sum, song) => sum + Duration(milliseconds: song.duration ?? 0),
+    );
 
-  // ===========================
-  // SORT BUTTON
-  // ===========================
+    final hours = totalDuration.inHours;
+    final minutes = totalDuration.inMinutes.remainder(60);
+
+    if (hours > 0) {
+      return '$hours hr $minutes min';
+    }
+    return '$minutes min';
+  }
 
   Widget _buildSortButton(BuildContext context) {
     return Container(
@@ -263,10 +257,6 @@ class _SongsViewState extends State<SongsView>
       ),
     );
   }
-
-  // ===========================
-  // SHUFFLE BUTTON
-  // ===========================
 
   Widget _buildShuffleButton(BuildContext context, List<SongModel> songs) {
     return Container(
@@ -292,7 +282,8 @@ class _SongsViewState extends State<SongsView>
         child: InkWell(
           borderRadius: BorderRadius.circular(32),
           onTap: () {
-            final randomIndex = Random().nextInt(songs.length);
+            final randomIndex =
+                DateTime.now().millisecondsSinceEpoch % songs.length;
 
             context.read<PlayerBloc>().add(PlayerSetShuffle(true));
             context.read<PlayerBloc>().add(
@@ -326,10 +317,6 @@ class _SongsViewState extends State<SongsView>
       ),
     );
   }
-
-  // ===========================
-  // PLAY BUTTON
-  // ===========================
 
   Widget _buildPlayButton(BuildContext context, List<SongModel> songs) {
     return Container(

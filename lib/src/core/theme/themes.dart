@@ -10,6 +10,9 @@ class Themes {
     OrangeTheme.name: OrangeTheme(),
     YellowTheme.name: YellowTheme(),
     TealTheme.name: TealTheme(),
+    CyanTheme.name: CyanTheme(),
+    LimeTheme.name: LimeTheme(),
+    PinkTheme.name: PinkTheme(),
     RedTheme.name: RedTheme(),
     BlackTheme.name: BlackTheme(),
     WhiteTheme.name: WhiteTheme(),
@@ -136,6 +139,48 @@ class TealTheme extends ThemeColor {
         themeName: name,
         primaryColor: const Color(0xFF0F2027),
         secondaryColor: const Color(0xFF00BFA6),
+      );
+
+  @override
+  Brightness get brightness => Brightness.dark;
+}
+
+class CyanTheme extends ThemeColor {
+  static const String name = 'Cyan';
+
+  CyanTheme()
+    : super(
+        themeName: name,
+        primaryColor: const Color(0xFF0F2027),
+        secondaryColor: const Color(0xFF00FFFF),
+      );
+
+  @override
+  Brightness get brightness => Brightness.dark;
+}
+
+class LimeTheme extends ThemeColor {
+  static const String name = 'Lime';
+
+  LimeTheme()
+    : super(
+        themeName: name,
+        primaryColor: const Color(0xFF1C1C1C),
+        secondaryColor: const Color(0xFFCDDC39),
+      );
+
+  @override
+  Brightness get brightness => Brightness.dark;
+}
+
+class PinkTheme extends ThemeColor {
+  static const String name = 'Pink';
+
+  PinkTheme()
+    : super(
+        themeName: name,
+        primaryColor: const Color(0xFF1C1C1C),
+        secondaryColor: const Color(0xFFFF4081),
       );
 
   @override

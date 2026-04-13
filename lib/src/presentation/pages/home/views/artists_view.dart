@@ -79,31 +79,57 @@ class _ArtistsViewState extends State<ArtistsView>
           );
         }
 
-        /// GRID VIEW
-        return AnimationLimiter(
-          child: GridView.builder(
-            physics: const BouncingScrollPhysics(),
-            padding: const EdgeInsets.fromLTRB(16, 16, 16, 100),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 16,
-              mainAxisSpacing: 16,
-              childAspectRatio: 0.85,
-            ),
-            itemCount: state.artists.length,
-            itemBuilder: (context, index) {
-              final artist = state.artists[index];
+        /// GRID VIEW - Responsive
+        return LayoutBuilder(
+          builder: (context, constraints) {
+            // Calculate responsive crossAxisCount based on screen width
+            int crossAxisCount;
+            double childAspectRatio;
 
-              return AnimationConfiguration.staggeredGrid(
-                position: index,
-                duration: const Duration(milliseconds: 500),
-                columnCount: 2,
-                child: ScaleAnimation(
-                  child: FadeInAnimation(child: _buildArtistCard(artist)),
+            if (constraints.maxWidth < 400) {
+              // Small phones
+              crossAxisCount = 2;
+              childAspectRatio = 0.85;
+            } else if (constraints.maxWidth < 600) {
+              // Medium phones
+              crossAxisCount = 2;
+              childAspectRatio = 0.9;
+            } else if (constraints.maxWidth < 900) {
+              // Tablets
+              crossAxisCount = 3;
+              childAspectRatio = 0.85;
+            } else {
+              // Large tablets and desktops
+              crossAxisCount = 4;
+              childAspectRatio = 0.85;
+            }
+
+            return AnimationLimiter(
+              child: GridView.builder(
+                physics: const BouncingScrollPhysics(),
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 100),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: crossAxisCount,
+                  crossAxisSpacing: 16,
+                  mainAxisSpacing: 16,
+                  childAspectRatio: childAspectRatio,
                 ),
-              );
-            },
-          ),
+                itemCount: state.artists.length,
+                itemBuilder: (context, index) {
+                  final artist = state.artists[index];
+
+                  return AnimationConfiguration.staggeredGrid(
+                    position: index,
+                    duration: const Duration(milliseconds: 500),
+                    columnCount: crossAxisCount,
+                    child: ScaleAnimation(
+                      child: FadeInAnimation(child: _buildArtistCard(artist)),
+                    ),
+                  );
+                },
+              ),
+            );
+          },
         );
       },
     );

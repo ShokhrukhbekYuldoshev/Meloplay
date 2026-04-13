@@ -79,31 +79,47 @@ class _AlbumsViewState extends State<AlbumsView>
           );
         }
 
-        /// GRID VIEW
-        return AnimationLimiter(
-          child: GridView.builder(
-            physics: const BouncingScrollPhysics(),
-            padding: const EdgeInsets.fromLTRB(16, 16, 16, 100),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 16,
-              mainAxisSpacing: 16,
-              childAspectRatio: 0.85,
-            ),
-            itemCount: state.albums.length,
-            itemBuilder: (context, index) {
-              final album = state.albums[index];
+        /// GRID VIEW - Responsive
 
-              return AnimationConfiguration.staggeredGrid(
-                position: index,
-                duration: const Duration(milliseconds: 500),
-                columnCount: 2,
-                child: ScaleAnimation(
-                  child: FadeInAnimation(child: _buildAlbumCard(album)),
+        return LayoutBuilder(
+          builder: (context, constraints) {
+            int crossAxisCount = 2;
+            double width = constraints.maxWidth;
+
+            if (width >= 1200) {
+              crossAxisCount = 5;
+            } else if (width >= 992) {
+              crossAxisCount = 4;
+            } else if (width >= 600) {
+              crossAxisCount = 3;
+            }
+
+            return AnimationLimiter(
+              child: GridView.builder(
+                physics: const BouncingScrollPhysics(),
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 100),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: crossAxisCount,
+                  crossAxisSpacing: 16,
+                  mainAxisSpacing: 16,
+                  childAspectRatio: 0.85,
                 ),
-              );
-            },
-          ),
+                itemCount: state.albums.length,
+                itemBuilder: (context, index) {
+                  final album = state.albums[index];
+
+                  return AnimationConfiguration.staggeredGrid(
+                    position: index,
+                    duration: const Duration(milliseconds: 500),
+                    columnCount: crossAxisCount,
+                    child: ScaleAnimation(
+                      child: FadeInAnimation(child: _buildAlbumCard(album)),
+                    ),
+                  );
+                },
+              ),
+            );
+          },
         );
       },
     );
@@ -141,13 +157,13 @@ class _AlbumsViewState extends State<AlbumsView>
                   keepOldArtwork: true,
                   id: album.id,
                   type: ArtworkType.ALBUM,
-                  artworkHeight: 140,
-                  artworkWidth: 140,
+                  artworkHeight: 120,
+                  artworkWidth: 120,
                   size: 500,
                   artworkBorder: BorderRadius.circular(12),
                   nullArtworkWidget: Container(
-                    width: 140,
-                    height: 140,
+                    width: 120,
+                    height: 120,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12),
                       gradient: LinearGradient(

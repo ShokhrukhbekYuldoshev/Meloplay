@@ -112,7 +112,7 @@ class _AlbumPageState extends State<AlbumPage> {
                       color: Colors.grey.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(0),
                     ),
-                    child: const Icon(Icons.music_note_outlined, size: 100),
+                    child: const Icon(Icons.album_outlined, size: 100),
                   ),
                 ),
               ),

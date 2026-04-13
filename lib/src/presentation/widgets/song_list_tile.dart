@@ -2,9 +2,11 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:lottie/lottie.dart';
+import 'package:meloplay/src/core/extensions/int_extensions.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -19,12 +21,18 @@ class SongListTile extends StatefulWidget {
   final SongModel song;
   final List<SongModel> songs;
   final bool showAlbumArt;
+  final bool isSelectionMode;
+  final bool isSelected;
+  final ValueChanged<bool?>? onSelectionChanged;
 
   const SongListTile({
     super.key,
     required this.song,
     required this.songs,
     this.showAlbumArt = true,
+    this.isSelectionMode = false,
+    this.isSelected = false,
+    this.onSelectionChanged,
   });
 
   @override
@@ -36,6 +44,10 @@ class _SongListTileState extends State<SongListTile> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.isSelectionMode) {
+      return _buildSelectionTile();
+    }
+
     return StreamBuilder<SequenceState?>(
       key: ValueKey(widget.song.id),
       stream: player.sequenceState,
@@ -43,45 +55,123 @@ class _SongListTileState extends State<SongListTile> {
         MediaItem? currentMediaItem;
         if (snapshot.hasData) {
           var sequence = snapshot.data;
-
           currentMediaItem = sequence!.currentSource?.tag as MediaItem?;
         }
 
-        return ListTile(
-          contentPadding: EdgeInsets.only(left: 16),
-          onTap: () async {
-            MediaItem mediaItem = player.getMediaItemFromSong(widget.song);
-
-            // if this is currently playing, navigate to player
-            // else load songs
-            if (currentMediaItem?.id == mediaItem.id) {
-              if (context.mounted) {
-                // open bottom sheet player
-                showPlayerSheet(context);
-              }
-            } else {
-              context.read<PlayerBloc>().add(
-                PlayerLoadPlaylist(
-                  mediaItem: mediaItem,
-                  playlist: widget.songs,
-                ),
-              );
-            }
-          },
-          leading: _buildLeading(currentMediaItem),
-          title: _buildTitle(currentMediaItem, context),
-          subtitle: _buildSubtitle(),
-          trailing: _buildTrailing(context),
-        );
+        return _buildNormalTile(currentMediaItem);
       },
     );
   }
 
+  Widget _buildNormalTile(MediaItem? currentMediaItem) {
+    final isPlaying = currentMediaItem?.id == widget.song.id.toString();
+
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        color: isPlaying
+            ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.1)
+            : Colors.white.withValues(alpha: 0.03),
+      ),
+      child: ListTile(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+        onTap: () async {
+          MediaItem mediaItem = player.getMediaItemFromSong(widget.song);
+
+          if (currentMediaItem?.id == mediaItem.id) {
+            if (context.mounted) {
+              showPlayerSheet(context);
+            }
+          } else {
+            context.read<PlayerBloc>().add(
+              PlayerLoadPlaylist(mediaItem: mediaItem, playlist: widget.songs),
+            );
+          }
+        },
+        leading: widget.showAlbumArt ? _buildLeading(currentMediaItem) : null,
+        title: _buildTitle(currentMediaItem, context),
+        subtitle: _buildSubtitle(),
+        trailing: _buildTrailing(context),
+        dense: true,
+      ),
+    );
+  }
+
+  Widget _buildSelectionTile() {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        color: widget.isSelected
+            ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.15)
+            : Colors.white.withValues(alpha: 0.03),
+        border: widget.isSelected
+            ? Border.all(
+                color: Theme.of(
+                  context,
+                ).colorScheme.primary.withValues(alpha: 0.3),
+                width: 1,
+              )
+            : null,
+      ),
+      child: CheckboxListTile(
+        value: widget.isSelected,
+        onChanged: widget.onSelectionChanged,
+        secondary: widget.showAlbumArt ? _buildSelectionArtwork() : null,
+        title: Text(
+          widget.song.title,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(
+            fontWeight: widget.isSelected ? FontWeight.bold : FontWeight.normal,
+          ),
+        ),
+        subtitle: Text(
+          widget.song.artist ?? 'Unknown',
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(
+            fontSize: 12,
+            color: Colors.white.withValues(alpha: 0.7),
+          ),
+        ),
+        activeColor: Theme.of(context).colorScheme.primary,
+        checkColor: Colors.white,
+        controlAffinity: ListTileControlAffinity.trailing,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+      ),
+    );
+  }
+
+  Widget _buildSelectionArtwork() {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(8),
+      child: QueryArtworkWidget(
+        keepOldArtwork: true,
+        id: widget.song.albumId ?? 0,
+        type: ArtworkType.ALBUM,
+        size: 100,
+        nullArtworkWidget: Container(
+          width: 50,
+          height: 50,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
+            color: Colors.grey.withValues(alpha: 0.2),
+          ),
+          child: Icon(
+            Icons.music_note,
+            size: 20,
+            color: Colors.white.withValues(alpha: 0.5),
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget? _buildLeading(MediaItem? currentMediaItem) {
-    // if showAlbumArt is false, don't show leading
-    if (!widget.showAlbumArt) {
-      return null;
-    }
+    final isPlaying = currentMediaItem?.id == widget.song.id.toString();
 
     return Stack(
       children: [
@@ -89,215 +179,312 @@ class _SongListTileState extends State<SongListTile> {
           keepOldArtwork: true,
           id: widget.song.albumId ?? 0,
           type: ArtworkType.ALBUM,
-          artworkBorder: BorderRadius.circular(10),
-          size: 500,
+          size: 100,
+
           nullArtworkWidget: Container(
             width: 50,
             height: 50,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: Colors.grey.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(50),
+              color: Colors.grey.withValues(alpha: 0.2),
             ),
-            child: const Icon(Icons.music_note_outlined),
+            child: Icon(
+              Icons.music_note,
+              size: 20,
+              color: Colors.white.withValues(alpha: 0.5),
+            ),
           ),
         ),
-        if (currentMediaItem != null &&
-            currentMediaItem.id == widget.song.id.toString())
+        if (isPlaying)
           Positioned.fill(
-            child: StreamBuilder<bool>(
-              stream: player.playing,
-              builder: (context, snapshot) {
-                final isPlaying = snapshot.data ?? false;
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(50),
+                color: Colors.black.withValues(alpha: 0.5),
+              ),
+              child: Center(
+                child: StreamBuilder<bool>(
+                  stream: player.playing,
+                  builder: (context, snapshot) {
+                    final isPlaying = snapshot.data ?? false;
 
-                return Stack(
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.black.withValues(alpha: 0.6),
-                      ),
-                    ),
-                    Align(
-                      alignment: Alignment.center,
-                      child: ColorFiltered(
-                        colorFilter: ColorFilter.mode(
-                          Theme.of(context).colorScheme.primary,
-                          BlendMode.srcIn,
-                        ),
-                        child: Lottie.asset(
-                          Assets.playingAnimation,
-                          animate: isPlaying,
-                          height: 32,
-                          width: 32,
-                        ),
-                      ),
-                    ),
-                  ],
-                );
-              },
+                    return AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 200),
+                      child: isPlaying
+                          ? ColorFiltered(
+                              colorFilter: ColorFilter.mode(
+                                Theme.of(context).colorScheme.primary,
+                                BlendMode.srcIn,
+                              ),
+                              child: Lottie.asset(
+                                Assets.playingAnimation,
+                                animate: true,
+                                height: 28,
+                                width: 28,
+                              ),
+                            )
+                          : Icon(
+                              Icons.play_arrow,
+                              color: Theme.of(context).colorScheme.primary,
+                              size: 24,
+                            ),
+                    );
+                  },
+                ),
+              ),
             ),
           ),
       ],
     );
   }
 
-  Text _buildTitle(MediaItem? currentMediaItem, BuildContext context) {
+  Widget _buildTitle(MediaItem? currentMediaItem, BuildContext context) {
+    final isPlaying = currentMediaItem?.id == widget.song.id.toString();
+
     return Text(
       widget.song.title,
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
       style: TextStyle(
-        fontWeight: FontWeight.bold,
-        color:
-            currentMediaItem != null &&
-                currentMediaItem.id == widget.song.id.toString()
-            ? Theme.of(context).colorScheme.primary
-            : null,
+        fontWeight: isPlaying ? FontWeight.bold : FontWeight.w500,
+        color: isPlaying ? Theme.of(context).colorScheme.primary : null,
+        fontSize: 14,
       ),
     );
   }
 
-  Text _buildSubtitle() {
-    String subtitle =
-        '${widget.song.artist ?? 'Unknown'} | ${widget.song.album ?? 'Unknown'}';
+  Widget _buildSubtitle() {
+    final artist = widget.song.artist ?? 'Unknown';
+
+    // duration
+    final duration = widget.song.duration ?? 0;
+    var subtitle = '$artist • ${duration.toHms()}';
     return Text(
       subtitle,
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
       style: TextStyle(
-        color: Theme.of(
-          context,
-        ).textTheme.bodyMedium!.color!.withValues(alpha: 0.8),
+        fontSize: 12,
+        color: Colors.white.withValues(alpha: 0.7),
       ),
     );
   }
 
-  IconButton _buildTrailing(BuildContext context) {
-    return IconButton(
-      onPressed: () {
-        // add to queue, add to playlist, delete, share
-        _buildModalBottomSheet(context);
-      },
-      icon: const Icon(Icons.more_vert_outlined),
-      tooltip: 'More',
-    );
-  }
-
-  Future<dynamic> _buildModalBottomSheet(BuildContext context) {
-    return showModalBottomSheet(
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
-      ),
-      context: context,
-      builder: (context) {
-        return Wrap(
-          children: [
-            ListTile(
-              // border radius same as bottom sheet
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
+  Widget _buildTrailing(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        PopupMenuButton<String>(
+          icon: const Icon(Icons.more_vert),
+          onSelected: (value) {
+            switch (value) {
+              case 'play_next':
+                _addToQueueNext();
+                break;
+              case 'add_to_queue':
+                _addToQueueEnd();
+                break;
+              case 'add_to_playlist':
+                _showAddToPlaylistDialog();
+                break;
+              case 'delete':
+                _showDeleteConfirmationDialog();
+                break;
+              case 'share':
+                shareSong(context, widget.song.data, widget.song.title);
+                break;
+            }
+          },
+          itemBuilder: (context) => [
+            const PopupMenuItem(
+              value: 'play_next',
+              child: Row(
+                children: [
+                  Icon(Icons.playlist_play, size: 20),
+                  SizedBox(width: 12),
+                  Text('Play next'),
+                ],
               ),
-              leading: const Icon(Icons.playlist_add_outlined),
-              title: const Text('Add to queue'),
-              onTap: () {
+            ),
+            const PopupMenuItem(
+              value: 'add_to_queue',
+              child: Row(
+                children: [
+                  Icon(Icons.queue_music, size: 20),
+                  SizedBox(width: 12),
+                  Text('Add to queue'),
+                ],
+              ),
+            ),
+            const PopupMenuItem(
+              value: 'add_to_playlist',
+              child: Row(
+                children: [
+                  Icon(Icons.playlist_add, size: 20),
+                  SizedBox(width: 12),
+                  Text('Add to playlist'),
+                ],
+              ),
+            ),
+            const PopupMenuDivider(),
+            const PopupMenuItem(
+              value: 'share',
+              child: Row(
+                children: [
+                  Icon(Icons.share, size: 20),
+                  SizedBox(width: 12),
+                  Text('Share'),
+                ],
+              ),
+            ),
+            const PopupMenuItem(
+              value: 'delete',
+              child: Row(
+                children: [
+                  Icon(Icons.delete_outline, size: 20, color: Colors.red),
+                  SizedBox(width: 12),
+                  Text('Delete', style: TextStyle(color: Colors.red)),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  void _addToQueueNext() {
+    // TODO: Implement add to queue next
+    Fluttertoast.showToast(
+      msg: 'Added to queue: ${widget.song.title}',
+      backgroundColor: Colors.green,
+      textColor: Colors.white,
+    );
+  }
+
+  void _addToQueueEnd() {
+    // TODO: Implement add to queue end
+    Fluttertoast.showToast(
+      msg: 'Added to queue: ${widget.song.title}',
+      backgroundColor: Colors.green,
+      textColor: Colors.white,
+    );
+  }
+
+  void _showAddToPlaylistDialog() {
+    // TODO: Implement add to playlist dialog
+    Fluttertoast.showToast(
+      msg: 'Add to playlist feature coming soon',
+      backgroundColor: Colors.orange,
+      textColor: Colors.white,
+    );
+  }
+
+  void _showDeleteConfirmationDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          title: const Text('Delete Song'),
+          content: Text(
+            'Are you sure you want to delete "${widget.song.title}"? This action cannot be undone.',
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Cancel'),
+            ),
+            ElevatedButton(
+              onPressed: () async {
                 Navigator.of(context).pop();
+                await _deleteSong();
               },
-            ),
-            ListTile(
-              leading: const Icon(Icons.playlist_add_outlined),
-              title: const Text('Add to playlist'),
-              onTap: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.delete_outlined),
-              title: const Text('Delete'),
-              onTap: () {
-                // Show a confirmation dialog before deleting the song
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: const Text('Delete Song'),
-                      content: const Text(
-                        'Are you sure you want to delete this song?',
-                      ),
-                      actions: <Widget>[
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: const Text('Cancel'),
-                        ),
-                        TextButton(
-                          onPressed: () async {
-                            // Delete the song from the database
-                            final file = File(widget.song.data);
-
-                            if (await file.exists()) {
-                              debugPrint('Deleting ${widget.song.title}');
-                              try {
-                                // ask for permission to manage external storage if not granted
-                                if (!await Permission
-                                    .manageExternalStorage
-                                    .isGranted) {
-                                  final status = await Permission
-                                      .manageExternalStorage
-                                      .request();
-
-                                  if (status.isGranted) {
-                                    debugPrint('Permission granted');
-                                  } else {
-                                    if (context.mounted) {
-                                      ScaffoldMessenger.of(
-                                        context,
-                                      ).showSnackBar(
-                                        const SnackBar(
-                                          content: Text('Permission denied'),
-                                          backgroundColor: Colors.red,
-                                        ),
-                                      );
-                                    }
-                                  }
-                                }
-                                await file.delete();
-                                debugPrint('Deleted ${widget.song.title}');
-                              } catch (e) {
-                                debugPrint(
-                                  'Failed to delete ${widget.song.title}',
-                                );
-                              }
-                            } else {
-                              debugPrint(
-                                'File does not exist ${widget.song.title}',
-                              );
-                            }
-
-                            // TODO: Remove the song from the list
-                            if (context.mounted) {
-                              Navigator.of(context).pop();
-                              Navigator.of(context).pop();
-                            }
-                          },
-                          child: const Text('Delete'),
-                        ),
-                      ],
-                    );
-                  },
-                );
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.share_outlined),
-              title: const Text('Share'),
-              onTap: () async {
-                await shareSong(context, widget.song.data, widget.song.title);
-              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red,
+                foregroundColor: Colors.white,
+              ),
+              child: const Text('Delete'),
             ),
           ],
         );
       },
     );
+  }
+
+  Future<void> _deleteSong() async {
+    final file = File(widget.song.data);
+
+    if (!await file.exists()) {
+      Fluttertoast.showToast(
+        msg: 'File not found',
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+      );
+      return;
+    }
+
+    // Request permission for Android 13+
+    if (Platform.isAndroid) {
+      final androidInfo = await getAndroidVersion();
+      if (androidInfo >= 33) {
+        final status = await Permission.audio.request();
+        if (!status.isGranted) {
+          Fluttertoast.showToast(
+            msg: 'Permission denied to delete audio files',
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+          );
+          return;
+        }
+      } else if (androidInfo >= 30) {
+        final status = await Permission.manageExternalStorage.request();
+        if (!status.isGranted) {
+          Fluttertoast.showToast(
+            msg: 'Storage permission required',
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+          );
+          return;
+        }
+      } else {
+        final status = await Permission.storage.request();
+        if (!status.isGranted) {
+          Fluttertoast.showToast(
+            msg: 'Storage permission required',
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+          );
+          return;
+        }
+      }
+    }
+
+    try {
+      await file.delete();
+
+      // Refresh the media store
+      final onAudioQuery = OnAudioQuery();
+      await onAudioQuery.scanMedia(widget.song.data);
+
+      if (mounted) {
+        Fluttertoast.showToast(
+          msg: 'Deleted: ${widget.song.title}',
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+        );
+
+        // Trigger refresh in parent
+        context.read<PlayerBloc>().add(const PlayerRefreshSongs());
+      }
+    } catch (e) {
+      Fluttertoast.showToast(
+        msg: 'Failed to delete song',
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+      );
+    }
   }
 }

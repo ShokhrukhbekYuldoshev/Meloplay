@@ -81,3 +81,7 @@ class PlayerPlayingChanged extends PlayerEvent {
   @override
   List<Object?> get props => [playing];
 }
+
+class PlayerRefreshSongs extends PlayerEvent {
+  const PlayerRefreshSongs();
+}
