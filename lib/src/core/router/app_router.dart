@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
-import 'package:meloplay/src/data/models/playlist_model.dart';
-import 'package:meloplay/src/presentation/pages/config/scan_page.dart';
-import 'package:meloplay/src/presentation/pages/config/settings_page.dart';
-import 'package:meloplay/src/presentation/pages/config/themes_page.dart';
-import 'package:meloplay/src/presentation/pages/details/album_page.dart';
-import 'package:meloplay/src/presentation/pages/details/artist_page.dart';
-import 'package:meloplay/src/presentation/pages/details/genre_page.dart';
-import 'package:meloplay/src/presentation/pages/home/home_page.dart';
-import 'package:meloplay/src/presentation/pages/home/search_page.dart';
-import 'package:meloplay/src/presentation/pages/player/queue_page.dart';
-import 'package:meloplay/src/presentation/pages/playlists/manage_playlist.dart';
-import 'package:meloplay/src/presentation/pages/playlists/favorites_page.dart';
-import 'package:meloplay/src/presentation/pages/playlists/playlist_details_page.dart';
-import 'package:meloplay/src/presentation/pages/playlists/recents_page.dart';
+import 'package:meloplay/src/features/playlists/data/models/playlist_model.dart';
+import 'package:meloplay/src/features/config/presentation/scan_page.dart';
+import 'package:meloplay/src/features/config/presentation/settings_page.dart';
+import 'package:meloplay/src/features/config/presentation/themes_page.dart';
+import 'package:meloplay/src/features/home/presentation/album_page.dart';
+import 'package:meloplay/src/features/home/presentation/artist_page.dart';
+import 'package:meloplay/src/features/home/presentation/genre_page.dart';
+import 'package:meloplay/src/features/home/presentation/home_page.dart';
+import 'package:meloplay/src/features/home/presentation/search_page.dart';
+import 'package:meloplay/src/features/player/presentation/queue_page.dart';
+import 'package:meloplay/src/features/playlists/presentation/manage_playlist.dart';
+import 'package:meloplay/src/features/playlists/presentation/favorites_page.dart';
+import 'package:meloplay/src/features/playlists/presentation/playlist_details_page.dart';
+import 'package:meloplay/src/features/playlists/presentation/recents_page.dart';
 
 class AppRouter {
   static const String homeRoute = '/';

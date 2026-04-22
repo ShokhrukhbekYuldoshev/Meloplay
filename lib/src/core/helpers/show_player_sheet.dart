@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:meloplay/src/presentation/pages/player/player_page.dart';
+import 'package:meloplay/src/features/player/presentation/player_page.dart';
 
 void showPlayerSheet(BuildContext context) {
   showModalBottomSheet(

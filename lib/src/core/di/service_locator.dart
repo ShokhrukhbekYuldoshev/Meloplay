@@ -2,23 +2,20 @@ import 'package:get_it/get_it.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
-import 'package:meloplay/src/bloc/playlists/playlists_cubit.dart';
-import 'package:meloplay/src/bloc/favorites/favorites_bloc.dart';
-import 'package:meloplay/src/bloc/home/home_bloc.dart';
-import 'package:meloplay/src/bloc/player/player_bloc.dart';
-import 'package:meloplay/src/bloc/recents/recents_bloc.dart';
-import 'package:meloplay/src/bloc/scan/scan_cubit.dart';
-import 'package:meloplay/src/bloc/search/search_bloc.dart';
-import 'package:meloplay/src/bloc/song/song_bloc.dart';
-import 'package:meloplay/src/bloc/theme/theme_bloc.dart';
+import 'package:meloplay/src/features/playlists/bloc/playlists/playlists_cubit.dart';
+import 'package:meloplay/src/features/playlists/bloc/favorites/favorites_bloc.dart';
+import 'package:meloplay/src/features/home/bloc/home/home_bloc.dart';
+import 'package:meloplay/src/features/player/bloc/player/player_bloc.dart';
+import 'package:meloplay/src/features/playlists/bloc/recents/recents_bloc.dart';
+import 'package:meloplay/src/features/config/bloc/scan/scan_cubit.dart';
+import 'package:meloplay/src/features/home/bloc/search/search_bloc.dart';
+import 'package:meloplay/src/features/player/bloc/song/song_bloc.dart';
+import 'package:meloplay/src/features/config/bloc/theme/theme_bloc.dart';
 
-import 'package:meloplay/src/data/repositories/favorites_repository.dart';
-import 'package:meloplay/src/data/repositories/home_repository.dart';
-import 'package:meloplay/src/data/services/music_player.dart';
-import 'package:meloplay/src/data/repositories/recents_repository.dart';
-import 'package:meloplay/src/data/repositories/search_repository.dart';
-import 'package:meloplay/src/data/repositories/song_repository.dart';
-import 'package:meloplay/src/data/repositories/theme_repository.dart';
+import 'package:meloplay/src/features/home/data/repositories/home_repository.dart';
+import 'package:meloplay/src/core/services/music_player.dart';
+import 'package:meloplay/src/features/home/data/repositories/search_repository.dart';
+import 'package:meloplay/src/features/playlists/data/repositories/song_repository.dart';
 
 final sl = GetIt.instance;
 
@@ -36,11 +33,8 @@ void init() {
   /// REPOSITORIES
   /// -----------------------
 
-  sl.registerLazySingleton(() => ThemeRepository());
   sl.registerLazySingleton(() => HomeRepository());
   sl.registerLazySingleton(() => SongRepository());
-  sl.registerLazySingleton(() => FavoritesRepository());
-  sl.registerLazySingleton(() => RecentsRepository());
   sl.registerLazySingleton(() => SearchRepository());
 
   // MusicPlayer abstraction using SAME AudioPlayer
@@ -58,11 +52,9 @@ void init() {
 
   sl.registerFactory(() => SongBloc(repository: sl<SongRepository>()));
 
-  sl.registerFactory(
-    () => FavoritesBloc(repository: sl<FavoritesRepository>()),
-  );
+  sl.registerFactory(() => FavoritesBloc(repository: sl<SongRepository>()));
 
-  sl.registerFactory(() => RecentsBloc(repository: sl<RecentsRepository>()));
+  sl.registerFactory(() => RecentsBloc(repository: sl<SongRepository>()));
 
   sl.registerFactory(() => SearchBloc(repository: sl<SearchRepository>()));
 
