@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:meloplay/src/features/playlists/bloc/favorites/favorites_bloc.dart';
-import 'package:meloplay/src/features/player/bloc/song/song_bloc.dart';
+import 'package:meloplay/src/features/playlists/bloc/song/song_bloc.dart';
 import 'package:meloplay/src/core/theme/themes.dart';
 import 'package:meloplay/src/core/shared/player_bottom_app_bar.dart';
 import 'package:meloplay/src/core/shared/song_list_tile.dart';

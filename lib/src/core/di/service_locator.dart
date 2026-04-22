@@ -9,7 +9,7 @@ import 'package:meloplay/src/features/player/bloc/player/player_bloc.dart';
 import 'package:meloplay/src/features/playlists/bloc/recents/recents_bloc.dart';
 import 'package:meloplay/src/features/config/bloc/scan/scan_cubit.dart';
 import 'package:meloplay/src/features/home/bloc/search/search_bloc.dart';
-import 'package:meloplay/src/features/player/bloc/song/song_bloc.dart';
+import 'package:meloplay/src/features/playlists/bloc/song/song_bloc.dart';
 import 'package:meloplay/src/features/config/bloc/theme/theme_bloc.dart';
 
 import 'package:meloplay/src/features/home/data/repositories/home_repository.dart';
@@ -46,17 +46,17 @@ void init() {
 
   sl.registerFactory(() => ThemeBloc());
 
-  sl.registerFactory(() => HomeBloc(repository: sl<HomeRepository>()));
+  sl.registerFactory(() => HomeBloc(repository: sl()));
 
-  sl.registerFactory(() => PlayerBloc(sl<MusicPlayer>()));
+  sl.registerFactory(() => PlayerBloc(sl()));
 
-  sl.registerFactory(() => SongBloc(repository: sl<SongRepository>()));
+  sl.registerFactory(() => SongBloc(repository: sl()));
 
-  sl.registerFactory(() => FavoritesBloc(repository: sl<SongRepository>()));
+  sl.registerFactory(() => FavoritesBloc(repository: sl()));
 
-  sl.registerFactory(() => RecentsBloc(repository: sl<SongRepository>()));
+  sl.registerFactory(() => RecentsBloc(repository: sl()));
 
-  sl.registerFactory(() => SearchBloc(repository: sl<SearchRepository>()));
+  sl.registerFactory(() => SearchBloc(repository: sl()));
 
   /// -----------------------
   /// CUBITS

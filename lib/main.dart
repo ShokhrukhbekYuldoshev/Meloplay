@@ -12,7 +12,7 @@ import 'package:meloplay/src/features/playlists/bloc/playlists/playlists_cubit.d
 import 'package:meloplay/src/features/playlists/bloc/recents/recents_bloc.dart';
 import 'package:meloplay/src/features/config/bloc/scan/scan_cubit.dart';
 import 'package:meloplay/src/features/home/bloc/search/search_bloc.dart';
-import 'package:meloplay/src/features/player/bloc/song/song_bloc.dart';
+import 'package:meloplay/src/features/playlists/bloc/song/song_bloc.dart';
 import 'package:meloplay/src/features/config/bloc/theme/theme_bloc.dart';
 import 'package:meloplay/src/core/di/service_locator.dart';
 import 'package:meloplay/src/core/services/music_player.dart';

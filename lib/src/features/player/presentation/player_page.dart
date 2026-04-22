@@ -13,7 +13,7 @@ import 'package:meloplay/src/core/shared/buttons/repeat_button.dart';
 import 'package:meloplay/src/core/shared/buttons/shuffle_button.dart';
 import 'package:meloplay/src/core/shared/sleep_timer_dialog.dart';
 import 'package:on_audio_query/on_audio_query.dart';
-import 'package:meloplay/src/features/player/bloc/song/song_bloc.dart';
+import 'package:meloplay/src/features/playlists/bloc/song/song_bloc.dart';
 import 'package:meloplay/src/core/di/service_locator.dart';
 import 'package:meloplay/src/core/services/music_player.dart';
 import 'package:meloplay/src/features/playlists/data/repositories/song_repository.dart';
