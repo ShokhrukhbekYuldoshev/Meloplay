@@ -1,21 +1,18 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:lottie/lottie.dart';
-import 'package:meloplay/src/core/extensions/int_extensions.dart';
 import 'package:on_audio_query/on_audio_query.dart';
-import 'package:permission_handler/permission_handler.dart';
 
-import 'package:meloplay/src/features/player/bloc/player/player_bloc.dart';
 import 'package:meloplay/src/core/constants/assets.dart';
 import 'package:meloplay/src/core/di/service_locator.dart';
+import 'package:meloplay/src/core/extensions/int_extensions.dart';
 import 'package:meloplay/src/core/helpers/helpers.dart';
 import 'package:meloplay/src/core/helpers/show_player_sheet.dart';
 import 'package:meloplay/src/core/services/music_player.dart';
+import 'package:meloplay/src/core/shared/add_to_playlist_dialog.dart';
+import 'package:meloplay/src/features/player/bloc/player/player_bloc.dart';
 
 class SongListTile extends StatefulWidget {
   final SongModel song;
@@ -25,6 +22,10 @@ class SongListTile extends StatefulWidget {
   final bool isSelected;
   final ValueChanged<bool?>? onSelectionChanged;
 
+  // For queue
+  final bool isQueueMode;
+  final VoidCallback? removeFromQueue;
+
   const SongListTile({
     super.key,
     required this.song,
@@ -33,6 +34,8 @@ class SongListTile extends StatefulWidget {
     this.isSelectionMode = false,
     this.isSelected = false,
     this.onSelectionChanged,
+    this.isQueueMode = false,
+    this.removeFromQueue,
   });
 
   @override
@@ -93,7 +96,7 @@ class _SongListTileState extends State<SongListTile> {
         leading: widget.showAlbumArt ? _buildLeading(currentMediaItem) : null,
         title: _buildTitle(currentMediaItem, context),
         subtitle: _buildSubtitle(),
-        trailing: _buildTrailing(context),
+        trailing: _buildTrailing(context, isPlaying),
         dense: true,
       ),
     );
@@ -270,113 +273,122 @@ class _SongListTileState extends State<SongListTile> {
     );
   }
 
-  Widget _buildTrailing(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        PopupMenuButton<String>(
-          icon: const Icon(Icons.more_vert),
-          onSelected: (value) {
-            switch (value) {
-              case 'play_next':
-                _addToQueueNext();
-                break;
-              case 'add_to_queue':
-                _addToQueueEnd();
-                break;
-              case 'add_to_playlist':
-                _showAddToPlaylistDialog();
-                break;
-              case 'delete':
-                _showDeleteConfirmationDialog();
-                break;
-              case 'share':
-                shareSong(context, widget.song.data, widget.song.title);
-                break;
-            }
-          },
-          itemBuilder: (context) => [
-            const PopupMenuItem(
-              value: 'play_next',
-              child: Row(
-                children: [
-                  Icon(Icons.playlist_play, size: 20),
-                  SizedBox(width: 12),
-                  Text('Play next'),
-                ],
-              ),
-            ),
-            const PopupMenuItem(
-              value: 'add_to_queue',
-              child: Row(
-                children: [
-                  Icon(Icons.queue_music, size: 20),
-                  SizedBox(width: 12),
-                  Text('Add to queue'),
-                ],
-              ),
-            ),
-            const PopupMenuItem(
-              value: 'add_to_playlist',
-              child: Row(
-                children: [
-                  Icon(Icons.playlist_add, size: 20),
-                  SizedBox(width: 12),
-                  Text('Add to playlist'),
-                ],
-              ),
-            ),
-            const PopupMenuDivider(),
-            const PopupMenuItem(
-              value: 'share',
-              child: Row(
-                children: [
-                  Icon(Icons.share, size: 20),
-                  SizedBox(width: 12),
-                  Text('Share'),
-                ],
-              ),
-            ),
-            const PopupMenuItem(
-              value: 'delete',
-              child: Row(
-                children: [
-                  Icon(Icons.delete_outline, size: 20, color: Colors.red),
-                  SizedBox(width: 12),
-                  Text('Delete', style: TextStyle(color: Colors.red)),
-                ],
-              ),
-            ),
-          ],
+  Widget _buildTrailing(BuildContext context, bool isPlaying) {
+    // If in queue mode, show reorder and remove button
+    if (widget.isQueueMode) {
+      return Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          IconButton(
+            icon: const Icon(Icons.close),
+            color: Theme.of(context).colorScheme.primary,
+            onPressed: widget.removeFromQueue,
+          ),
+          const SizedBox(width: 8),
+          Icon(Icons.drag_handle, color: Theme.of(context).colorScheme.primary),
+        ],
+      );
+    }
+
+    // Original popup menu for normal mode
+    if (widget.isSelectionMode) {
+      return Checkbox(
+        value: widget.isSelected,
+        onChanged: widget.onSelectionChanged,
+        activeColor: Theme.of(context).colorScheme.primary,
+      );
+    }
+    return PopupMenuButton<String>(
+      icon: const Icon(Icons.more_vert),
+      onSelected: (value) {
+        switch (value) {
+          case 'play_next':
+            _addToQueueNext();
+            break;
+          case 'add_to_queue':
+            _addToQueue();
+            break;
+          case 'add_to_playlist':
+            _showAddToPlaylistDialog();
+            break;
+          case 'delete':
+            _showDeleteConfirmationDialog();
+            break;
+          case 'share':
+            shareSong(context, widget.song.data, widget.song.title);
+            break;
+        }
+      },
+      itemBuilder: (context) => [
+        const PopupMenuItem(
+          value: 'play_next',
+          child: Row(
+            children: [
+              Icon(Icons.playlist_play, size: 20),
+              SizedBox(width: 12),
+              Text('Play next'),
+            ],
+          ),
+        ),
+        const PopupMenuItem(
+          value: 'add_to_queue',
+          child: Row(
+            children: [
+              Icon(Icons.queue_music, size: 20),
+              SizedBox(width: 12),
+              Text('Add to queue'),
+            ],
+          ),
+        ),
+        const PopupMenuDivider(),
+        const PopupMenuItem(
+          value: 'add_to_playlist',
+          child: Row(
+            children: [
+              Icon(Icons.playlist_add, size: 20),
+              SizedBox(width: 12),
+              Text('Add to playlist'),
+            ],
+          ),
+        ),
+        const PopupMenuItem(
+          value: 'share',
+          child: Row(
+            children: [
+              Icon(Icons.share, size: 20),
+              SizedBox(width: 12),
+              Text('Share'),
+            ],
+          ),
+        ),
+        const PopupMenuItem(
+          value: 'delete',
+          child: Row(
+            children: [
+              Icon(Icons.delete_outline, size: 20, color: Colors.red),
+              SizedBox(width: 12),
+              Text('Delete', style: TextStyle(color: Colors.red)),
+            ],
+          ),
         ),
       ],
     );
   }
 
-  void _addToQueueNext() {
-    // TODO: Implement add to queue next
-    Fluttertoast.showToast(
-      msg: 'Added to queue: ${widget.song.title}',
-      backgroundColor: Colors.green,
-      textColor: Colors.white,
-    );
+  void _addToQueue() {
+    final player = sl<MusicPlayer>();
+    player.addToQueue(widget.song);
   }
 
-  void _addToQueueEnd() {
-    // TODO: Implement add to queue end
-    Fluttertoast.showToast(
-      msg: 'Added to queue: ${widget.song.title}',
-      backgroundColor: Colors.green,
-      textColor: Colors.white,
-    );
+  void _addToQueueNext() {
+    final player = sl<MusicPlayer>();
+    player.addToQueueNext(widget.song);
   }
 
   void _showAddToPlaylistDialog() {
-    // TODO: Implement add to playlist dialog
-    Fluttertoast.showToast(
-      msg: 'Add to playlist feature coming soon',
-      backgroundColor: Colors.orange,
-      textColor: Colors.white,
+    showDialog(
+      context: context,
+      builder: (context) => AddToPlaylistDialog(song: widget.song),
     );
   }
 
@@ -399,8 +411,8 @@ class _SongListTileState extends State<SongListTile> {
             ),
             ElevatedButton(
               onPressed: () async {
+                // TODO : implement delete song
                 Navigator.of(context).pop();
-                await _deleteSong();
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.red,
@@ -412,79 +424,5 @@ class _SongListTileState extends State<SongListTile> {
         );
       },
     );
-  }
-
-  Future<void> _deleteSong() async {
-    final file = File(widget.song.data);
-
-    if (!await file.exists()) {
-      Fluttertoast.showToast(
-        msg: 'File not found',
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
-      return;
-    }
-
-    // Request permission for Android 13+
-    if (Platform.isAndroid) {
-      final androidInfo = await getAndroidVersion();
-      if (androidInfo >= 33) {
-        final status = await Permission.audio.request();
-        if (!status.isGranted) {
-          Fluttertoast.showToast(
-            msg: 'Permission denied to delete audio files',
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-          );
-          return;
-        }
-      } else if (androidInfo >= 30) {
-        final status = await Permission.manageExternalStorage.request();
-        if (!status.isGranted) {
-          Fluttertoast.showToast(
-            msg: 'Storage permission required',
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-          );
-          return;
-        }
-      } else {
-        final status = await Permission.storage.request();
-        if (!status.isGranted) {
-          Fluttertoast.showToast(
-            msg: 'Storage permission required',
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-          );
-          return;
-        }
-      }
-    }
-
-    try {
-      await file.delete();
-
-      // Refresh the media store
-      final onAudioQuery = OnAudioQuery();
-      await onAudioQuery.scanMedia(widget.song.data);
-
-      if (mounted) {
-        Fluttertoast.showToast(
-          msg: 'Deleted: ${widget.song.title}',
-          backgroundColor: Colors.green,
-          textColor: Colors.white,
-        );
-
-        // Trigger refresh in parent
-        context.read<PlayerBloc>().add(const PlayerRefreshSongs());
-      }
-    } catch (e) {
-      Fluttertoast.showToast(
-        msg: 'Failed to delete song',
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
-    }
   }
 }

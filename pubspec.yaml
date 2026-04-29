@@ -1,7 +1,7 @@
 name: meloplay
 description: "Meloplay is a local music player app that plays music from your device."
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
-version: 1.4.2
+version: 1.4.3
 
 environment:
   sdk: ">=3.11.4 <4.0.0"

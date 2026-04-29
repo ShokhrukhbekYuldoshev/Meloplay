@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:share_plus/share_plus.dart';
 
 Color calculateTextColor(Color background) {
@@ -19,9 +20,6 @@ Future<void> shareSong(
   files.add(songFile);
   ShareParams shareParams = ShareParams(files: files, text: songName);
   await SharePlus.instance.share(shareParams);
-  if (context.mounted) {
-    Navigator.of(context).pop();
-  }
 }
 
 Future<int> getAndroidVersion() async {
@@ -35,4 +33,16 @@ Future<int> getAndroidVersion() async {
 Future<AndroidDeviceInfo> getAndroidInfo() async {
   final deviceInfo = DeviceInfoPlugin();
   return await deviceInfo.androidInfo;
+}
+
+/// Helper method to show toast messages
+void showToast(String message) {
+  // Using fluttertoast package
+  Fluttertoast.showToast(
+    msg: message,
+    backgroundColor: Colors.grey.shade800,
+    textColor: Colors.white,
+    gravity: ToastGravity.BOTTOM,
+    toastLength: Toast.LENGTH_SHORT,
+  );
 }

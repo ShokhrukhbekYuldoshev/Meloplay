@@ -18,7 +18,7 @@ Meloplay is a local music player app that plays music from your device built wit
 - [x] Sort by (title, artist, album, duration, date, size, etc)
 - [x] Order by (ascending, descending)
 - [x] Playlists (Read, create, rename, delete, add songs, remove songs)
-- [ ] Queue (List, add songs, remove songs, change order)
+- [x] Queue (List, add songs, remove songs, change order)
 - [x] Favorites (Add songs, remove songs)
 - [x] Recently played
 - [ ] Most played

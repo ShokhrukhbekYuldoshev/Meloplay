@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:meloplay/src/core/shared/sleep_timer_dialog.dart';
 import 'package:meloplay/src/features/config/bloc/theme/theme_bloc.dart';
 import 'package:meloplay/src/core/router/app_router.dart';
 import 'package:meloplay/src/core/theme/themes.dart';
@@ -127,7 +128,18 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                   title: const Text('Sleep Timer'),
                   subtitle: const Text('Stop playback after time'),
-                  onTap: () {},
+                  onTap: () {
+                    showModalBottomSheet<void>(
+                      context: context,
+                      builder: (BuildContext context) => SleepTimerDialog(),
+                      isScrollControlled: true,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(20),
+                        ),
+                      ),
+                    );
+                  },
                 ),
 
                 const Divider(height: 32, color: Colors.white24),
