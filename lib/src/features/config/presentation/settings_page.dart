@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:meloplay/src/core/shared/sleep_timer_dialog.dart';
+import 'package:meloplay/src/core/theme/theme_colors.dart';
 import 'package:meloplay/src/features/config/bloc/theme/theme_bloc.dart';
 import 'package:meloplay/src/core/router/app_router.dart';
 import 'package:meloplay/src/core/theme/themes.dart';
@@ -104,7 +105,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: Colors.white.withValues(alpha: 0.1),
+                      color: ThemeColors.surfaceColor(context),
                     ),
                     child: const Icon(Icons.equalizer, size: 20),
                   ),
@@ -122,7 +123,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: Colors.white.withValues(alpha: 0.1),
+                      color: ThemeColors.surfaceColor(context),
                     ),
                     child: const Icon(Icons.timer_outlined, size: 20),
                   ),
@@ -142,7 +143,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   },
                 ),
 
-                const Divider(height: 32, color: Colors.white24),
+                Divider(height: 32, color: ThemeColors.dividerColor(context)),
 
                 // Library Section
                 _buildSectionHeader('Library'),
@@ -153,7 +154,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: Colors.white.withValues(alpha: 0.1),
+                      color: ThemeColors.surfaceColor(context),
                     ),
                     child: const Icon(Icons.wifi_tethering_outlined, size: 20),
                   ),
@@ -175,7 +176,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: Colors.white.withValues(alpha: 0.1),
+                      color: ThemeColors.surfaceColor(context),
                     ),
                     child: const Icon(Icons.color_lens_outlined, size: 20),
                   ),
@@ -186,7 +187,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   },
                 ),
 
-                const Divider(height: 32, color: Colors.white24),
+                Divider(height: 32, color: ThemeColors.dividerColor(context)),
 
                 // About Section
                 _buildSectionHeader('About'),
@@ -197,7 +198,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: Colors.white.withValues(alpha: 0.1),
+                      color: ThemeColors.surfaceColor(context),
                     ),
                     child: const Icon(Icons.code_outlined, size: 20),
                   ),
@@ -216,7 +217,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: Colors.white.withValues(alpha: 0.1),
+                      color: ThemeColors.surfaceColor(context),
                     ),
                     child: const Icon(Icons.share_outlined, size: 20),
                   ),
@@ -231,7 +232,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: Colors.white.withValues(alpha: 0.1),
+                      color: ThemeColors.surfaceColor(context),
                     ),
                     child: const Icon(Icons.star_outline, size: 20),
                   ),
@@ -259,7 +260,9 @@ class _SettingsPageState extends State<SettingsPage> {
                           'Made with ❤️',
                           style: TextStyle(
                             fontSize: 12,
-                            color: Colors.white.withValues(alpha: 0.4),
+                            color: ThemeColors.textColor(
+                              context,
+                            ).withValues(alpha: 0.7),
                           ),
                         ),
                         const SizedBox(height: 4),
@@ -267,7 +270,9 @@ class _SettingsPageState extends State<SettingsPage> {
                           'Open source music player',
                           style: TextStyle(
                             fontSize: 11,
-                            color: Colors.white.withValues(alpha: 0.3),
+                            color: ThemeColors.textColor(
+                              context,
+                            ).withValues(alpha: 0.5),
                           ),
                         ),
                       ],
@@ -305,24 +310,13 @@ class _SettingsPageState extends State<SettingsPage> {
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          color: Colors.white.withValues(alpha: 0.1),
+          color: ThemeColors.surfaceColor(context),
         ),
         child: const Icon(Icons.info_outline, size: 20),
       ),
       title: const Text('Version'),
       subtitle: Text(_packageInfo.version),
-      trailing: Container(
-        padding: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.05),
-          shape: BoxShape.circle,
-        ),
-        child: Icon(
-          Icons.info_outline,
-          size: 18,
-          color: Colors.white.withValues(alpha: 0.5),
-        ),
-      ),
+
       onTap: () {
         _showVersionDialog();
       },

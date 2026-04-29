@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:meloplay/src/core/theme/theme_colors.dart';
 import 'package:meloplay/src/features/home/bloc/home/home_bloc.dart';
 import 'package:meloplay/src/core/router/app_router.dart';
 import 'package:on_audio_query/on_audio_query.dart';
@@ -58,7 +59,7 @@ class _GenresViewState extends State<GenresView>
                 Icon(
                   Icons.category_outlined,
                   size: 80,
-                  color: Colors.white.withValues(alpha: 0.3),
+                  color: ThemeColors.iconColor(context),
                 ),
                 const SizedBox(height: 16),
                 Text(
@@ -66,13 +67,13 @@ class _GenresViewState extends State<GenresView>
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w500,
-                    color: Colors.white.withValues(alpha: 0.7),
+                    color: ThemeColors.textColor(context),
                   ),
                 ),
                 const SizedBox(height: 8),
                 Text(
                   'Add music to your device to see genres',
-                  style: TextStyle(color: Colors.white.withValues(alpha: 0.5)),
+                  style: TextStyle(color: ThemeColors.textColor(context)),
                 ),
               ],
             ),
@@ -112,11 +113,11 @@ class _GenresViewState extends State<GenresView>
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            Colors.white.withValues(alpha: 0.08),
-            Colors.white.withValues(alpha: 0.03),
+            ThemeColors.surfaceColor(context).withValues(alpha: 0.08),
+            ThemeColors.surfaceColor(context).withValues(alpha: 0.03),
           ],
         ),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+        border: Border.all(color: ThemeColors.borderColor(context)),
       ),
       child: ListTile(
         onTap: () {
@@ -166,19 +167,19 @@ class _GenresViewState extends State<GenresView>
           '${genre.numOfSongs} ${genre.numOfSongs == 1 ? 'song' : 'songs'}',
           style: TextStyle(
             fontSize: 13,
-            color: Colors.white.withValues(alpha: 0.6),
+            color: ThemeColors.textColor(context).withValues(alpha: 0.6),
           ),
         ),
         trailing: Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: Colors.white.withValues(alpha: 0.05),
+            color: ThemeColors.surfaceColor(context).withValues(alpha: 0.05),
             shape: BoxShape.circle,
           ),
           child: Icon(
             Icons.chevron_right,
             size: 20,
-            color: Colors.white.withValues(alpha: 0.5),
+            color: ThemeColors.textColor(context).withValues(alpha: 0.5),
           ),
         ),
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),

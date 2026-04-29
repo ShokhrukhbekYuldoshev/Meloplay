@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:meloplay/src/core/theme/theme_colors.dart';
 import 'package:meloplay/src/features/player/bloc/player/player_bloc.dart';
 
 class SleepTimerDialog extends StatefulWidget {
@@ -82,7 +83,7 @@ class _SleepTimerDialogState extends State<SleepTimerDialog> {
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.05),
+                    color: ThemeColors.surfaceColor(context),
                     borderRadius: BorderRadius.circular(16),
                     border: Border.all(
                       color: Theme.of(
@@ -261,7 +262,7 @@ class _SleepTimerDialogState extends State<SleepTimerDialog> {
         });
       },
       avatar: Icon(preset['icon'], size: 18),
-      backgroundColor: Colors.white.withValues(alpha: 0.05),
+      backgroundColor: ThemeColors.surfaceColor(context),
       selectedColor: Theme.of(
         context,
       ).colorScheme.primary.withValues(alpha: 0.2),
@@ -270,7 +271,7 @@ class _SleepTimerDialogState extends State<SleepTimerDialog> {
         side: BorderSide(
           color: isSelected
               ? Theme.of(context).colorScheme.primary
-              : Colors.white.withValues(alpha: 0.1),
+              : ThemeColors.borderColor(context),
         ),
       ),
     );
@@ -291,7 +292,7 @@ class _SleepTimerDialogState extends State<SleepTimerDialog> {
         });
       },
       avatar: const Icon(Icons.edit, size: 18),
-      backgroundColor: Colors.white.withValues(alpha: 0.05),
+      backgroundColor: ThemeColors.surfaceColor(context),
       selectedColor: Theme.of(
         context,
       ).colorScheme.primary.withValues(alpha: 0.2),
@@ -299,7 +300,7 @@ class _SleepTimerDialogState extends State<SleepTimerDialog> {
         side: BorderSide(
           color: isSelected
               ? Theme.of(context).colorScheme.primary
-              : Colors.white.withValues(alpha: 0.1),
+              : ThemeColors.borderColor(context),
         ),
       ),
     );
@@ -315,12 +316,12 @@ class _SleepTimerDialogState extends State<SleepTimerDialog> {
       children: [
         Text(
           label,
-          style: const TextStyle(fontSize: 12, color: Colors.white70),
+          style: TextStyle(fontSize: 12, color: ThemeColors.textColor(context)),
         ),
         const SizedBox(height: 8),
         Container(
           decoration: BoxDecoration(
-            color: Colors.white.withValues(alpha: 0.1),
+            color: ThemeColors.surfaceColor(context),
             borderRadius: BorderRadius.circular(12),
           ),
           child: Column(
@@ -361,7 +362,7 @@ class _SleepTimerDialogState extends State<SleepTimerDialog> {
       style: OutlinedButton.styleFrom(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        side: BorderSide(color: Colors.white.withValues(alpha: 0.2)),
+        side: BorderSide(color: ThemeColors.borderColor(context)),
       ),
       child: Text(label, style: const TextStyle(fontSize: 12)),
     );

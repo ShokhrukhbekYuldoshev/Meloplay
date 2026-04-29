@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:meloplay/src/core/theme/theme_colors.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 import 'package:meloplay/src/features/home/bloc/home/home_bloc.dart';
@@ -160,20 +161,20 @@ class _SongsViewState extends State<SongsView>
           Icon(
             Icons.music_note_outlined,
             size: 80,
-            color: Colors.white.withValues(alpha: 0.3),
+            color: ThemeColors.iconColor(context),
           ),
           const SizedBox(height: 16),
           Text(
             'No Songs Found',
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
-              color: Colors.white.withValues(alpha: 0.7),
+              color: ThemeColors.textColor(context).withValues(alpha: 0.7),
             ),
           ),
           const SizedBox(height: 8),
           Text(
             'Add music to your device to get started',
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: Colors.white.withValues(alpha: 0.5),
+              color: ThemeColors.textColor(context).withValues(alpha: 0.5),
             ),
           ),
           const SizedBox(height: 24),
@@ -216,7 +217,7 @@ class _SongsViewState extends State<SongsView>
         Text(
           (_cachedStatsText ?? ''),
           style: Theme.of(context).textTheme.bodySmall?.copyWith(
-            color: Colors.white.withValues(alpha: 0.7),
+            color: ThemeColors.textColor(context).withValues(alpha: 0.7),
           ),
         ),
       ],
@@ -241,7 +242,7 @@ class _SongsViewState extends State<SongsView>
   Widget _buildSortButton(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.1),
+        color: ThemeColors.surfaceColor(context),
         borderRadius: BorderRadius.circular(30),
       ),
       child: IconButton(
@@ -263,19 +264,9 @@ class _SongsViewState extends State<SongsView>
     return Container(
       height: 48,
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            Colors.white.withValues(alpha: 0.15),
-            Colors.white.withValues(alpha: 0.08),
-          ],
-        ),
+        color: ThemeColors.surfaceColor(context),
         borderRadius: BorderRadius.circular(32),
-        border: Border.all(
-          color: Colors.white.withValues(alpha: 0.1),
-          width: 0.5,
-        ),
+        border: Border.all(color: ThemeColors.borderColor(context), width: 0.5),
       ),
       child: Material(
         color: Colors.transparent,
@@ -301,7 +292,7 @@ class _SongsViewState extends State<SongsView>
                 Assets.shuffleSvg,
                 width: 20,
                 colorFilter: ColorFilter.mode(
-                  Theme.of(context).textTheme.bodyMedium!.color!,
+                  ThemeColors.iconColor(context),
                   BlendMode.srcIn,
                 ),
               ),

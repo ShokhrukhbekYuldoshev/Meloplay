@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:meloplay/src/core/theme/theme_colors.dart';
 import 'package:meloplay/src/features/home/bloc/home/home_bloc.dart';
 import 'package:meloplay/src/core/router/app_router.dart';
 import 'package:on_audio_query/on_audio_query.dart';
@@ -58,7 +59,7 @@ class _ArtistsViewState extends State<ArtistsView>
                 Icon(
                   Icons.person_outline_rounded,
                   size: 80,
-                  color: Colors.white.withValues(alpha: 0.3),
+                  color: ThemeColors.iconColor(context),
                 ),
                 const SizedBox(height: 16),
                 Text(
@@ -66,13 +67,17 @@ class _ArtistsViewState extends State<ArtistsView>
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w500,
-                    color: Colors.white.withValues(alpha: 0.7),
+                    color: ThemeColors.iconColor(context),
                   ),
                 ),
                 const SizedBox(height: 8),
                 Text(
                   'Add music to your device to see artists',
-                  style: TextStyle(color: Colors.white.withValues(alpha: 0.5)),
+                  style: TextStyle(
+                    color: ThemeColors.textColor(
+                      context,
+                    ).withValues(alpha: 0.7),
+                  ),
                 ),
               ],
             ),
@@ -149,11 +154,11 @@ class _ArtistsViewState extends State<ArtistsView>
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
-              Colors.white.withValues(alpha: 0.08),
-              Colors.white.withValues(alpha: 0.03),
+              ThemeColors.surfaceColor(context).withValues(alpha: 0.08),
+              ThemeColors.surfaceColor(context).withValues(alpha: 0.03),
             ],
           ),
-          border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+          border: Border.all(color: ThemeColors.borderColor(context)),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -180,21 +185,19 @@ class _ArtistsViewState extends State<ArtistsView>
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                         colors: [
-                          Theme.of(
+                          ThemeColors.surfaceColor(
                             context,
-                          ).colorScheme.primary.withValues(alpha: 0.3),
-                          Theme.of(
+                          ).withValues(alpha: 0.3),
+                          ThemeColors.surfaceColor(
                             context,
-                          ).colorScheme.primary.withValues(alpha: 0.1),
+                          ).withValues(alpha: 0.1),
                         ],
                       ),
                     ),
                     child: Icon(
                       Icons.person_outline_rounded,
                       size: 50,
-                      color: Theme.of(
-                        context,
-                      ).colorScheme.primary.withValues(alpha: 0.5),
+                      color: ThemeColors.iconColor(context),
                     ),
                   ),
                 ),
@@ -220,7 +223,7 @@ class _ArtistsViewState extends State<ArtistsView>
               '${artist.numberOfTracks} ${artist.numberOfTracks == 1 ? 'song' : 'songs'}',
               style: TextStyle(
                 fontSize: 11,
-                color: Colors.white.withValues(alpha: 0.5),
+                color: ThemeColors.textColor(context).withValues(alpha: 0.5),
               ),
             ),
           ],

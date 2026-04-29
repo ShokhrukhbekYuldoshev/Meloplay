@@ -3,6 +3,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:meloplay/src/core/di/service_locator.dart';
 import 'package:meloplay/src/core/shared/player_bottom_app_bar.dart';
+import 'package:meloplay/src/core/theme/theme_colors.dart';
 import 'package:meloplay/src/core/theme/themes.dart';
 import 'package:meloplay/src/core/services/music_player.dart';
 import 'package:meloplay/src/core/shared/song_list_tile.dart';
@@ -113,7 +114,6 @@ class _QueuePageState extends State<QueuePage> {
     final upcomingCount = _playlist.length - (_currentPlayingIndex ?? 0) - 1;
 
     if (upcomingCount <= 0) return const SizedBox.shrink();
-
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
       child: Row(
@@ -121,7 +121,7 @@ class _QueuePageState extends State<QueuePage> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.1),
+              color: ThemeColors.surfaceColor(context),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Text(
@@ -129,7 +129,7 @@ class _QueuePageState extends State<QueuePage> {
               style: TextStyle(
                 fontSize: 11,
                 fontWeight: FontWeight.w500,
-                color: Colors.white.withValues(alpha: 0.7),
+                color: ThemeColors.iconColor(context),
               ),
             ),
           ),
@@ -146,7 +146,7 @@ class _QueuePageState extends State<QueuePage> {
           Icon(
             Icons.queue_music_outlined,
             size: 80,
-            color: Colors.white.withValues(alpha: 0.3),
+            color: ThemeColors.iconColor(context),
           ),
           const SizedBox(height: 16),
           Text(
@@ -154,7 +154,7 @@ class _QueuePageState extends State<QueuePage> {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w500,
-              color: Colors.white.withValues(alpha: 0.7),
+              color: ThemeColors.textColor(context).withValues(alpha: 0.7),
             ),
           ),
           const SizedBox(height: 8),
@@ -162,7 +162,7 @@ class _QueuePageState extends State<QueuePage> {
             'Tap + to add songs to the queue',
             style: TextStyle(
               fontSize: 14,
-              color: Colors.white.withValues(alpha: 0.5),
+              color: ThemeColors.textColor(context).withValues(alpha: 0.7),
             ),
           ),
         ],

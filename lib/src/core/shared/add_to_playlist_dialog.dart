@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:meloplay/src/core/theme/theme_colors.dart';
 import 'package:meloplay/src/features/playlists/bloc/playlists/playlists_cubit.dart';
 import 'package:meloplay/src/features/playlists/data/models/playlist_model.dart';
 import 'package:on_audio_query/on_audio_query.dart';
@@ -128,7 +129,7 @@ class _AddToPlaylistDialogState extends State<AddToPlaylistDialog> {
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                           fontSize: 12,
-                          color: Colors.white.withValues(alpha: 0.7),
+                          color: ThemeColors.textColor(context),
                         ),
                       ),
                     ],
@@ -202,12 +203,12 @@ class _AddToPlaylistDialogState extends State<AddToPlaylistDialog> {
           decoration: BoxDecoration(
             color: isSelected
                 ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.2)
-                : Colors.white.withValues(alpha: 0.05),
+                : ThemeColors.surfaceColor(context),
             borderRadius: BorderRadius.circular(30),
             border: Border.all(
               color: isSelected
                   ? Theme.of(context).colorScheme.primary
-                  : Colors.white.withValues(alpha: 0.1),
+                  : ThemeColors.borderColor(context),
             ),
           ),
           child: Row(
@@ -218,7 +219,7 @@ class _AddToPlaylistDialogState extends State<AddToPlaylistDialog> {
                 size: 18,
                 color: isSelected
                     ? Theme.of(context).colorScheme.primary
-                    : Colors.white.withValues(alpha: 0.7),
+                    : ThemeColors.iconColor(context),
               ),
               const SizedBox(width: 8),
               Text(
@@ -226,7 +227,7 @@ class _AddToPlaylistDialogState extends State<AddToPlaylistDialog> {
                 style: TextStyle(
                   color: isSelected
                       ? Theme.of(context).colorScheme.primary
-                      : Colors.white.withValues(alpha: 0.7),
+                      : ThemeColors.textColor(context),
                 ),
               ),
             ],
@@ -249,29 +250,31 @@ class _AddToPlaylistDialogState extends State<AddToPlaylistDialog> {
     if (_playlists.isEmpty) {
       return Container(
         padding: const EdgeInsets.all(32),
-        child: Column(
-          children: [
-            Icon(
-              Icons.playlist_play_outlined,
-              size: 48,
-              color: Colors.white.withValues(alpha: 0.3),
-            ),
-            const SizedBox(height: 8),
-            const Text('No playlists yet', style: TextStyle(fontSize: 14)),
-            const SizedBox(height: 8),
-            ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  _isCreatingNew = true;
-                });
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Theme.of(context).colorScheme.primary,
-                foregroundColor: Colors.white,
+        child: Center(
+          child: Column(
+            children: [
+              Icon(
+                Icons.playlist_play_outlined,
+                size: 48,
+                color: ThemeColors.iconColor(context),
               ),
-              child: const Text('Create First Playlist'),
-            ),
-          ],
+              const SizedBox(height: 8),
+              const Text('No playlists yet', style: TextStyle(fontSize: 14)),
+              const SizedBox(height: 8),
+              ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    _isCreatingNew = true;
+                  });
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  foregroundColor: Colors.white,
+                ),
+                child: const Text('Create First Playlist'),
+              ),
+            ],
+          ),
         ),
       );
     }
@@ -316,7 +319,7 @@ class _AddToPlaylistDialogState extends State<AddToPlaylistDialog> {
               '${playlist.numOfSongs} songs',
               style: TextStyle(
                 fontSize: 12,
-                color: Colors.white.withValues(alpha: 0.6),
+                color: ThemeColors.textColor(context),
               ),
             ),
             onTap: () => _addToPlaylist(playlist),
@@ -340,7 +343,7 @@ class _AddToPlaylistDialogState extends State<AddToPlaylistDialog> {
               borderSide: BorderSide.none,
             ),
             filled: true,
-            fillColor: Colors.white.withValues(alpha: 0.1),
+            fillColor: ThemeColors.surfaceColor(context),
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 16,
               vertical: 14,

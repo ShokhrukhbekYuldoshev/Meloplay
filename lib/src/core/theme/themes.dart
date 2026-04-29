@@ -3,7 +3,7 @@ import 'package:hive/hive.dart';
 import 'package:meloplay/src/core/services/hive_box.dart';
 
 class Themes {
-  static final Map<String, ThemeColor> _themes = {
+  static final Map<String, AbstractThemeColor> _themes = {
     PurpleTheme.name: PurpleTheme(),
     BlueTheme.name: BlueTheme(),
     GreenTheme.name: GreenTheme(),
@@ -21,10 +21,10 @@ class Themes {
 
   static Box<dynamic> get _box => Hive.box(HiveBox.boxName);
 
-  static List<ThemeColor> get themes => _themes.values.toList();
+  static List<AbstractThemeColor> get themes => _themes.values.toList();
   static List<String> get themeNames => _themes.keys.toList();
 
-  static ThemeColor getTheme() {
+  static AbstractThemeColor getTheme() {
     final name = _box.get(HiveBox.themeKey, defaultValue: PurpleTheme.name);
     return _themes[name] ?? PurpleTheme();
   }
@@ -38,12 +38,12 @@ class Themes {
   }
 }
 
-abstract class ThemeColor {
+abstract class AbstractThemeColor {
   final String themeName;
   final Color primaryColor;
   final Color secondaryColor;
 
-  const ThemeColor({
+  const AbstractThemeColor({
     required this.themeName,
     required this.primaryColor,
     required this.secondaryColor,
@@ -61,7 +61,7 @@ abstract class ThemeColor {
   Brightness get brightness;
 }
 
-class PurpleTheme extends ThemeColor {
+class PurpleTheme extends AbstractThemeColor {
   static const String name = 'Purple';
 
   PurpleTheme()
@@ -75,7 +75,7 @@ class PurpleTheme extends ThemeColor {
   Brightness get brightness => Brightness.dark;
 }
 
-class BlueTheme extends ThemeColor {
+class BlueTheme extends AbstractThemeColor {
   static const String name = 'Blue';
 
   BlueTheme()
@@ -89,7 +89,7 @@ class BlueTheme extends ThemeColor {
   Brightness get brightness => Brightness.dark;
 }
 
-class GreenTheme extends ThemeColor {
+class GreenTheme extends AbstractThemeColor {
   static const String name = 'Green';
 
   GreenTheme()
@@ -103,7 +103,7 @@ class GreenTheme extends ThemeColor {
   Brightness get brightness => Brightness.dark;
 }
 
-class OrangeTheme extends ThemeColor {
+class OrangeTheme extends AbstractThemeColor {
   static const String name = 'Orange';
 
   OrangeTheme()
@@ -117,7 +117,7 @@ class OrangeTheme extends ThemeColor {
   Brightness get brightness => Brightness.dark;
 }
 
-class YellowTheme extends ThemeColor {
+class YellowTheme extends AbstractThemeColor {
   static const String name = 'Yellow';
 
   YellowTheme()
@@ -131,7 +131,7 @@ class YellowTheme extends ThemeColor {
   Brightness get brightness => Brightness.dark;
 }
 
-class TealTheme extends ThemeColor {
+class TealTheme extends AbstractThemeColor {
   static const String name = 'Teal';
 
   TealTheme()
@@ -145,7 +145,7 @@ class TealTheme extends ThemeColor {
   Brightness get brightness => Brightness.dark;
 }
 
-class CyanTheme extends ThemeColor {
+class CyanTheme extends AbstractThemeColor {
   static const String name = 'Cyan';
 
   CyanTheme()
@@ -159,7 +159,7 @@ class CyanTheme extends ThemeColor {
   Brightness get brightness => Brightness.dark;
 }
 
-class LimeTheme extends ThemeColor {
+class LimeTheme extends AbstractThemeColor {
   static const String name = 'Lime';
 
   LimeTheme()
@@ -173,7 +173,7 @@ class LimeTheme extends ThemeColor {
   Brightness get brightness => Brightness.dark;
 }
 
-class PinkTheme extends ThemeColor {
+class PinkTheme extends AbstractThemeColor {
   static const String name = 'Pink';
 
   PinkTheme()
@@ -187,7 +187,7 @@ class PinkTheme extends ThemeColor {
   Brightness get brightness => Brightness.dark;
 }
 
-class RedTheme extends ThemeColor {
+class RedTheme extends AbstractThemeColor {
   static const String name = 'Red';
 
   RedTheme()
@@ -201,7 +201,7 @@ class RedTheme extends ThemeColor {
   Brightness get brightness => Brightness.dark;
 }
 
-class BlackTheme extends ThemeColor {
+class BlackTheme extends AbstractThemeColor {
   static const String name = 'Black';
 
   BlackTheme()
@@ -215,7 +215,7 @@ class BlackTheme extends ThemeColor {
   Brightness get brightness => Brightness.dark;
 }
 
-class WhiteTheme extends ThemeColor {
+class WhiteTheme extends AbstractThemeColor {
   static const String name = 'White';
 
   WhiteTheme()
@@ -229,7 +229,7 @@ class WhiteTheme extends ThemeColor {
   Brightness get brightness => Brightness.light;
 }
 
-class GrayTheme extends ThemeColor {
+class GrayTheme extends AbstractThemeColor {
   static const String name = 'Gray';
 
   GrayTheme()

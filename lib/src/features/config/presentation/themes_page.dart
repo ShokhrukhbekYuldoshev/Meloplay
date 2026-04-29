@@ -84,7 +84,7 @@ class _ThemesPageState extends State<ThemesPage> {
             Fluttertoast.showToast(
               msg: 'Theme changed to $themeName',
               backgroundColor: theme.secondaryColor,
-              textColor: Colors.white,
+              textColor: isDark ? Colors.white : Colors.black,
               gravity: ToastGravity.BOTTOM,
             );
           },
@@ -110,11 +110,7 @@ class _ThemesPageState extends State<ThemesPage> {
                         ),
                       ],
                     ),
-                    child: Icon(
-                      Icons.palette,
-                      color: isDark ? Colors.white : Colors.black,
-                      size: 30,
-                    ),
+                    child: Icon(Icons.palette, color: Colors.white, size: 30),
                   ),
                   const SizedBox(height: 12),
                   // Theme name

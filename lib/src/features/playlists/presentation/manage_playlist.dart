@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:meloplay/src/core/theme/theme_colors.dart';
 import 'package:meloplay/src/features/home/bloc/home/home_bloc.dart';
 import 'package:meloplay/src/features/playlists/bloc/playlists/playlists_cubit.dart';
 import 'package:meloplay/src/core/theme/themes.dart';
@@ -156,7 +157,7 @@ class _ManagePlaylistState extends State<ManagePlaylist> {
     return Container(
       margin: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.1),
+        color: ThemeColors.surfaceColor(context),
         borderRadius: BorderRadius.circular(30),
       ),
       child: TextField(

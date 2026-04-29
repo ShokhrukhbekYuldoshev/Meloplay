@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:lottie/lottie.dart';
+import 'package:meloplay/src/core/theme/theme_colors.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 import 'package:meloplay/src/core/constants/assets.dart';
@@ -75,7 +76,7 @@ class _SongListTileState extends State<SongListTile> {
         borderRadius: BorderRadius.circular(12),
         color: isPlaying
             ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.1)
-            : Colors.white.withValues(alpha: 0.03),
+            : ThemeColors.surfaceColor(context),
       ),
       child: ListTile(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -109,7 +110,7 @@ class _SongListTileState extends State<SongListTile> {
         borderRadius: BorderRadius.circular(12),
         color: widget.isSelected
             ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.15)
-            : Colors.white.withValues(alpha: 0.03),
+            : ThemeColors.surfaceColor(context),
         border: widget.isSelected
             ? Border.all(
                 color: Theme.of(
@@ -135,13 +136,10 @@ class _SongListTileState extends State<SongListTile> {
           widget.song.artist ?? 'Unknown',
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: TextStyle(
-            fontSize: 12,
-            color: Colors.white.withValues(alpha: 0.7),
-          ),
+          style: TextStyle(fontSize: 12, color: ThemeColors.iconColor(context)),
         ),
         activeColor: Theme.of(context).colorScheme.primary,
-        checkColor: Colors.white,
+        checkColor: Theme.of(context).colorScheme.onPrimary,
         controlAffinity: ListTileControlAffinity.trailing,
         contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
       ),
@@ -166,7 +164,7 @@ class _SongListTileState extends State<SongListTile> {
           child: Icon(
             Icons.music_note,
             size: 20,
-            color: Colors.white.withValues(alpha: 0.5),
+            color: ThemeColors.iconColor(context),
           ),
         ),
       ),
@@ -194,7 +192,7 @@ class _SongListTileState extends State<SongListTile> {
             child: Icon(
               Icons.music_note,
               size: 20,
-              color: Colors.white.withValues(alpha: 0.5),
+              color: ThemeColors.iconColor(context),
             ),
           ),
         ),
@@ -266,10 +264,7 @@ class _SongListTileState extends State<SongListTile> {
       subtitle,
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
-      style: TextStyle(
-        fontSize: 12,
-        color: Colors.white.withValues(alpha: 0.7),
-      ),
+      style: TextStyle(fontSize: 12),
     );
   }
 

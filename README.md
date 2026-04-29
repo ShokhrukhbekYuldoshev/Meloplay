@@ -87,7 +87,7 @@ Meloplay is a local music player app that plays music from your device built wit
 | [liquid_glass_renderer](https://pub.dev/packages/liquid_glass_renderer)               | A Flutter plugin for rendering liquid glass effects.                               |
 | [device_info_plus](https://pub.dev/packages/device_info_plus)                         | Plugin for getting device information.                                             |
 
-## 📦 Installation
+## Installation
 
 ### Prerequisites
 
@@ -114,7 +114,7 @@ Meloplay is a local music player app that plays music from your device built wit
    flutter run
    ```
 
-## ❗ Permissions
+## Permissions
 
 Inside `AndroidManifest.xml` we have the following permissions:
 

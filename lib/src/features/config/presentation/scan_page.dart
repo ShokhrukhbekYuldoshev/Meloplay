@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive/hive.dart';
 import 'package:lottie/lottie.dart';
+import 'package:meloplay/src/core/theme/theme_colors.dart';
 import 'package:meloplay/src/features/home/bloc/home/home_bloc.dart';
 import 'package:meloplay/src/features/config/bloc/scan/scan_cubit.dart';
 import 'package:meloplay/src/core/constants/assets.dart';
@@ -99,9 +100,9 @@ class _ScanPageState extends State<ScanPage> {
               margin: const EdgeInsets.symmetric(horizontal: 16),
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.05),
+                color: ThemeColors.surfaceColor(context),
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+                border: Border.all(color: ThemeColors.borderColor(context)),
               ),
               child: Row(
                 children: [
@@ -115,7 +116,7 @@ class _ScanPageState extends State<ScanPage> {
                       'Configure minimum duration and file size to filter out short audio files, ringtones, and notification sounds.',
                       style: TextStyle(
                         fontSize: 12,
-                        color: Colors.white.withValues(alpha: 0.7),
+                        color: ThemeColors.textColor(context),
                       ),
                     ),
                   ),
@@ -139,7 +140,7 @@ class _ScanPageState extends State<ScanPage> {
             Card(
               margin: const EdgeInsets.symmetric(horizontal: 16),
               elevation: 0,
-              color: Colors.white.withValues(alpha: 0.05),
+              color: ThemeColors.surfaceColor(context),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
               ),
@@ -180,7 +181,7 @@ class _ScanPageState extends State<ScanPage> {
             Card(
               margin: const EdgeInsets.symmetric(horizontal: 16),
               elevation: 0,
-              color: Colors.white.withValues(alpha: 0.05),
+              color: ThemeColors.surfaceColor(context),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
               ),

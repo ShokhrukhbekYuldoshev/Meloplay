@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:meloplay/src/core/theme/theme_colors.dart';
 
 import 'package:meloplay/src/features/playlists/bloc/playlists/playlists_cubit.dart';
 import 'package:meloplay/src/core/constants/assets.dart';
@@ -54,7 +55,7 @@ class _PlaylistsViewState extends State<PlaylistsView>
 
     final cards = [
       const SizedBox(width: 16),
-      PlaylistCard(
+      FeaturedCard(
         image: Assets.heart,
         label: 'Favorites',
         icon: Icons.favorite_border_outlined,
@@ -65,7 +66,7 @@ class _PlaylistsViewState extends State<PlaylistsView>
         },
       ),
       const SizedBox(width: 16),
-      PlaylistCard(
+      FeaturedCard(
         image: Assets.earphones,
         label: 'Recents',
         icon: Icons.history_outlined,
@@ -200,20 +201,20 @@ class _PlaylistsViewState extends State<PlaylistsView>
             Icon(
               Icons.playlist_play_outlined,
               size: 64,
-              color: Colors.white.withValues(alpha: 0.3),
+              color: ThemeColors.iconColor(context),
             ),
             const SizedBox(height: 16),
             Text(
               'No playlists yet',
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                color: Colors.white.withValues(alpha: 0.7),
+                color: ThemeColors.textColor(context),
               ),
             ),
             const SizedBox(height: 8),
             Text(
               'Tap the + button to create your first playlist',
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: Colors.white.withValues(alpha: 0.5),
+                color: ThemeColors.textColor(context),
               ),
               textAlign: TextAlign.center,
             ),
@@ -251,7 +252,7 @@ class _PlaylistsViewState extends State<PlaylistsView>
       child: Card(
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
         elevation: 0,
-        color: Colors.white.withValues(alpha: 0.05),
+        color: ThemeColors.surfaceColor(context),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         child: ListTile(
           onTap: () async {
@@ -294,13 +295,13 @@ class _PlaylistsViewState extends State<PlaylistsView>
           trailing: Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.05),
+              color: ThemeColors.surfaceColor(context),
               shape: BoxShape.circle,
             ),
             child: Icon(
               Icons.chevron_right,
               size: 20,
-              color: Colors.white.withValues(alpha: 0.5),
+              color: ThemeColors.iconColor(context),
             ),
           ),
         ),
@@ -348,7 +349,7 @@ class _PlaylistsViewState extends State<PlaylistsView>
   }
 }
 
-class PlaylistCard extends StatelessWidget {
+class FeaturedCard extends StatelessWidget {
   final String image;
   final String label;
   final IconData icon;
@@ -356,7 +357,7 @@ class PlaylistCard extends StatelessWidget {
   final Color color;
   final List<Color>? gradientColors;
 
-  const PlaylistCard({
+  const FeaturedCard({
     super.key,
     required this.image,
     required this.label,

@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:meloplay/src/core/theme/theme_colors.dart';
 import 'package:meloplay/src/features/player/bloc/player/player_bloc.dart';
 import 'package:meloplay/src/core/extensions/song_model_extensions.dart';
 import 'package:meloplay/src/features/playlists/data/models/playlist_model.dart';
@@ -112,8 +113,11 @@ class _PlaylistDetailsPageState extends State<PlaylistDetailsPage> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: _navigateToAddSongs,
-        icon: const Icon(Icons.add),
-        label: const Text('Add songs'),
+        icon: const Icon(Icons.add, size: 20, color: Colors.white),
+        label: const Text(
+          'Add songs',
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+        ),
         backgroundColor: Theme.of(context).colorScheme.primary,
       ),
     );
@@ -198,9 +202,9 @@ class _PlaylistDetailsPageState extends State<PlaylistDetailsPage> {
       margin: const EdgeInsets.all(16),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.05),
+        color: ThemeColors.surfaceColor(context),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+        border: Border.all(color: ThemeColors.borderColor(context)),
       ),
       child: Row(
         children: [
@@ -243,7 +247,7 @@ class _PlaylistDetailsPageState extends State<PlaylistDetailsPage> {
                   durationText,
                   style: TextStyle(
                     fontSize: 12,
-                    color: Colors.white.withValues(alpha: 0.7),
+                    color: ThemeColors.textColor(context),
                   ),
                 ),
               ],
@@ -275,7 +279,7 @@ class _PlaylistDetailsPageState extends State<PlaylistDetailsPage> {
           Icon(
             Icons.playlist_play_outlined,
             size: 80,
-            color: Colors.white.withValues(alpha: 0.3),
+            color: ThemeColors.iconColor(context),
           ),
           const SizedBox(height: 16),
           Text(
@@ -283,13 +287,13 @@ class _PlaylistDetailsPageState extends State<PlaylistDetailsPage> {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w500,
-              color: Colors.white.withValues(alpha: 0.7),
+              color: ThemeColors.textColor(context),
             ),
           ),
           const SizedBox(height: 8),
           Text(
             'Tap the + button to add songs',
-            style: TextStyle(color: Colors.white.withValues(alpha: 0.5)),
+            style: TextStyle(color: ThemeColors.textColor(context)),
           ),
         ],
       ),
@@ -304,12 +308,12 @@ class _PlaylistDetailsPageState extends State<PlaylistDetailsPage> {
           Icon(
             Icons.error_outline,
             size: 64,
-            color: Colors.white.withValues(alpha: 0.5),
+            color: ThemeColors.iconColor(context),
           ),
           const SizedBox(height: 16),
           Text(
             message,
-            style: TextStyle(color: Colors.white.withValues(alpha: 0.7)),
+            style: TextStyle(color: ThemeColors.textColor(context)),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 16),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:meloplay/src/core/theme/theme_colors.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 import 'package:meloplay/src/features/home/bloc/search/search_bloc.dart';
@@ -46,7 +47,7 @@ class _SearchPageState extends State<SearchPage> {
         title: Container(
           height: 40,
           decoration: BoxDecoration(
-            color: Colors.white.withValues(alpha: 0.15),
+            color: ThemeColors.surfaceColor(context),
             borderRadius: BorderRadius.circular(30),
           ),
           child: TextField(
@@ -55,13 +56,15 @@ class _SearchPageState extends State<SearchPage> {
             onChanged: (value) {
               context.read<SearchBloc>().add(SearchQueryChanged(value.trim()));
             },
-            style: const TextStyle(color: Colors.white),
+            style: TextStyle(color: ThemeColors.textColor(context)),
             decoration: InputDecoration(
               hintText: 'Search songs, artists, albums...',
-              hintStyle: TextStyle(color: Colors.white.withValues(alpha: 0.5)),
+              hintStyle: TextStyle(
+                color: ThemeColors.textColor(context).withValues(alpha: 0.5),
+              ),
               prefixIcon: Icon(
                 Icons.search,
-                color: Colors.white.withValues(alpha: 0.7),
+                color: ThemeColors.textColor(context),
               ),
               border: InputBorder.none,
               contentPadding: const EdgeInsets.symmetric(vertical: 10),
@@ -127,7 +130,7 @@ class _SearchPageState extends State<SearchPage> {
           Icon(
             Icons.search_rounded,
             size: 80,
-            color: Colors.white.withValues(alpha: 0.3),
+            color: ThemeColors.textColor(context).withValues(alpha: 0.3),
           ),
           const SizedBox(height: 16),
           Text(
@@ -135,13 +138,15 @@ class _SearchPageState extends State<SearchPage> {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w500,
-              color: Colors.white.withValues(alpha: 0.7),
+              color: ThemeColors.textColor(context).withValues(alpha: 0.7),
             ),
           ),
           const SizedBox(height: 8),
           Text(
             'Find your favorite songs, artists, and albums',
-            style: TextStyle(color: Colors.white.withValues(alpha: 0.5)),
+            style: TextStyle(
+              color: ThemeColors.textColor(context).withValues(alpha: 0.5),
+            ),
           ),
         ],
       ),
@@ -169,12 +174,14 @@ class _SearchPageState extends State<SearchPage> {
           Icon(
             Icons.error_outline,
             size: 64,
-            color: Colors.white.withValues(alpha: 0.5),
+            color: ThemeColors.textColor(context).withValues(alpha: 0.5),
           ),
           const SizedBox(height: 16),
           Text(
             message,
-            style: TextStyle(color: Colors.white.withValues(alpha: 0.7)),
+            style: TextStyle(
+              color: ThemeColors.textColor(context).withValues(alpha: 0.7),
+            ),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 16),
@@ -199,7 +206,7 @@ class _SearchPageState extends State<SearchPage> {
           Icon(
             Icons.search_off_rounded,
             size: 64,
-            color: Colors.white.withValues(alpha: 0.5),
+            color: ThemeColors.textColor(context).withValues(alpha: 0.5),
           ),
           const SizedBox(height: 16),
           Text(
@@ -207,13 +214,15 @@ class _SearchPageState extends State<SearchPage> {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w500,
-              color: Colors.white.withValues(alpha: 0.7),
+              color: ThemeColors.textColor(context).withValues(alpha: 0.7),
             ),
           ),
           const SizedBox(height: 8),
           Text(
             'No matches for "$query"',
-            style: TextStyle(color: Colors.white.withValues(alpha: 0.5)),
+            style: TextStyle(
+              color: ThemeColors.textColor(context).withValues(alpha: 0.5),
+            ),
           ),
         ],
       ),
@@ -368,7 +377,7 @@ class _SearchPageState extends State<SearchPage> {
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
-        color: Colors.white.withValues(alpha: 0.05),
+        color: ThemeColors.surfaceColor(context),
       ),
       child: ListTile(
         onTap: () {
@@ -385,10 +394,7 @@ class _SearchPageState extends State<SearchPage> {
               width: 50,
               height: 50,
               color: Colors.grey.withValues(alpha: 0.2),
-              child: Icon(
-                Icons.album,
-                color: Colors.white.withValues(alpha: 0.5),
-              ),
+              child: Icon(Icons.album, color: ThemeColors.iconColor(context)),
             ),
           ),
         ),
@@ -400,12 +406,12 @@ class _SearchPageState extends State<SearchPage> {
           album.artist ?? 'Unknown Artist',
           style: TextStyle(
             fontSize: 12,
-            color: Colors.white.withValues(alpha: 0.7),
+            color: ThemeColors.textColor(context).withValues(alpha: 0.7),
           ),
         ),
         trailing: Icon(
           Icons.chevron_right,
-          color: Colors.white.withValues(alpha: 0.5),
+          color: ThemeColors.iconColor(context).withValues(alpha: 0.5),
         ),
       ),
     );
@@ -416,7 +422,7 @@ class _SearchPageState extends State<SearchPage> {
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
-        color: Colors.white.withValues(alpha: 0.05),
+        color: ThemeColors.surfaceColor(context),
       ),
       child: ListTile(
         onTap: () {
@@ -463,12 +469,12 @@ class _SearchPageState extends State<SearchPage> {
           '${artist.numberOfTracks} ${'song'.pluralize(artist.numberOfTracks ?? 0)}',
           style: TextStyle(
             fontSize: 12,
-            color: Colors.white.withValues(alpha: 0.7),
+            color: ThemeColors.textColor(context).withValues(alpha: 0.7),
           ),
         ),
         trailing: Icon(
           Icons.chevron_right,
-          color: Colors.white.withValues(alpha: 0.5),
+          color: ThemeColors.iconColor(context).withValues(alpha: 0.5),
         ),
       ),
     );
@@ -479,7 +485,7 @@ class _SearchPageState extends State<SearchPage> {
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
-        color: Colors.white.withValues(alpha: 0.05),
+        color: ThemeColors.surfaceColor(context),
       ),
       child: ListTile(
         onTap: () {
@@ -510,7 +516,7 @@ class _SearchPageState extends State<SearchPage> {
         ),
         trailing: Icon(
           Icons.chevron_right,
-          color: Colors.white.withValues(alpha: 0.5),
+          color: ThemeColors.textColor(context),
         ),
       ),
     );
